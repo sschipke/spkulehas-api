@@ -23,7 +23,7 @@ router.post("/login", async (request, res) => {
   if (!isValidPassword) {
     return res.status(401).json({ error: "Incorrect email or password." });
   }
-  // const tokenSecret = process.env.TOKEN_SECRET;
+
   const user = await getUserProfileById(foundUser[0].id);
   const webToken = generateWebtoken(user);
   if (user.status === "ADMIN") {
@@ -95,8 +95,9 @@ router.put("/update/email/:id", async (req, res) => {
     return updateEmail(id, newEmail)
       .then((email) => {
         logger("Sucessfully updated email to: " + email, req);
-        console.log({ email });
-        return res.status(200).json({ email });
+//TODO: return new token
+//TODO: return new token
+        return res.status(200).json({ email, token: webToken });
       })
       .catch((err) => {
         console.error("Unable to update email. ", err);
@@ -129,11 +130,12 @@ router.put("/:id", async (req, res) => {
           .status(404)
           .json({ error: "No profile found with id: " + id });
       }
-      const query = await getUserProfileById(id);
-      const newUserProfile = query[0];
+
+      const newUserProfile = await getUserProfileById(id);
       console.log({ newUserProfile });
       logger("Sucessfully updated profile.", req);
-      return res.status(200).json({ user: newUserProfile });
+      const webToken = generateWebtoken(user);
+      return res.status(200).json({ user: newUserProfile, token: webToken });
     })
     .catch((err) => {
       console.error("Unable to successfuly update profile.", err);
