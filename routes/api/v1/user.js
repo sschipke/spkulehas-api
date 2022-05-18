@@ -49,7 +49,6 @@ router.put("/update/password/:id", async (req, res) => {
   const { id } = req.params;
   const { newPassword, password } = req.body;
   const foundUser = await findUserById(id);
-  req.body.user = foundUser;
   const hash = foundUser.password;
   let isValidPassword = bcrypt.compareSync(password, hash);
   if (!isValidPassword) {
@@ -69,6 +68,7 @@ router.put("/update/password/:id", async (req, res) => {
 router.put("/update/email/:id", async (req, res) => {
   const { newEmail, password } = req.body;
   const { id } = req.params;
+  const localUser = res.locals.user;
   const foundUser = await findUserById(id);
   console.log({ foundUser });
   if (!foundUser) {
@@ -78,12 +78,12 @@ router.put("/update/email/:id", async (req, res) => {
   if (!newEmail || !password) {
     return res.status(422).json({ error: "New email and password required." });
   }
-
   const matchingEmails = await findUserByEmail(newEmail);
   if (matchingEmails.length > 0) {
     return res.status(409).json({ error: "This email already exists." });
   }
-  req.body.user = foundUser;
+
+
 
   const hash = foundUser.password;
   let isValidPassword = bcrypt.compareSync(password, hash);
@@ -95,8 +95,11 @@ router.put("/update/email/:id", async (req, res) => {
     return updateEmail(id, newEmail)
       .then((email) => {
         logger("Sucessfully updated email to: " + email, req);
-//TODO: return new token
-//TODO: return new token
+        const updatedUser = foundUser;
+        updatedUser.email = email;
+        updatedUser.name = localUser.name;
+        updatedUser.status = localUser.status;
+        const webToken = generateWebtoken(updatedUser);
         return res.status(200).json({ email, token: webToken });
       })
       .catch((err) => {
