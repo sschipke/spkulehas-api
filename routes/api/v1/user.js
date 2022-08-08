@@ -2,6 +2,11 @@ import moment from "moment";
 import * as jwt from "jsonwebtoken";
 import { database } from "../../../app";
 import { logger } from "../../../utils/logging";
+import { sendPasswordResetEmail } from "../../../email";
+import {
+  loginLimiter,
+  passwordResetLimiter,
+} from "../../../middleware/rate-limits";
 import {
   validateRequestToken,
   generateWebtoken,
@@ -12,7 +17,7 @@ const bcrypt = require("bcrypt");
 const router = express.Router();
 router.use(validateRequestToken);
 
-router.post("/login", async (request, res) => {
+router.post("/login", loginLimiter, async (request, res) => {
   const { email, password } = request.body;
   const foundUser = await findUserByEmail(email);
   if (!foundUser || !foundUser.length) {
@@ -25,24 +30,17 @@ router.post("/login", async (request, res) => {
   }
 
   const user = await getUserProfileById(foundUser[0].id);
-  const webToken = generateWebtoken(user);
-  if (user.status === "ADMIN") {
-    const admin = user;
-    const usersInfoForAdmin = await getSimpleProfileInfoForAdmin();
-    request.body.user = admin;
-    const responseBody = {
-      user,
-      usersInfo: usersInfoForAdmin,
-      token: webToken,
-    };
-    return res.status(200).json(responseBody);
-  } else {
-    const userToReturn = user;
-    console.log({ user: userToReturn });
-    request.body.user = userToReturn;
-    logger("Successful login for user: ", request);
-    return res.status(200).json({ user: userToReturn, token: webToken });
-  }
+  console.log({ user });
+  const usersInfo = await getAllUsersIdNameAndEmail();
+  const webToken = generateWebtoken(user, "1hr");
+  const responseBody = {
+    user,
+    usersInfo: usersInfo,
+    token: webToken,
+  };
+  console.log({ user });
+  logger("Successful login for user: ", request);
+  return res.status(200).json(responseBody);
 });
 
 router.put("/update/password/:id", async (req, res) => {
@@ -65,6 +63,54 @@ router.put("/update/password/:id", async (req, res) => {
   }
 });
 
+router.post("/forgot/password", passwordResetLimiter, async (req, res) => {
+  const { email } = req.body;
+  console.log(email, req.body);
+  const usersByEmail = await findUserByEmail(email);
+  if (usersByEmail.length === 1) {
+    const user = usersByEmail[0];
+    const token = generateWebtoken(user, "2hr", "email");
+    const emailUrl = `${process.env.FRONT_END_BASE_URL}?reset=${token}`;
+    try {
+      let success = await sendPasswordResetEmail(user, emailUrl);
+      return res
+        .status(200)
+        .json("If a user with this email exists, an email has been sent.");
+    } catch (error) {
+      console.error(
+        "Unable to send password reset email to: " + user.email + " " + error
+      );
+      return res.status(500).json("Unable to send email.");
+    }
+  } else {
+    console.error(
+      "Password reset email not sent due to duplicate or insufficient emails. ",
+      { usersByEmail }
+    );
+    return res
+      .status(200)
+      .json("If a user with this email exists, an email has been sent.");
+  }
+});
+
+router.put("/reset/password", passwordResetLimiter, async (req, res) => {
+  const { newPassword } = req.body;
+  const { user, tokenType } = res.locals;
+  if (tokenType !== "email") {
+    console.error("Attempt to reset password with non-email token.");
+    return res.status(403).json("Unauthorized");
+  }
+  try {
+    return updatePassword(user.id, newPassword).then((success) => {
+      logger("Sucessfully reset password. ", req);
+      return res.status(200).json("Successfully reset password.");
+    });
+  } catch (error) {
+    console.error("Unable to reset password. ", error);
+    return res.status(500).json({ error: "Unable to reset password." });
+  }
+});
+
 router.put("/update/email/:id", async (req, res) => {
   const { newEmail, password } = req.body;
   const { id } = req.params;
@@ -83,8 +129,6 @@ router.put("/update/email/:id", async (req, res) => {
     return res.status(409).json({ error: "This email already exists." });
   }
 
-
-
   const hash = foundUser.password;
   let isValidPassword = bcrypt.compareSync(password, hash);
   if (!isValidPassword) {
@@ -99,7 +143,7 @@ router.put("/update/email/:id", async (req, res) => {
         updatedUser.email = email;
         updatedUser.name = localUser.name;
         updatedUser.status = localUser.status;
-        const webToken = generateWebtoken(updatedUser);
+        const webToken = generateWebtoken(updatedUser, "1hr");
         return res.status(200).json({ email, token: webToken });
       })
       .catch((err) => {
@@ -137,7 +181,7 @@ router.put("/:id", async (req, res) => {
       const newUserProfile = await getUserProfileById(id);
       console.log({ newUserProfile });
       logger("Sucessfully updated profile.", req);
-      const webToken = generateWebtoken(user);
+      const webToken = generateWebtoken(user, "1hr");
       return res.status(200).json({ user: newUserProfile, token: webToken });
     })
     .catch((err) => {
@@ -205,7 +249,7 @@ const updateProfile = async (user) => {
     });
 };
 
-const getSimpleProfileInfoForAdmin = async () => {
+const getAllUsersIdNameAndEmail = async () => {
   return database("userprofile")
     .columns(["name", "user_id AS id"])
     .innerJoin("user", "user.id", "userprofile.user_id")
