@@ -1512,7 +1512,77 @@ const mockUsers = [
       status: "ADMIN",
       name: "Schipke SpKuLeHaS",
     },
-    reservations: [],
+    reservations: [
+      {
+    notes: "During deer hunting season the cabin is open to all.",
+    title: "Open For Hunting",
+    user_id: "c81ec5cf-67da-4729-b34d-49e409693695",
+    start:  moment("2022-11-01")
+    .startOf("isoMonth")
+          .set({
+            hour: 0,
+            minute: 0,
+            second: 0,
+            millisecond: 0,
+          })
+          .toISOString(),
+    end: moment("2022-11-05")
+    .endOf("isoMonth")
+          .set({
+            hour: 12,
+            minute: 0,
+            second: 0,
+            millisecond: 0,
+          })
+          .toISOString(),
+  },
+  {
+    notes: "During deer hunting season the cabin is open to all.",
+    title: "Open For Hunting",
+    user_id: "c81ec5cf-67da-4729-b34d-49e409693695",
+    start:  moment("2023-11-01")
+    .startOf("isoMonth")
+          .set({
+            hour: 0,
+            minute: 0,
+            second: 0,
+            millisecond: 0,
+          })
+          .toISOString(),
+    end: moment("2023-11-05")
+    .endOf("isoMonth")
+          .set({
+            hour: 12,
+            minute: 0,
+            second: 0,
+            millisecond: 0,
+          })
+          .toISOString(),
+  },
+  {
+    notes: "During deer hunting season the cabin is open to all.",
+    title: "Open For Hunting",
+    user_id: "c81ec5cf-67da-4729-b34d-49e409693695",
+    start:  moment("2024-11-01")
+    .startOf("isoMonth")
+          .set({
+            hour: 0,
+            minute: 0,
+            second: 0,
+            millisecond: 0,
+          })
+          .toISOString(),
+    end: moment("2024-11-01")
+    .endOf("isoMonth")
+          .set({
+            hour: 0,
+            minute: 0,
+            second: 0,
+            millisecond: 0,
+          })
+          .toISOString(),
+  }
+    ],
   },
 ];
 

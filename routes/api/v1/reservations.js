@@ -1,3 +1,4 @@
+require("@babel/polyfill");
 import { database } from "../../../app";
 import { logger } from "../../../utils/logging";
 import {
@@ -5,10 +6,13 @@ import {
   validateReservation
 } from "../../../utils/helpers";
 import { validateRequestToken } from "../../../middleware/auth";
+import { alertUsersOfDeletion } from "../../../email";
 const moment = require("moment");
 const express = require("express");
 const router = express.Router();
 router.use(validateRequestToken);
+
+const RESERVATION_DELETION = "reservation_deleted";
 
 router.get("/", async (req, res) => {
   try {
@@ -40,7 +44,7 @@ router.post("/", async (req, res, next) => {
     return res.status(422).json(error);
   }
   try {
-    let addedReservation = await addReservation(reservation);
+    const addedReservation = await addReservation(reservation);
     console.log({ addedReservation });
     logger("Successfully added reservation!", req)
     const response = addedReservation[0];
@@ -63,10 +67,10 @@ router.put("/:reservation_id", async (req, res, next) => {
   if (!reservationToUpdate || !reservationToUpdate.length) {
     return res
       .status(404)
-      .json({ error: "Unable to find reservation with id: " + reservationId });
+      .json({ error: "Unable to find reservation with id: " + reservation.id });
   }
   const error = validateReservation(reservation);
-  if (error.length) {
+  if (error["error"]) {
     return res.status(422).json(error);
   }
   let updatedReservation = await updateReservation(reservation);
@@ -94,7 +98,8 @@ router.delete("/:id", async (req, response) => {
           .json(`reservation with an id: ${id} does not exist.`);
       }
       logger("Sucessfully deleted reservation: ", req);
-      return response.status(200).json("Reservation successfully removed.");
+      response.status(200).json("Reservation successfully removed.").send();
+      handleDeletionEmail(reservation);
     });
 });
 
@@ -131,5 +136,38 @@ const addReservation = async (reservation) => {
 const findReservationById = async (reservationId) => {
   return database("reservation").where({ id: reservationId }).select();
 };
+
+const getEmailsForSetting = async (setting) => {
+  return database("user")
+    .column("email")
+    .innerJoin("email_setting", "email_setting.user_id", "user.id")
+    .where({ setting_name: setting })
+    .andWhere("value", true)
+    .orderBy("email", "asc")
+    .select("email")
+    .then((emails) => {
+      if (emails.length) {
+        return emails.map(email => email.email);
+      }
+      return emails;
+    })
+};
+
+const handleDeletionEmail = (reservation) => {
+  //TODO: Remove User who deleted reservation from email list
+  try {
+    getEmailsForSetting(RESERVATION_DELETION)
+      .then((members) => {
+        if (members.length) {
+          alertUsersOfDeletion(members, reservation);
+        }
+      })
+      .catch((error) =>
+        console.error("Unable to send deletion alert. ", error)
+      );
+  } catch (error) {
+    console.error("Unable to find members for deletion email. ", error);
+  }
+}
 
 export default router;

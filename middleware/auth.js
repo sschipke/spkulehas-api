@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken");
 
 export const validateRequestToken = (req, res, next) => {
   const signature = process.env.TOKEN_SECRET;
-  const nonsecurePaths = ["/login"];
+  const nonsecurePaths = ["/login", "/forgot/password"];
   const nononSecureMethod = "GET";
   if (nonsecurePaths.includes(req.path) || req.method === nononSecureMethod) {
     return next();
@@ -19,13 +19,22 @@ export const validateRequestToken = (req, res, next) => {
       } else {
         console.log({ decoded });
         res.locals.user = decoded.user;
+        res.locals.tokenType = decoded.type;
         return next();
       }
     });
+  } else {
+    return res.status(401).json({error: "Unauthorized."})
   }
 };
 
-export const generateWebtoken = (userProfile) => {
+export const generateWebtoken = (userProfile, expiration, type) => {
+  if (!expiration || !expiration.includes("hr")) {
+    throw new Error("No expiration time inlcuded in generate request.");
+  }
+  if (!type) {
+    type = "login"
+  }
   const signature = process.env.TOKEN_SECRET;
   const { id, email, name, status } = userProfile;
   const data = {
@@ -34,5 +43,20 @@ export const generateWebtoken = (userProfile) => {
     name,
     status,
   };
-  return jwt.sign({ user: data }, signature, { expiresIn: "1hr" });
+  return jwt.sign({ user: data, type }, signature, { expiresIn: expiration });
 };
+
+export const validateOrigin = (req, res, next) => {
+  const { headers } = req;
+  const { origin } = headers;
+  if (
+    !origin ||
+    !process.env.FRONT_END_BASE_URL.includes(origin)
+  ) {
+    if (res.headersSent) {
+      return next(err);
+    }
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+  return next();
+}
