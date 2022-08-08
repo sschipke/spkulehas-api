@@ -8,15 +8,13 @@ export const logger = (message, req) => {
     req.ips,
     "URL: ",
     req.originalUrl,
-    // "for: ",
-    // req["body"]["user"]["id"],
     " at ",
     timeString
   );
 };
 
 export const logRequest = (req, res, next) => {
-  const { method, originalUrl, ip } = req;
+  const { method, originalUrl, ip, headers } = req;
   console.log(
     "Incoming request:",
     "url:",
