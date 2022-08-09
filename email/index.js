@@ -61,7 +61,7 @@ export const sendPasswordResetEmail = async (user, url) => {
   };
 
   console.log(
-    "Sending rest email to: ",
+    "Sending reset email to: ",
     user.email,
     process.env.NODE_ENV,
     mailOptions
