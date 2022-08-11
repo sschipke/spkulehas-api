@@ -18,6 +18,8 @@ import {
   generateWebtoken,
 } from "../../../middleware/auth";
 
+const SEND_EMAIL_DELAY_MS = 900;
+
 const express = require("express");
 const bcrypt = require("bcrypt");
 const router = express.Router();
@@ -96,11 +98,11 @@ router.post("/forgot/password", passwordResetLimiter, async (req, res) => {
     const emailUrl = `${process.env.FRONT_END_BASE_URL}?reset=${token}`;
     delete user.password;
     try {
+      await sendPasswordResetEmail(user, emailUrl);
       res
         .status(200)
         .json("If a user with this email exists, an email has been sent.")
         .send();
-      sendPasswordResetEmail(user, emailUrl);
     } catch (error) {
       console.error(
         "Unable to send password reset email to: " + user.email + " " + error
@@ -111,9 +113,14 @@ router.post("/forgot/password", passwordResetLimiter, async (req, res) => {
       "Password reset email not sent due to duplicate or missing emails. ",
       { usersByEmail }
     );
-    return res
-      .status(200)
-      .json("If a user with this email exists, an email has been sent.");
+    
+    //This delay was added to roughly match the latency it took for successful emails to be sent.
+    //This is to make it harder for an attacker to determine if an email exists in the db or not
+    setTimeout(() => {
+      return res
+        .status(200)
+        .json("If a user with this email exists, an email has been sent.");
+    }, SEND_EMAIL_DELAY_MS);
   }
 });
 
