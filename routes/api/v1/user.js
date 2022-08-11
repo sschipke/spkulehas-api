@@ -1,8 +1,14 @@
 import moment from "moment";
-import * as jwt from "jsonwebtoken";
 import { database } from "../../../app";
 import { logger } from "../../../utils/logging";
 import { sendPasswordResetEmail } from "../../../email";
+import {
+  validateUserProfile,
+  canUserUpdate,
+  validateEmail,
+  validateStatus,
+  validatePassword,
+} from "../../../validations/userValidation";
 import {
   loginLimiter,
   passwordResetLimiter,
@@ -21,7 +27,7 @@ router.post("/login", loginLimiter, async (request, res) => {
   const { email, password } = request.body;
   const foundUser = await findUserByEmail(email);
   if (!foundUser || !foundUser.length) {
-    return res.status(404).json({ error: "Incorrect email or password." });
+    return res.status(401).json({ error: "Incorrect email or password." });
   }
   const hash = foundUser[0].password;
   let isValidPassword = bcrypt.compareSync(password, hash);
@@ -43,15 +49,32 @@ router.post("/login", loginLimiter, async (request, res) => {
   return res.status(200).json(responseBody);
 });
 
-router.put("/update/password/:id", async (req, res) => {
+router.put("/update/password/:id", passwordResetLimiter, async (req, res) => {
   const { id } = req.params;
-  const { newPassword, password } = req.body;
+  const { password } = req.body;
+  let { newPassword } = req.body;
+  const userFromJwt = res.locals.user;
   const foundUser = await findUserById(id);
+
+  if (!canUserUpdate(userFromJwt, id, true)) {
+    return res.status(403).json({ error: "Unauthorized" });
+  }
   const hash = foundUser.password;
   let isValidPassword = bcrypt.compareSync(password, hash);
   if (!isValidPassword) {
     return res.status(401).json({ error: "Unauthorized" });
   }
+
+  if (password === newPassword) {
+    return res.status(422).json({ error: "Cannot use old password" });
+  }
+
+  const error = validatePassword(newPassword);
+  if (Object.keys(error).length) {
+    return res.status(422).json(error);
+  }
+
+
   try {
     return updatePassword(id, newPassword).then((success) => {
       logger("Sucessfully updated password. ", req);
@@ -71,20 +94,21 @@ router.post("/forgot/password", passwordResetLimiter, async (req, res) => {
     const user = usersByEmail[0];
     const token = generateWebtoken(user, "2hr", "email");
     const emailUrl = `${process.env.FRONT_END_BASE_URL}?reset=${token}`;
+    delete user.password;
     try {
-      let success = await sendPasswordResetEmail(user, emailUrl);
-      return res
+      res
         .status(200)
-        .json("If a user with this email exists, an email has been sent.");
+        .json("If a user with this email exists, an email has been sent.")
+        .send();
+      sendPasswordResetEmail(user, emailUrl);
     } catch (error) {
       console.error(
         "Unable to send password reset email to: " + user.email + " " + error
       );
-      return res.status(500).json("Unable to send email.");
     }
   } else {
     console.error(
-      "Password reset email not sent due to duplicate or insufficient emails. ",
+      "Password reset email not sent due to duplicate or missing emails. ",
       { usersByEmail }
     );
     return res
@@ -100,6 +124,10 @@ router.put("/reset/password", passwordResetLimiter, async (req, res) => {
     console.error("Attempt to reset password with non-email token.");
     return res.status(403).json("Unauthorized");
   }
+  const error = validatePassword(newPassword);
+  if (Object.keys(error).length) {
+    return res.status(422).json(error);
+  }
   try {
     return updatePassword(user.id, newPassword).then((success) => {
       logger("Sucessfully reset password. ", req);
@@ -114,11 +142,15 @@ router.put("/reset/password", passwordResetLimiter, async (req, res) => {
 router.put("/update/email/:id", async (req, res) => {
   const { newEmail, password } = req.body;
   const { id } = req.params;
-  const localUser = res.locals.user;
+  const userFromJwt = res.locals.user;
   const foundUser = await findUserById(id);
   console.log({ foundUser });
   if (!foundUser) {
     return res.status(404).json({ error: "Invalid user ID." });
+  }
+
+  if (!canUserUpdate(userFromJwt, id)) {
+    return res.status(403).status({ error: "Unauthorized." });
   }
 
   if (!newEmail || !password) {
@@ -133,6 +165,12 @@ router.put("/update/email/:id", async (req, res) => {
   let isValidPassword = bcrypt.compareSync(password, hash);
   if (!isValidPassword) {
     return res.status(401).json({ error: "Unauthorized" });
+  }
+
+  const error = validateEmail(newEmail);
+
+  if (Object.keys(error).length) {
+    return res.status(422).json(error);
   }
 
   try {
@@ -159,6 +197,11 @@ router.put("/update/email/:id", async (req, res) => {
 router.put("/:id", async (req, res) => {
   const { id } = req.params;
   const { user } = req.body;
+  const jwtUser = res.locals.user;
+
+  if (!canUserUpdate(jwtUser, id)) {
+    return res.status(403).status({ error: "Unauthorized." });
+  }
 
   let profileToUpdate = await getUserProfileById(id);
 
@@ -168,9 +211,18 @@ router.put("/:id", async (req, res) => {
       .json({ error: "Unable to find profile with id: " + reservationId });
   }
 
-  //TODO: Add Validation!
+  const profile = mapUserToProfile(user);
+  if (!validateStatus(jwtUser, profileToUpdate, profile)) {
+    return res
+      .status(403)
+      .json({ error: "Only the admin can update a member's status." });
+  }
+  const error = validateUserProfile(profile);
+  if (Object.keys(error).length) {
+    return res.status(422).json(error);
+  }
 
-  return updateProfile(user)
+  return updateProfile(profile)
     .then(async (numberOfUpdates) => {
       if (numberOfUpdates <= 0) {
         return res
@@ -238,10 +290,10 @@ const mapUserToProfile = (user) => {
   return profile;
 };
 
-const updateProfile = async (user) => {
-  const profile = mapUserToProfile(user);
+const updateProfile = async (profile) => {
+  const userId = profile.user_id;
   return database("userprofile")
-    .where({ user_id: user.id })
+    .where({ user_id: userId })
     .update(profile)
     .catch((err) => {
       console.error("Unable to update profile: ", profile, "Error: ", err);

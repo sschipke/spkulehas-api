@@ -38,17 +38,22 @@ router.post("/", async (req, res, next) => {
   const { reservation } = req.body;
   const { user } = res.locals;
   if (!canUserEdit(user, reservation)) {
+    console.error(
+      "Unable to create reservation: User did not have permission."
+    );
     return res.status(401).json({ error: "Unauthorized" });
   }
 
   const error = validateReservation(reservation);
   if (Object.keys(error).length) {
+    console.error("Unable to create reservation: ", error);
     return res.status(422).json(error);
   }
   const conflictingReservations = await checkForConflictingReservations(
     reservation
   );
   if (conflictingReservations.length) {
+    console.error("Unable to create reservation: Conflicting Reservation.");
     return res
       .status(422)
       .json({ error: "This reservation conflicts with another." });
@@ -103,6 +108,11 @@ router.delete("/:id", async (req, response) => {
   const id = Number(req.params.id);
   const { reservation } = req.body;
   const { user } = response.locals;
+  if (!reservation || !reservation.user_id) {
+    return res
+      .status(422)
+      .json({ error: "Reservation must be included in the body." });
+  }
   if (!canUserEdit(user, reservation)) {
     return response.status(401).json({ error: "Unauthorized" });
   }
