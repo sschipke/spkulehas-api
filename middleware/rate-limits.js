@@ -4,7 +4,7 @@ export const passwordResetLimiter = rateLimit({
   windowMs: 60 * 60 * 1000, // 1 hr
   max: 5,
   message: {
-    error: "Too many password reset requests. Please try again after an hour.",
+    error: "Too many password reset requests. Please try again later.",
   },
   standardHeaders: true,
   legacyHeaders: false,
