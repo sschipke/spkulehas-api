@@ -8,6 +8,7 @@ import {
   validateEmail,
   validateStatus,
   validatePassword,
+  validateEmailSetting,
 } from "../../../validations/userValidation";
 import {
   loginLimiter,
@@ -76,7 +77,6 @@ router.put("/update/password/:id", passwordResetLimiter, async (req, res) => {
     return res.status(422).json(error);
   }
 
-
   try {
     return updatePassword(id, newPassword).then((success) => {
       logger("Sucessfully updated password. ", req);
@@ -113,7 +113,7 @@ router.post("/forgot/password", passwordResetLimiter, async (req, res) => {
       "Password reset email not sent due to duplicate or missing emails. ",
       { usersByEmail }
     );
-    
+
     //This delay was added to roughly match the latency it took for successful emails to be sent.
     //This is to make it harder for an attacker to determine if an email exists in the db or not
     setTimeout(() => {
@@ -251,6 +251,32 @@ router.put("/:id", async (req, res) => {
     });
 });
 
+router.put("/email_setting/:userId", passwordResetLimiter, async (req, res) => {
+  const { userId } = req.params;
+  const { settingName, value } = req.body;
+  const userFromJwt = res.locals.user;
+  const foundUser = await findUserById(userId);
+
+  if (!canUserUpdate(userFromJwt, userId, true)) {
+    return res.status(403).json({ error: "Unauthorized" });
+  }
+
+  if (!validateEmailSetting(settingName, value)) {
+    return res.status(422).json({ error: "Invalid email setting" });
+  }
+
+  try {
+    return processEmailSettingUpdate(userId, settingName, value).then((success) => {
+      let successMessage = value ? "Sucessfully updated email setting." : "You will no longer receive deletion emails."
+      logger("Sucessfully updated email setting. ", req);
+      return res.status(200).json(successMessage);
+    });
+  } catch (error) {
+    console.error("Unable to update password. ", error);
+    return res.status(500).json({ error: "Unable to update email setting." });
+  }
+});
+
 const findUserByEmail = async (email) => {
   return database("user").where({ email: email.toLowerCase() });
 };
@@ -334,6 +360,58 @@ const updateEmail = async (id, newEmail) => {
         return res[0].email;
       }
     });
+};
+
+const processEmailSettingUpdate = async (userId, settingName, value) => {
+  const possibleExistingSetting = await findEmailSettingByNameAndUserId(
+    userId,
+    settingName
+  );
+  if (possibleExistingSetting.length === 1) {
+    try {
+      const existingSetting = possibleExistingSetting[0];
+      const settingId = existingSetting.id;
+      return updateEmailSetting(settingId, value);
+    } catch (error) {
+      console.error(
+        "Error updating existing email setting setting for: ",
+        userId,
+        error
+      );
+      throw new Error({ error: "Unable to update email setting." });
+    }
+  } else if (possibleExistingSetting.length === 0) {
+    try {
+      return addEmailSettingForUser(userId, settingName, value);
+    } catch (error) {
+      console.error("Error adding email setting setting for: ", userId, error);
+
+      throw new Error({ error: "Unable to update email setting." });
+    }
+  } else {
+    throw new Error({ error: "Duplicate email settings for user: ", userId });
+  }
+};
+
+const findEmailSettingByNameAndUserId = async (userId, settingName) => {
+  return database("email_setting")
+    .where({ user_id: userId })
+    .andWhere({ setting_name: settingName });
+};
+
+const updateEmailSetting = async (settingId, value) => {
+  const now = moment().toISOString();
+  return database("email_setting")
+    .where({ id: settingId })
+    .update({ value, updated_at: now });
+};
+
+const addEmailSettingForUser = async (userId, settingName, value) => {
+  return database("email_setting").insert({
+    user_id: userId,
+    setting_name: settingName,
+    value,
+  });
 };
 
 export default router;
