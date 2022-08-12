@@ -1,4 +1,9 @@
 const POSSIBLE_STATUSES = ["ADMIN", "D2", "D1", "S2", "S1", "U"];
+const POSSIBLE_EMAIL_SETTINGS = [
+  "reservation_deleted",
+  "reservation_shortened",
+  "reservation_reminder",
+];
 
 const USER_ID_REGEX = new RegExp(
   /^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/
@@ -150,3 +155,7 @@ export const validatePassword = (newPassword) => {
   }
   return {};
 };
+
+export const validateEmailSetting = (emailSetting, value) => {
+  return POSSIBLE_EMAIL_SETTINGS.includes(emailSetting) && typeof value === "boolean"
+}

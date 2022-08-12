@@ -5,11 +5,15 @@ exports.up = function (knex) {
       table.string("user_id").notNull();
       table.foreign("user_id").references("user.id");
       table
-        .enu("status", [
-          "reservation_deleted",
-          "reservation_shortened",
-          "reservation_reminder",
-        ], 30)
+        .enu(
+          "setting_name",
+          [
+            "reservation_deleted",
+            "reservation_shortened",
+            "reservation_reminder",
+          ],
+          30
+        )
         .notNull();
       table.boolean("value").default(false);
       table.timestamps(true, true);
