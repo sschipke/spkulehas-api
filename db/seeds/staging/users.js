@@ -2026,7 +2026,12 @@ const mockUsers = [
   },
 ];
 
-const usersToEmail = ["swschipke@gmail.com", "spkulehas@gmail.com"];
+const usersToEmail = [
+  "srschipke@gmail.com",
+  "swschipke@gmail.com",
+  "huntshop@rushmore.com",
+  "spkulehas@gmail.com",
+];
 
 const createUser = async (knex, user) => {
   console.log({ user });

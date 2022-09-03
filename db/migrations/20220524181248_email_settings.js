@@ -18,9 +18,22 @@ exports.up = function (knex) {
       table.boolean("value").default(false);
       table.timestamps(true, true);
     }),
+    knex.schema.createTable("session", function (table) {
+      table.increments("pk").primary();
+      table.string("id").unique().notNull();
+      table.string("user_id").notNull();
+      table.foreign("user_id").references("user.id");
+      table.enu("type", ["password_reset", "refresh"], 30).notNull();
+      table.timestamp("expires", { useTz: true }).notNull();
+      table.boolean("valid").default(true);
+      table.timestamps(true, true);
+    }),
   ]);
 };
 
 exports.down = function (knex) {
-  return Promise.all([knex.schema.dropTable("email_setting")]);
+  return Promise.all([
+    knex.schema.dropTable("email_setting"),
+    knex.schema.dropTable("session"),
+  ]);
 };

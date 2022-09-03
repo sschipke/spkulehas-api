@@ -3,7 +3,6 @@ const bcrypt = require("bcrypt");
 const { v4: uuidv4 } = require("uuid");
 const saltRounds = 10;
 const { sendWelcomeEmail } = require("../../../email/index");
-const { copyUser, resetPassFile } = require("../../../utils/filewriter");
 const { generatePassword } = require("../seed-helpers");
 
 const mockUsers = [
@@ -2026,26 +2025,21 @@ const mockUsers = [
   },
 ];
 
-const usersToEmail = ["swschipke@gmail.com", "spkulehas@gmail.com"];
-
 const createUser = async (knex, user) => {
-  console.log({ user });
   user.password = generatePassword();
-  copyUser(user);
-  const { email, password, id } = user;
-  const hash = bcrypt.hashSync(password, saltRounds);
-  if (usersToEmail.includes(email.toLowerCase())) {
-    await sendWelcomeEmail(user);
-  }
-  return knex("user")
-    .insert(
-      {
-        email,
-        password: hash,
-        id,
-      },
-      "id"
-    )
+  return sendWelcomeEmail(user)
+    .then(() => {
+      const { email, password, id } = user;
+      const hash = bcrypt.hashSync(password, saltRounds);
+      return knex("user").insert(
+        {
+          email,
+          password: hash,
+          id,
+        },
+        "id"
+      );
+    })
     .catch((err) => {
       console.log("ERR: ", err);
       throw new Error("Error in createUser ", err);
@@ -2056,7 +2050,7 @@ const createUser = async (knex, user) => {
       console.log({ profile });
       return createProfile(knex, profile, user.id);
     })
-    .catch((err) => console.error("Error executing profile: ", err))
+    .catch((err) => console.error("Error seeding profile: ", err))
     .then(() => {
       if (user["reservations"] && user["reservations"].length) {
         console.log("90");
@@ -2121,8 +2115,6 @@ const createProfile = (knex, profile, user_id) => {
     });
 };
 exports.seed = function (knex) {
-  console.log("128");
-  resetPassFile();
   return knex("userprofile")
     .del()
     .then(() => knex("reservation").del())
