@@ -48,7 +48,7 @@ const sendWelcomeEmail = async (user) => {
   return transporter.sendMail(mailOptions);
 };
 
-export const sendPasswordResetEmail = async (user, url) => {
+const sendPasswordResetEmail = async (user, url) => {
   const mailOptions = {
     from: process.env.ADMIN_EMAIL,
     to: user.email,
@@ -69,7 +69,7 @@ export const sendPasswordResetEmail = async (user, url) => {
   return transporter.sendMail(mailOptions);
 };
 
-export const alertUsersOfDeletion = async (members, reservation) => {
+const alertUsersOfDeletion = async (members, reservation) => {
   const { start, end, title } = reservation;
   const startDate = moment(start).format("dddd, MMMM Do, YYYY");
   const endDate = moment(end).format("dddd, MMMM Do, YYYY");
@@ -89,10 +89,7 @@ export const alertUsersOfDeletion = async (members, reservation) => {
     },
   };
 
-  console.log(
-    "Sending deletion email: ",
-    mailOptions
-  );
+  console.log("Sending deletion email: ", mailOptions);
   return transporter.sendMail(mailOptions);
 };
 
