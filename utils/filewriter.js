@@ -23,7 +23,6 @@ const resetPassFile = () => {
     fs.unlinkSync(`./passwords-${env}.json`);
   } catch (err) {
     console.error("Error resetting file. ", err);
-    return new Error("Error resetting file. ", err);
   }
   console.log("Successfully deleted file!");
 };
