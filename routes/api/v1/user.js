@@ -10,6 +10,7 @@ import {
   validatePassword,
   validateEmailSetting,
 } from "../../../validations/userValidation";
+import { createResetSessionForUser } from "../../../repoCalls/userRepoCalls";
 import {
   loginLimiter,
   passwordResetLimiter,
@@ -18,6 +19,8 @@ import {
   validateRequestToken,
   generateWebtoken,
 } from "../../../middleware/auth";
+
+import { validateSession } from "../../../repoCalls/userRepoCalls";
 
 const SEND_EMAIL_DELAY_MS = 900;
 
@@ -39,11 +42,14 @@ router.post("/login", loginLimiter, async (request, res) => {
   }
 
   const user = await getUserProfileById(foundUser[0].id);
-  console.log({ user });
   const usersInfo = await getAllUsersIdNameAndEmail();
+  const emailSettings = await findAllEmailSettingsByUserId(foundUser[0].id);
   const webToken = generateWebtoken(user, "1hr");
+  //TODO: For now there should only be one email setting for deletion emails
+  //Once we support more, we can remove the index here
   const responseBody = {
     user,
+    emailSettings: emailSettings.length ? emailSettings[0] : null,
     usersInfo: usersInfo,
     token: webToken,
   };
@@ -78,7 +84,7 @@ router.put("/update/password/:id", passwordResetLimiter, async (req, res) => {
   }
 
   try {
-    return updatePassword(id, newPassword).then((success) => {
+    return updatePassword(id, newPassword).then(() => {
       logger("Sucessfully updated password. ", req);
       return res.status(200).json("Successfully updated password.");
     });
@@ -90,11 +96,11 @@ router.put("/update/password/:id", passwordResetLimiter, async (req, res) => {
 
 router.post("/forgot/password", passwordResetLimiter, async (req, res) => {
   const { email } = req.body;
-  console.log(email, req.body);
   const usersByEmail = await findUserByEmail(email);
   if (usersByEmail.length === 1) {
     const user = usersByEmail[0];
-    const token = generateWebtoken(user, "2hr", "email");
+    const sessionId = await createResetSessionForUser(user.id);
+    const token = generateWebtoken(user, "2hr", "email", sessionId[0].id);
     const emailUrl = `${process.env.FRONT_END_BASE_URL}?reset=${token}`;
     delete user.password;
     try {
@@ -126,10 +132,14 @@ router.post("/forgot/password", passwordResetLimiter, async (req, res) => {
 
 router.put("/reset/password", passwordResetLimiter, async (req, res) => {
   const { newPassword } = req.body;
-  const { user, tokenType } = res.locals;
+  const { user, tokenType, sessionId } = res.locals;
   if (tokenType !== "email") {
     console.error("Attempt to reset password with non-email token.");
     return res.status(403).json("Unauthorized");
+  }
+  const { isValid, message } = await validateSession(sessionId);
+  if (!isValid) {
+    return res.status(401).json({ error: message });
   }
   const error = validatePassword(newPassword);
   if (Object.keys(error).length) {
@@ -186,8 +196,8 @@ router.put("/update/email/:id", async (req, res) => {
         logger("Sucessfully updated email to: " + email, req);
         const updatedUser = foundUser;
         updatedUser.email = email;
-        updatedUser.name = localUser.name;
-        updatedUser.status = localUser.status;
+        updatedUser.name = userFromJwt.name;
+        updatedUser.status = userFromJwt.status;
         const webToken = generateWebtoken(updatedUser, "1hr");
         return res.status(200).json({ email, token: webToken });
       })
@@ -251,11 +261,11 @@ router.put("/:id", async (req, res) => {
     });
 });
 
-router.put("/email_setting/:userId", passwordResetLimiter, async (req, res) => {
+router.put("/email_setting/:userId", async (req, res) => {
   const { userId } = req.params;
   const { settingName, value } = req.body;
+  console.log(req.body);
   const userFromJwt = res.locals.user;
-  const foundUser = await findUserById(userId);
 
   if (!canUserUpdate(userFromJwt, userId, true)) {
     return res.status(403).json({ error: "Unauthorized" });
@@ -266,8 +276,10 @@ router.put("/email_setting/:userId", passwordResetLimiter, async (req, res) => {
   }
 
   try {
-    return processEmailSettingUpdate(userId, settingName, value).then((success) => {
-      let successMessage = value ? "Sucessfully updated email setting." : "You will no longer receive deletion emails."
+    return processEmailSettingUpdate(userId, settingName, value).then(() => {
+      let successMessage = value
+        ? "You will be notified when reservations are deleted."
+        : "You will no longer receive deletion emails.";
       logger("Sucessfully updated email setting. ", req);
       return res.status(200).json(successMessage);
     });
@@ -397,6 +409,12 @@ const findEmailSettingByNameAndUserId = async (userId, settingName) => {
   return database("email_setting")
     .where({ user_id: userId })
     .andWhere({ setting_name: settingName });
+};
+
+const findAllEmailSettingsByUserId = async (userId) => {
+  return database("email_setting")
+    .columns(["setting_name", "value"])
+    .where({ user_id: userId });
 };
 
 const updateEmailSetting = async (settingId, value) => {

@@ -20,20 +20,21 @@ export const validateRequestToken = (req, res, next) => {
         console.log({ decoded });
         res.locals.user = decoded.user;
         res.locals.tokenType = decoded.type;
+        res.locals.sessionId = decoded.sessionId;
         return next();
       }
     });
   } else {
-    return res.status(401).json({error: "Unauthorized."})
+    return res.status(401).json({ error: "Unauthorized." });
   }
 };
 
-export const generateWebtoken = (userProfile, expiration, type) => {
+export const generateWebtoken = (userProfile, expiration, type, sessionId) => {
   if (!expiration || !expiration.includes("hr")) {
     throw new Error("No expiration time inlcuded in generate request.");
   }
   if (!type) {
-    type = "login"
+    type = "login";
   }
   const signature = process.env.TOKEN_SECRET;
   const { id, email, name, status } = userProfile;
@@ -43,20 +44,19 @@ export const generateWebtoken = (userProfile, expiration, type) => {
     name,
     status,
   };
-  return jwt.sign({ user: data, type }, signature, { expiresIn: expiration });
+  return jwt.sign({ user: data, type, sessionId }, signature, {
+    expiresIn: expiration,
+  });
 };
 
 export const validateOrigin = (req, res, next) => {
   const { headers } = req;
   const { origin } = headers;
-  if (
-    !origin ||
-    !process.env.FRONT_END_BASE_URL.includes(origin)
-  ) {
+  if (!origin || !process.env.FRONT_END_BASE_URL.includes(origin)) {
     if (res.headersSent) {
       return next(err);
     }
     return res.status(401).json({ error: "Unauthorized" });
   }
   return next();
-}
+};
