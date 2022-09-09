@@ -2,7 +2,7 @@ import { database } from "../app";
 import moment from "moment";
 const { v4: uuidv4 } = require("uuid");
 
-const RESET_TYPE = "password_reset";
+export const RESET_TYPE = "password_reset";
 
 export const createResetSessionForUser = async (userId) => {
   const id = uuidv4();
@@ -20,6 +20,13 @@ const invalidateSession = async (sessionId, now) => {
   return database("session")
     .where({ id: sessionId })
     .update({ valid: false, updated_at: now });
+};
+
+export const invalidateOtherSessions = async (userId, type) => {
+  const now = moment().toISOString();
+  return database("session")
+    .where({ user_id: userId, type, valid: true })
+    .update({ valid: false, updated_at: now, expires: now });
 };
 
 export const validateSession = async (sessionId) => {

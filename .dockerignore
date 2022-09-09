@@ -1,0 +1,9 @@
+node_modules
+README.md
+PROCFILE
+passwords-development.json
+passwords-test.json
+passwords*.json
+.vscode
+ssh
+ssh-cert.pub

@@ -78,6 +78,11 @@ export const isInWinter = (date) => {
       WINTER_SEASON_START_2023,
       WINTER_SEASON_END_2023,
       "day"
+    ) ||
+    moment(date).isBetween(
+      WINTER_SEASON_START_2024,
+      WINTER_SEASON_END_2024,
+      "day"
     )
   );
 };
