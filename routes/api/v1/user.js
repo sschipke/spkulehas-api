@@ -20,7 +20,7 @@ import {
   generateWebtoken,
 } from "../../../middleware/auth";
 
-import { validateSession } from "../../../repoCalls/userRepoCalls";
+import { validateSession, invalidateOtherSessions, RESET_TYPE } from "../../../repoCalls/userRepoCalls";
 
 const SEND_EMAIL_DELAY_MS = 900;
 
@@ -99,6 +99,7 @@ router.post("/forgot/password", passwordResetLimiter, async (req, res) => {
   const usersByEmail = await findUserByEmail(email);
   if (usersByEmail.length === 1) {
     const user = usersByEmail[0];
+    await invalidateOtherSessions(user.id, RESET_TYPE);
     const sessionId = await createResetSessionForUser(user.id);
     const token = generateWebtoken(user, "2hr", "email", sessionId[0].id);
     const emailUrl = `${process.env.FRONT_END_BASE_URL}?reset=${token}`;

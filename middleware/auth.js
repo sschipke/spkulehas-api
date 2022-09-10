@@ -52,6 +52,7 @@ export const generateWebtoken = (userProfile, expiration, type, sessionId) => {
 export const validateOrigin = (req, res, next) => {
   const { headers } = req;
   const { origin } = headers;
+  console.log({origin})
   if (!origin || !process.env.FRONT_END_BASE_URL.includes(origin)) {
     if (res.headersSent) {
       return next(err);

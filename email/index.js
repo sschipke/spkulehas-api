@@ -26,7 +26,7 @@ const handlebarOptions = {
 transporter.use("compile", hbs(handlebarOptions));
 
 const sendWelcomeEmail = async (user) => {
-  const frontEndUrl = process.env.FRONT_END_BASE_URL;
+  const loginUrl = `${process.env.FRONT_END_BASE_URL}login`;
   const mailOptions = {
     from: process.env.ADMIN_EMAIL, // sender address
     to: user.email,
@@ -34,12 +34,12 @@ const sendWelcomeEmail = async (user) => {
     template: "welcome",
     context: {
       user,
-      frontEndUrl,
+      loginUrl,
     },
   };
 
   console.log(
-    "Sending email: ",
+    "Sending welcome email: ",
     user.email,
     user.profile.name,
     process.env.NODE_ENV,
