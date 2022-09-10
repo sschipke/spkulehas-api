@@ -34,7 +34,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.post("/", async (req, res, next) => {
+router.post("/new", async (req, res, next) => {
   const { reservation } = req.body;
   const { user } = res.locals;
   if (!canUserEdit(user, reservation)) {
