@@ -18,3 +18,13 @@ export const loginLimiter = rateLimit({
   legacyHeaders: false,
   // skipSuccessfulRequests: true
 });
+
+export const resetTokenValidationLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000, // 1 hr
+  max: 5,
+  message: {
+    error: "Too many reset validation requests. Please try again later.",
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+});

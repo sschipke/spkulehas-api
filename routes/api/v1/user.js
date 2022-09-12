@@ -10,7 +10,6 @@ import {
   validatePassword,
   validateEmailSetting,
 } from "../../../validations/userValidation";
-import { createResetSessionForUser } from "../../../repoCalls/userRepoCalls";
 import {
   loginLimiter,
   passwordResetLimiter,
@@ -20,7 +19,13 @@ import {
   generateWebtoken,
 } from "../../../middleware/auth";
 
-import { validateSession, invalidateOtherSessions, RESET_TYPE } from "../../../repoCalls/userRepoCalls";
+import {
+  validateSession,
+  invalidateOtherSessions,
+  RESET_TYPE,
+  createResetSessionForUser,
+} from "../../../repoCalls/sessionRepoCalls";
+import { forbiddenResponse } from "../../../utils/httpHelpers";
 
 const SEND_EMAIL_DELAY_MS = 900;
 
@@ -136,9 +141,13 @@ router.put("/reset/password", passwordResetLimiter, async (req, res) => {
   const { user, tokenType, sessionId } = res.locals;
   if (tokenType !== "email") {
     console.error("Attempt to reset password with non-email token.");
-    return res.status(403).json("Unauthorized");
+    return forbiddenResponse();
   }
-  const { isValid, message } = await validateSession(sessionId);
+  const { isValid, message } = await validateSession(
+    sessionId,
+    RESET_TYPE,
+    user.id
+  );
   if (!isValid) {
     return res.status(401).json({ error: message });
   }
@@ -147,7 +156,7 @@ router.put("/reset/password", passwordResetLimiter, async (req, res) => {
     return res.status(422).json(error);
   }
   try {
-    return updatePassword(user.id, newPassword).then((success) => {
+    return updatePassword(user.id, newPassword).then(() => {
       logger("Sucessfully reset password. ", req);
       return res.status(200).json("Successfully reset password.");
     });

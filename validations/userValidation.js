@@ -53,7 +53,7 @@ export const validateUserProfile = (userProfile) => {
   const trimmedStreet = street.trim();
   if (
     !trimmedStreet ||
-    trimmedStreet.length < 15 ||
+    trimmedStreet.length < 10 ||
     trimmedStreet.length > 50
   ) {
     return { error: "Invalid street address." };

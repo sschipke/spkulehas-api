@@ -8,6 +8,7 @@ import { logRequest } from "./utils/logging";
 import { errorHandler } from "./middleware/errors";
 import reservations from "./routes/api/v1/reservations"
 import user from "./routes/api/v1/user";
+import sessionsRouter from "./routes/api/v1/session";
 if (environment === "development") {
   console.log("loaded")
   require("dotenv").config();
@@ -34,6 +35,7 @@ app.use(validateOrigin);
 
 app.use("/api/v1/user", user);
 app.use("/api/v1/reservations", reservations);
+app.use("/api/v1/session", sessionsRouter);
 
 app.get("/api/v1/teapot", (request, response) => {
   return response

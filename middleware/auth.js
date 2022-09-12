@@ -1,11 +1,11 @@
 import "@babel/polyfill";
 const jwt = require("jsonwebtoken");
+import { unauthorizedResponse } from "../utils/httpHelpers";
 
 export const validateRequestToken = (req, res, next) => {
   const signature = process.env.TOKEN_SECRET;
   const nonsecurePaths = ["/login", "/forgot/password"];
-  const nononSecureMethod = "GET";
-  if (nonsecurePaths.includes(req.path) || req.method === nononSecureMethod) {
+  if (nonsecurePaths.includes(req.path) || req.baseUrl === "/api/v1/reservations" && req.method === "GET") {
     return next();
   }
   const authHeader = req.headers["authorization"];
@@ -14,8 +14,13 @@ export const validateRequestToken = (req, res, next) => {
     const token = bearer[1];
     return jwt.verify(token, signature, (err, decoded) => {
       if (err) {
-        console.error("Error in jwt: ", err.message);
-        return res.status(401).json({ error: err.message });
+        const { message } = err;
+        console.error("Error in jwt: ", message);
+        if (message === "jwt expired") {
+          return unauthorizedResponse(
+            "This session has expired. Please login again."
+          );
+        }
       } else {
         console.log({ decoded });
         res.locals.user = decoded.user;
@@ -25,7 +30,7 @@ export const validateRequestToken = (req, res, next) => {
       }
     });
   } else {
-    return res.status(401).json({ error: "Unauthorized." });
+    return unauthorizedResponse(res);
   }
 };
 
@@ -52,12 +57,12 @@ export const generateWebtoken = (userProfile, expiration, type, sessionId) => {
 export const validateOrigin = (req, res, next) => {
   const { headers } = req;
   const { origin } = headers;
-  console.log({origin})
+  console.log({ origin });
   if (!origin || !process.env.FRONT_END_BASE_URL.includes(origin)) {
     if (res.headersSent) {
       return next(err);
     }
-    return res.status(401).json({ error: "Unauthorized" });
+    return unauthorizedResponse(res);
   }
   return next();
 };

@@ -37,8 +37,7 @@ export const validateReservation = (reservation) => {
   if (!moment(end).isValid()) {
     return { error: "Invalid end date" };
   }
-  if (moment(reservation.start).isSameOrAfter(reservation.end)) {
-    console.log("comparing");
+  if (moment(reservation.start).isAfter(reservation.end)) {
     return { error: "Start date cannot be after end date." };
   }
   if (moment(start).isBefore(minDate, "day")) {
