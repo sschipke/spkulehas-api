@@ -5,9 +5,15 @@ import { canUserEdit } from "../../../utils/helpers";
 import { validateReservation } from "../../../validations/reservationvalidation";
 import { validateRequestToken } from "../../../middleware/auth";
 import { alertUsersOfDeletion } from "../../../email";
+import {
+  forbiddenResponse,
+  notFoundResponse,
+  unauthorizedResponse,
+} from "../../../utils/httpHelpers";
 const moment = require("moment");
 const express = require("express");
 const router = express.Router();
+
 router.use(validateRequestToken);
 
 const RESERVATION_DELETION = "reservation_deleted";
@@ -34,14 +40,14 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.post("/", async (req, res, next) => {
+router.post("/new", async (req, res, next) => {
   const { reservation } = req.body;
   const { user } = res.locals;
   if (!canUserEdit(user, reservation)) {
     console.error(
       "Unable to create reservation: User did not have permission."
     );
-    return res.status(401).json({ error: "Unauthorized" });
+    return forbiddenResponse(res);
   }
 
   const error = validateReservation(reservation);
@@ -72,17 +78,52 @@ router.post("/", async (req, res, next) => {
   }
 });
 
+router.get("/", async (req, res) => {
+  try {
+    const reservations = await getReservations();
+    console.log(
+      "Successfully sent GET for reservations. ",
+      req.ips,
+      new Date().toLocaleString({ timeZone: "American/Denver" })
+    );
+    return res.status(200).json({ reservations });
+  } catch (err) {
+    console.error(
+      "Error sending GET Reservations Response: ",
+      { err },
+      "for",
+      req.ip,
+      " at ",
+      new Date().toLocaleDateString()
+    );
+    return res.status(500).json({ msg: "Error sending reservations.", err });
+  }
+});
+
+router.get("/new", async (req, res, next) => {
+  return unauthorizedResponse(
+    res,
+    "This session has expired. Please login again."
+  );
+});
+
 router.put("/:reservation_id", async (req, res, next) => {
+  const reservationId = Number(req.params.reservation_id);
   const { reservation } = req.body;
   const { user } = res.locals;
-  if (!canUserEdit(user, reservation)) {
-    return res.status(401).json({ error: "Unauthorized" });
+  const reservationToUpdate = await findReservationById(reservationId);
+  if (!canUserEdit(user, reservationToUpdate)) {
+    console.log(
+      "Unable to update reservation: user did not have permission",
+      reservationToUpdate
+    );
+    return forbiddenResponse(res);
   }
-  let reservationToUpdate = await findReservationById(reservation.id);
-  if (!reservationToUpdate || !reservationToUpdate.length) {
-    return res
-      .status(404)
-      .json({ error: "Unable to find reservation with id: " + reservation.id });
+  if (!reservationToUpdate) {
+    return notFoundResponse(
+      res,
+      "Unable to find reservation with id: " + reservationId
+    );
   }
   const error = validateReservation(reservation);
   if (Object.keys(error).length) {
@@ -97,7 +138,7 @@ router.put("/:reservation_id", async (req, res, next) => {
       .status(422)
       .json({ error: "This reservation conflicts with another." });
   }
-  let updatedReservation = await updateReservation(reservation);
+  const updatedReservation = await updateReservation(reservation);
   console.log({ updatedReservation });
   const response = updatedReservation[0];
   logger(`Successfully updated reservation.`, req);
@@ -108,13 +149,17 @@ router.delete("/:id", async (req, response) => {
   const id = Number(req.params.id);
   const { reservation } = req.body;
   const { user } = response.locals;
-  if (!reservation || !reservation.user_id) {
-    return res
-      .status(422)
-      .json({ error: "Reservation must be included in the body." });
+  const currentReservation = await findReservationById(id);
+  console.log({ currentReservation });
+  if (!currentReservation) {
+    return notFoundResponse(
+      response,
+      `Could not find reservation with id: ${id}`
+    );
   }
-  if (!canUserEdit(user, reservation)) {
-    return response.status(401).json({ error: "Unauthorized" });
+  if (!canUserEdit(user, currentReservation)) {
+    console.log("Unable to delete reservation: user did not have permission.");
+    return forbiddenResponse(response);
   }
   console.log({ deletedReservation: reservation });
   return database("reservation")
@@ -122,13 +167,14 @@ router.delete("/:id", async (req, response) => {
     .del()
     .then((res) => {
       if (res === 0) {
-        return response
-          .status(404)
-          .json(`reservation with id: ${id} does not exist.`);
+        return notFoundResponse(
+          response,
+          `Reservation with id: ${id} does not exist.`
+        );
       }
       logger("Sucessfully deleted reservation: ", req);
       response.status(200).json("Reservation successfully removed.").send();
-      handleDeletionEmail(reservation, user.id);
+      handleDeletionEmail(currentReservation, user.id);
     });
 });
 
@@ -163,7 +209,7 @@ const addReservation = async (reservation) => {
 };
 
 const findReservationById = async (reservationId) => {
-  return database("reservation").where({ id: reservationId }).select();
+  return database("reservation").where({ id: reservationId }).select().first();
 };
 
 const getEmailsForDeletionEmail = async (userId) => {

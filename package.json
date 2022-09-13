@@ -8,6 +8,7 @@
     "dev": "nodemon --exec babel-node server.js --verbose",
     "initdb": "knex migrate:latest && knex seed:run",
     "migrate": "knex migrate:latest",
+    "seed-cleaning": "knex seed:run --specific=cabin-cleaning.js",
     "down": "knex migrate:down",
     "test": "jest --forceExit",
     "test:watch": "jest --watchAll"

@@ -1932,6 +1932,11 @@ const mockUsers = [
     profile: {
       status: "ADMIN",
       name: "Schipke SpKuLeHaS",
+      street: "20753 Highway 14A",
+      city: "Spearfish",
+      state: "SD",
+      zipcode: "57783"
+    },
     },
     reservations: [
       {
@@ -2027,9 +2032,7 @@ const mockUsers = [
 ];
 
 const usersToEmail = [
-  "srschipke@gmail.com",
   "swschipke@gmail.com",
-  "huntshop@rushmore.com",
   "spkulehas@gmail.com",
 ];
 
@@ -2052,19 +2055,16 @@ const createUser = async (knex, user) => {
       "id"
     )
     .catch((err) => {
-      console.log("ERR: ", err);
+      console.error("ERR: ", err);
       throw new Error("Error in createUser ", err);
     })
     .then(() => {
-      console.log("98");
       const { profile } = user;
-      console.log({ profile });
       return createProfile(knex, profile, user.id);
     })
     .catch((err) => console.error("Error executing profile: ", err))
     .then(() => {
       if (user["reservations"] && user["reservations"].length) {
-        console.log("90");
         let reservationPromises = [];
         user.reservations.forEach((reservation) => {
           reservationPromises.push(
@@ -2090,7 +2090,6 @@ const createUser = async (knex, user) => {
 
 const createReservations = (knex, reservation, userId) => {
   const { start, title, end, notes } = reservation;
-  console.log({ reservation });
   return knex("reservation")
     .insert({
       notes: notes ? notes : "",
@@ -2126,7 +2125,6 @@ const createProfile = (knex, profile, user_id) => {
     });
 };
 exports.seed = function (knex) {
-  console.log("128");
   resetPassFile();
   return knex("userprofile")
     .del()

@@ -1,11 +1,11 @@
 const moment = require("moment");
 
-const WINTER_SEASON_START_2022 = "2022-10-23";
-const WINTER_SEASON_END_2022 = "2023-05-20";
-const WINTER_SEASON_START_2023 = "2023-10-18";
+const WINTER_SEASON_START_2022 = "2022-10-24";
+const WINTER_SEASON_END_2022 = "2023-05-21";
+const WINTER_SEASON_START_2023 = "2023-10-23";
 const WINTER_SEASON_END_2023 = "2024-05-20";
-const WINTER_SEASON_START_2024 = "2024-10-20";
-const WINTER_SEASON_END_2024 = "2025-05-21";
+const WINTER_SEASON_START_2024 = "2024-10-21";
+const WINTER_SEASON_END_2024 = "2025-05-18";
 
 export const validateReservation = (reservation) => {
   const minDate = process.env.MINIMUM_RESERVATION_DATE;
@@ -37,8 +37,7 @@ export const validateReservation = (reservation) => {
   if (!moment(end).isValid()) {
     return { error: "Invalid end date" };
   }
-  if (moment(reservation.start).isSameOrAfter(reservation.end)) {
-    console.log("comparing");
+  if (moment(reservation.start).isAfter(reservation.end)) {
     return { error: "Start date cannot be after end date." };
   }
   if (moment(start).isBefore(minDate, "day")) {

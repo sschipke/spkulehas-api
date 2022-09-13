@@ -180,7 +180,7 @@ const mockUsers = [
         title: "Jill Orwick",
       },
       {
-        start: moment("2023-07-17")
+        start: moment("2024-10-14")
           .startOf("isoWeek")
           .set({
             hour: 0,
@@ -195,7 +195,7 @@ const mockUsers = [
             millisecond: 0,
           })
           .toISOString(),
-        end: moment("2023-07-17")
+        end: moment("2024-10-14")
           .endOf("isoWeek")
           .set({
             hour: 12,
@@ -1931,6 +1931,10 @@ const mockUsers = [
     profile: {
       status: "ADMIN",
       name: "Schipke SpKuLeHaS",
+      street: "20753 Highway 14A",
+      city: "Spearfish",
+      state: "SD",
+      zipcode: "57783"
     },
     reservations: [
       {
@@ -2021,6 +2025,86 @@ const mockUsers = [
           })
           .toISOString(),
       },
+      {
+        start: moment("2022-05-21")
+          .set({
+            hour: 0,
+            minute: 0,
+            second: 0,
+            millisecond: 0,
+          })
+          .toISOString(),
+        end: moment("2022-05-21")
+          .set({
+            hour: 20,
+            minute: 0,
+            second: 0,
+            millisecond: 0,
+          })
+          .toISOString(),
+        title: "Cabin Cleaning",
+        notes: "Cabin cleaning and anual board meeting.",
+      },
+      {
+        start: moment("2023-05-20")
+          .set({
+            hour: 0,
+            minute: 0,
+            second: 0,
+            millisecond: 0,
+          })
+          .toISOString(),
+        end: moment("2023-05-20")
+          .set({
+            hour: 20,
+            minute: 0,
+            second: 0,
+            millisecond: 0,
+          })
+          .toISOString(),
+        title: "Cabin Cleaning",
+        notes: "Cabin cleaning and anual board meeting.",
+      },
+      {
+        start: moment("2024-05-18")
+          .set({
+            hour: 0,
+            minute: 0,
+            second: 0,
+            millisecond: 0,
+          })
+          .toISOString(),
+        end: moment("2024-05-18")
+          .set({
+            hour: 20,
+            minute: 0,
+            second: 0,
+            millisecond: 0,
+          })
+          .toISOString(),
+        title: "Cabin Cleaning",
+        notes: "Cabin cleaning and anual board meeting.",
+      },
+      {
+        start: moment("2025-05-17")
+          .set({
+            hour: 0,
+            minute: 0,
+            second: 0,
+            millisecond: 0,
+          })
+          .toISOString(),
+        end: moment("2025-05-17")
+          .set({
+            hour: 20,
+            minute: 0,
+            second: 0,
+            millisecond: 0,
+          })
+          .toISOString(),
+        title: "Cabin Cleaning",
+        notes: "Cabin cleaning and anual board meeting.",
+      },
     ],
   },
 ];
@@ -2041,19 +2125,16 @@ const createUser = async (knex, user) => {
       );
     })
     .catch((err) => {
-      console.log("ERR: ", err);
+      console.error("ERR: ", err);
       throw new Error("Error in createUser ", err);
     })
     .then(() => {
-      console.log("98");
       const { profile } = user;
-      console.log({ profile });
       return createProfile(knex, profile, user.id);
     })
     .catch((err) => console.error("Error seeding profile: ", err))
     .then(() => {
       if (user["reservations"] && user["reservations"].length) {
-        console.log("90");
         let reservationPromises = [];
         user.reservations.forEach((reservation) => {
           reservationPromises.push(
@@ -2068,7 +2149,7 @@ const createUser = async (knex, user) => {
       throw new Error("Error on 99: ", err);
     })
     .catch((err) => {
-      console.log("104", err);
+      console.error("104", err);
       throw new Error("104", err);
     })
     .catch((error) => {
