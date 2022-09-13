@@ -1937,6 +1937,7 @@ const mockUsers = [
       state: "SD",
       zipcode: "57783"
     },
+    },
     reservations: [
       {
         notes: "During deer hunting season the cabin is open to all.",
@@ -2030,7 +2031,10 @@ const mockUsers = [
   },
 ];
 
-const usersToEmail = ["swschipke@gmail.com", "spkulehas@gmail.com"];
+const usersToEmail = [
+  "swschipke@gmail.com",
+  "spkulehas@gmail.com",
+];
 
 const createUser = async (knex, user) => {
   console.log({ user });
@@ -2075,7 +2079,7 @@ const createUser = async (knex, user) => {
       throw new Error("Error on 99: ", err);
     })
     .catch((err) => {
-      console.error("104", err);
+      console.log("104", err);
       throw new Error("104", err);
     })
     .catch((error) => {

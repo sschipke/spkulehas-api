@@ -6,6 +6,10 @@
   "scripts": {
     "start": "nodemon --exec babel-node server.js",
     "dev": "nodemon --exec babel-node server.js --verbose",
+    "initdb": "knex migrate:latest && knex seed:run",
+    "migrate": "knex migrate:latest",
+    "seed-cleaning": "knex seed:run --specific=cabin-cleaning.js",
+    "down": "knex migrate:down",
     "test": "jest --forceExit",
     "test:watch": "jest --watchAll"
   },
@@ -19,6 +23,7 @@
     "bcrypt": "^5.0.1",
     "cors": "^2.8.5",
     "express": "^4.17.1",
+    "express-rate-limit": "^6.4.0",
     "jsonwebtoken": "^8.5.1",
     "knex": "^0.20.15",
     "moment": "^2.29.1",

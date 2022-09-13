@@ -3,13 +3,7 @@ const bcrypt = require("bcrypt");
 const saltRounds = 10;
 const { copyUser, resetPassFile } = require("../../../utils/filewriter");
 const { sendWelcomeEmail } = require("../../../email/index");
-
-const generatePassword = () => {
-  return (
-    Math.random().toString(36).slice(4) +
-    Math.random().toString(36).toUpperCase().slice(4)
-  );
-};
+const { generatePassword } = require("../seed-helpers");
 
 const mockUsers = [
   {
@@ -120,7 +114,7 @@ const createUser = async (knex, user) => {
   user.password = generatePassword();
   copyUser(user);
   return sendWelcomeEmail(user)
-    .then((res) => {
+    .then(() => {
       const { email, password, id } = user;
       const hash = bcrypt.hashSync(password, saltRounds);
       return knex("user").insert(
@@ -206,6 +200,8 @@ exports.seed = function (knex) {
   return knex("userprofile")
     .del()
     .then(() => knex("reservation").del())
+    .then(() => knex("session").del())
+    .then(() => knex("email_setting").del())
     .then(() => knex("user").del())
     .then(() => {
       let userPromises = [];

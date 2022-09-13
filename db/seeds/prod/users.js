@@ -3,7 +3,6 @@ const bcrypt = require("bcrypt");
 const { v4: uuidv4 } = require("uuid");
 const saltRounds = 10;
 const { sendWelcomeEmail } = require("../../../email/index");
-const { copyUser, resetPassFile } = require("../../../utils/filewriter");
 const { generatePassword } = require("../seed-helpers");
 
 const mockUsers = [
@@ -181,7 +180,7 @@ const mockUsers = [
         title: "Jill Orwick",
       },
       {
-        start: moment("2023-07-17")
+        start: moment("2024-10-14")
           .startOf("isoWeek")
           .set({
             hour: 0,
@@ -196,7 +195,7 @@ const mockUsers = [
             millisecond: 0,
           })
           .toISOString(),
-        end: moment("2023-07-17")
+        end: moment("2024-10-14")
           .endOf("isoWeek")
           .set({
             hour: 12,
@@ -2026,30 +2025,105 @@ const mockUsers = [
           })
           .toISOString(),
       },
+      {
+        start: moment("2022-05-21")
+          .set({
+            hour: 0,
+            minute: 0,
+            second: 0,
+            millisecond: 0,
+          })
+          .toISOString(),
+        end: moment("2022-05-21")
+          .set({
+            hour: 20,
+            minute: 0,
+            second: 0,
+            millisecond: 0,
+          })
+          .toISOString(),
+        title: "Cabin Cleaning",
+        notes: "Cabin cleaning and anual board meeting.",
+      },
+      {
+        start: moment("2023-05-20")
+          .set({
+            hour: 0,
+            minute: 0,
+            second: 0,
+            millisecond: 0,
+          })
+          .toISOString(),
+        end: moment("2023-05-20")
+          .set({
+            hour: 20,
+            minute: 0,
+            second: 0,
+            millisecond: 0,
+          })
+          .toISOString(),
+        title: "Cabin Cleaning",
+        notes: "Cabin cleaning and anual board meeting.",
+      },
+      {
+        start: moment("2024-05-18")
+          .set({
+            hour: 0,
+            minute: 0,
+            second: 0,
+            millisecond: 0,
+          })
+          .toISOString(),
+        end: moment("2024-05-18")
+          .set({
+            hour: 20,
+            minute: 0,
+            second: 0,
+            millisecond: 0,
+          })
+          .toISOString(),
+        title: "Cabin Cleaning",
+        notes: "Cabin cleaning and anual board meeting.",
+      },
+      {
+        start: moment("2025-05-17")
+          .set({
+            hour: 0,
+            minute: 0,
+            second: 0,
+            millisecond: 0,
+          })
+          .toISOString(),
+        end: moment("2025-05-17")
+          .set({
+            hour: 20,
+            minute: 0,
+            second: 0,
+            millisecond: 0,
+          })
+          .toISOString(),
+        title: "Cabin Cleaning",
+        notes: "Cabin cleaning and anual board meeting.",
+      },
     ],
   },
 ];
 
-const usersToEmail = ["swschipke@gmail.com", "spkulehas@gmail.com"];
-
 const createUser = async (knex, user) => {
-  console.log({ user });
   user.password = generatePassword();
-  copyUser(user);
-  const { email, password, id } = user;
-  const hash = bcrypt.hashSync(password, saltRounds);
-  if (usersToEmail.includes(email.toLowerCase())) {
-    await sendWelcomeEmail(user);
-  }
-  return knex("user")
-    .insert(
-      {
-        email,
-        password: hash,
-        id,
-      },
-      "id"
-    )
+  return sendWelcomeEmail(user)
+    .then(() => {
+      const { email, password, id } = user;
+      const hash = bcrypt.hashSync(password, saltRounds);
+      return knex("user").insert(
+        {
+          email,
+          password: hash,
+          id,
+        },
+        "id"
+      );
+    })
     .catch((err) => {
       console.error("ERR: ", err);
       throw new Error("Error in createUser ", err);
@@ -2058,7 +2132,7 @@ const createUser = async (knex, user) => {
       const { profile } = user;
       return createProfile(knex, profile, user.id);
     })
-    .catch((err) => console.error("Error executing profile: ", err))
+    .catch((err) => console.error("Error seeding profile: ", err))
     .then(() => {
       if (user["reservations"] && user["reservations"].length) {
         let reservationPromises = [];
@@ -2086,6 +2160,7 @@ const createUser = async (knex, user) => {
 
 const createReservations = (knex, reservation, userId) => {
   const { start, title, end, notes } = reservation;
+  console.log({ reservation });
   return knex("reservation")
     .insert({
       notes: notes ? notes : "",
@@ -2121,7 +2196,6 @@ const createProfile = (knex, profile, user_id) => {
     });
 };
 exports.seed = function (knex) {
-  resetPassFile();
   return knex("userprofile")
     .del()
     .then(() => knex("reservation").del())

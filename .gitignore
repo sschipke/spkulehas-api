@@ -2,3 +2,7 @@ node_modules
 coverage
 .env
 passwords*.json
+.vscode
+ssh
+ssh-cert.pub
+fly.toml
