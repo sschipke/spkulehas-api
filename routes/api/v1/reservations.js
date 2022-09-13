@@ -8,10 +8,12 @@ import { alertUsersOfDeletion } from "../../../email";
 import {
   forbiddenResponse,
   notFoundResponse,
+  unauthorizedResponse,
 } from "../../../utils/httpHelpers";
 const moment = require("moment");
 const express = require("express");
 const router = express.Router();
+
 router.use(validateRequestToken);
 
 const RESERVATION_DELETION = "reservation_deleted";
@@ -74,6 +76,35 @@ router.post("/new", async (req, res, next) => {
       .status(500)
       .json({ error: `Unable to add reservation. ${error}` });
   }
+});
+
+router.get("/", async (req, res) => {
+  try {
+    const reservations = await getReservations();
+    console.log(
+      "Successfully sent GET for reservations. ",
+      req.ips,
+      new Date().toLocaleString({ timeZone: "American/Denver" })
+    );
+    return res.status(200).json({ reservations });
+  } catch (err) {
+    console.error(
+      "Error sending GET Reservations Response: ",
+      { err },
+      "for",
+      req.ip,
+      " at ",
+      new Date().toLocaleDateString()
+    );
+    return res.status(500).json({ msg: "Error sending reservations.", err });
+  }
+});
+
+router.get("/new", async (req, res, next) => {
+  return unauthorizedResponse(
+    res,
+    "This session has expired. Please login again."
+  );
 });
 
 router.put("/:reservation_id", async (req, res, next) => {

@@ -18,6 +18,7 @@ export const validateRequestToken = (req, res, next) => {
         console.error("Error in jwt: ", message);
         if (message === "jwt expired") {
           return unauthorizedResponse(
+            res,
             "This session has expired. Please login again."
           );
         }

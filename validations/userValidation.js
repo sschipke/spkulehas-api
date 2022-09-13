@@ -114,7 +114,6 @@ export const validateStatus = (jwtUser, dbProfile, requestedProfile) => {
 };
 
 export const validateEmail = (email) => {
-  console.log("Validating email");
   const processedEmail = email.trim().toLowerCase();
   if (!processedEmail || !EMAIL_REGEX.test(processedEmail)) {
     return { error: "Invalid email address." };

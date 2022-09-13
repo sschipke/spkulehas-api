@@ -274,7 +274,6 @@ router.put("/:id", async (req, res) => {
 router.put("/email_setting/:userId", async (req, res) => {
   const { userId } = req.params;
   const { settingName, value } = req.body;
-  console.log(req.body);
   const userFromJwt = res.locals.user;
 
   if (!canUserUpdate(userFromJwt, userId, true)) {

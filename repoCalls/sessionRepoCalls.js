@@ -19,7 +19,7 @@ export const createResetSessionForUser = async (userId) => {
 const invalidateSession = async (sessionId, now) => {
   return database("session")
     .where({ id: sessionId })
-    .update({ valid: false, updated_at: now });
+    .update({ valid: false, expires: now, updated_at: now });
 };
 
 export const invalidateOtherSessions = async (userId, type) => {

@@ -84,7 +84,6 @@ const cabinCleanings = [
 ];
 
 exports.seed = function (knex) {
-  knex();
   return knex("user")
     .where({ email: "spkulehas@gmail.com" })
     .columns(["id"])

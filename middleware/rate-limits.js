@@ -2,7 +2,7 @@ import rateLimit from "express-rate-limit";
 
 export const passwordResetLimiter = rateLimit({
   windowMs: 60 * 60 * 1000, // 1 hr
-  max: 5,
+  max: 10,
   message: {
     error: "Too many password reset requests. Please try again later.",
   },
@@ -21,7 +21,7 @@ export const loginLimiter = rateLimit({
 
 export const resetTokenValidationLimiter = rateLimit({
   windowMs: 60 * 60 * 1000, // 1 hr
-  max: 5,
+  max: 10,
   message: {
     error: "Too many reset validation requests. Please try again later.",
   },
