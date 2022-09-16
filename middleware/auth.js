@@ -5,7 +5,10 @@ import { unauthorizedResponse } from "../utils/httpHelpers";
 export const validateRequestToken = (req, res, next) => {
   const signature = process.env.TOKEN_SECRET;
   const nonsecurePaths = ["/login", "/forgot/password"];
-  if (nonsecurePaths.includes(req.path) || req.baseUrl === "/api/v1/reservations" && req.method === "GET") {
+  if (
+    nonsecurePaths.includes(req.path) ||
+    (req.baseUrl === "/api/v1/reservations" && req.method === "GET")
+  ) {
     return next();
   }
   const authHeader = req.headers["authorization"];
@@ -21,6 +24,8 @@ export const validateRequestToken = (req, res, next) => {
             res,
             "This session has expired. Please login again."
           );
+        } else {
+          return unauthorizedResponse(res, message);
         }
       } else {
         console.log({ decoded });
@@ -48,10 +53,10 @@ export const generateWebtoken = (userProfile, expiration, type, sessionId) => {
     id,
     email,
     name,
-    status,
+    status
   };
   return jwt.sign({ user: data, type, sessionId }, signature, {
-    expiresIn: expiration,
+    expiresIn: expiration
   });
 };
 

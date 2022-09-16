@@ -1,5 +1,4 @@
 import moment from "moment";
-import { database } from "../../../app";
 import { logger } from "../../../utils/logging";
 import { sendPasswordResetEmail } from "../../../email";
 import {
@@ -9,24 +8,39 @@ import {
   validateStatus,
   validatePassword,
   validateEmailSetting,
+  isAdmin
 } from "../../../validations/userValidation";
 import {
   loginLimiter,
-  passwordResetLimiter,
+  passwordResetLimiter
 } from "../../../middleware/rate-limits";
 import {
   validateRequestToken,
-  generateWebtoken,
+  generateWebtoken
 } from "../../../middleware/auth";
 
 import {
   validateSession,
   invalidateOtherSessions,
   RESET_TYPE,
-  createResetSessionForUser,
+  createResetSessionForUser
 } from "../../../repoCalls/sessionRepoCalls";
-import { forbiddenResponse } from "../../../utils/httpHelpers";
-
+import {
+  findUserByEmail,
+  findUserById,
+  getUserProfileById,
+  mapUserToProfile,
+  updateProfile,
+  getAllUsersIdNameAndEmail,
+  updatePassword,
+  updateEmail,
+  processEmailSettingUpdate,
+  findAllEmailSettingsByUserId
+} from "../../../repoCalls/userRepoCalls";
+import {
+  forbiddenResponse,
+  notFoundResponse
+} from "../../../utils/httpHelpers";
 const SEND_EMAIL_DELAY_MS = 900;
 
 const express = require("express");
@@ -56,7 +70,7 @@ router.post("/login", loginLimiter, async (request, res) => {
     user,
     emailSettings: emailSettings.length ? emailSettings[0] : null,
     usersInfo: usersInfo,
-    token: webToken,
+    token: webToken
   };
   console.log({ user });
   logger("Successful login for user: ", request);
@@ -149,6 +163,7 @@ router.put("/reset/password", passwordResetLimiter, async (req, res) => {
     user.id
   );
   if (!isValid) {
+    console.log({ isValid });
     return res.status(401).json({ error: message });
   }
   const error = validatePassword(newPassword);
@@ -171,6 +186,7 @@ router.put("/update/email/:id", async (req, res) => {
   const { id } = req.params;
   const userFromJwt = res.locals.user;
   const foundUser = await findUserById(id);
+  const isVerifiedAdmin = isAdmin(userFromJwt);
   console.log({ foundUser });
   if (!foundUser) {
     return res.status(404).json({ error: "Invalid user ID." });
@@ -188,10 +204,19 @@ router.put("/update/email/:id", async (req, res) => {
     return res.status(409).json({ error: "This email already exists." });
   }
 
-  const hash = foundUser.password;
-  let isValidPassword = bcrypt.compareSync(password, hash);
-  if (!isValidPassword) {
-    return res.status(401).json({ error: "Unauthorized" });
+  if (isVerifiedAdmin) {
+    let adminUser = await findUserById(userFromJwt.id);
+    const adminHash = adminUser.password;
+    let isValidPassword = bcrypt.compareSync(password, adminHash);
+    if (!isValidPassword) {
+      return forbiddenResponse(res);
+    }
+  } else {
+    const hash = foundUser.password;
+    let isValidPassword = bcrypt.compareSync(password, hash);
+    if (!isValidPassword) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
   }
 
   const error = validateEmail(newEmail);
@@ -204,10 +229,12 @@ router.put("/update/email/:id", async (req, res) => {
     return updateEmail(id, newEmail)
       .then((email) => {
         logger("Sucessfully updated email to: " + email, req);
-        const updatedUser = foundUser;
-        updatedUser.email = email;
-        updatedUser.name = userFromJwt.name;
-        updatedUser.status = userFromJwt.status;
+        const updatedUser = isVerifiedAdmin ? userFromJwt : foundUser;
+        if (!isVerifiedAdmin) {
+          updatedUser.email = email;
+          updatedUser.name = userFromJwt.name;
+          updatedUser.status = userFromJwt.status;
+        }
         const webToken = generateWebtoken(updatedUser, "1hr");
         return res.status(200).json({ email, token: webToken });
       })
@@ -235,7 +262,7 @@ router.put("/:id", async (req, res) => {
   if (!profileToUpdate) {
     return res
       .status(404)
-      .json({ error: "Unable to find profile with id: " + reservationId });
+      .json({ error: "Unable to find profile with id: " + id });
   }
 
   const profile = mapUserToProfile(user);
@@ -276,7 +303,7 @@ router.put("/email_setting/:userId", async (req, res) => {
   const { settingName, value } = req.body;
   const userFromJwt = res.locals.user;
 
-  if (!canUserUpdate(userFromJwt, userId, true)) {
+  if (!canUserUpdate(userFromJwt, userId)) {
     return res.status(403).json({ error: "Unauthorized" });
   }
 
@@ -298,147 +325,28 @@ router.put("/email_setting/:userId", async (req, res) => {
   }
 });
 
-const findUserByEmail = async (email) => {
-  return database("user").where({ email: email.toLowerCase() });
-};
-
-const findUserById = async (id) => {
-  return database("user")
-    .where({ id })
-    .columns(["id", "email", "password"])
-    .first();
-};
-
-const getUserProfileById = async (id) => {
-  return database("userprofile")
-    .where({ user_id: id })
-    .columns([
-      "name",
-      "status",
-      "street",
-      "city",
-      "state",
-      "zipcode",
-      "phone",
-      "user_id AS id",
-    ])
-    .innerJoin("user", "user.id", "userprofile.user_id")
-    .columns(["email"])
-    .first();
-};
-
-const mapUserToProfile = (user) => {
-  const { id, name, status, street, city, state, zipcode, phone } = user;
-  const updated_at = moment().toISOString();
-  const profile = {
-    user_id: id,
-    name,
-    status,
-    street,
-    city,
-    state,
-    zipcode,
-    phone,
-    updated_at,
-  };
-  return profile;
-};
-
-const updateProfile = async (profile) => {
-  const userId = profile.user_id;
-  return database("userprofile")
-    .where({ user_id: userId })
-    .update(profile)
-    .catch((err) => {
-      console.error("Unable to update profile: ", profile, "Error: ", err);
-      throw new Error("Unable to update profile. ", err);
-    });
-};
-
-const getAllUsersIdNameAndEmail = async () => {
-  return database("userprofile")
-    .columns(["name", "user_id AS id"])
-    .innerJoin("user", "user.id", "userprofile.user_id")
-    .columns(["email"])
-    .orderBy("name", "asc");
-};
-
-const updatePassword = async (id, password) => {
-  const now = moment().toISOString();
-  const hash = bcrypt.hashSync(password, 10);
-  return database("user")
-    .where({ id: id })
-    .update({ password: hash, updated_at: now });
-};
-
-const updateEmail = async (id, newEmail) => {
-  const now = moment().toISOString();
-  return database("user")
-    .where({ id })
-    .update({ email: newEmail, updated_at: now }, ["email"])
-    .then((res) => {
-      if (res && res.length > 0) {
-        return res[0].email;
-      }
-    });
-};
-
-const processEmailSettingUpdate = async (userId, settingName, value) => {
-  const possibleExistingSetting = await findEmailSettingByNameAndUserId(
-    userId,
-    settingName
-  );
-  if (possibleExistingSetting.length === 1) {
-    try {
-      const existingSetting = possibleExistingSetting[0];
-      const settingId = existingSetting.id;
-      return updateEmailSetting(settingId, value);
-    } catch (error) {
-      console.error(
-        "Error updating existing email setting setting for: ",
-        userId,
-        error
-      );
-      throw new Error({ error: "Unable to update email setting." });
-    }
-  } else if (possibleExistingSetting.length === 0) {
-    try {
-      return addEmailSettingForUser(userId, settingName, value);
-    } catch (error) {
-      console.error("Error adding email setting setting for: ", userId, error);
-
-      throw new Error({ error: "Unable to update email setting." });
-    }
-  } else {
-    throw new Error({ error: "Duplicate email settings for user: ", userId });
+router.get("/:userId", async (req, res) => {
+  const { userId } = req.params;
+  console.log({ userId });
+  const userFromJwt = res.locals.user;
+  if (!isAdmin(userFromJwt)) {
+    return forbiddenResponse(res);
   }
-};
 
-const findEmailSettingByNameAndUserId = async (userId, settingName) => {
-  return database("email_setting")
-    .where({ user_id: userId })
-    .andWhere({ setting_name: settingName });
-};
-
-const findAllEmailSettingsByUserId = async (userId) => {
-  return database("email_setting")
-    .columns(["setting_name", "value"])
-    .where({ user_id: userId });
-};
-
-const updateEmailSetting = async (settingId, value) => {
-  const now = moment().toISOString();
-  return database("email_setting")
-    .where({ id: settingId })
-    .update({ value, updated_at: now });
-};
-
-const addEmailSettingForUser = async (userId, settingName, value) => {
-  return database("email_setting").insert({
-    user_id: userId,
-    setting_name: settingName,
-    value,
-  });
-};
+  const selectedUser = await getUserProfileById(userId);
+  const emailSettings = await findAllEmailSettingsByUserId(userId);
+  //TODO: For now there should only be one email setting for deletion emails
+  //Once we support more, we can remove the index here
+  if (!selectedUser) {
+    return notFoundResponse(res, `Unable to find user with id: ${userId}`);
+  }
+  const responseBody = {
+    selectedMember: selectedUser,
+    selectedMemberEmailSettings: emailSettings.length ? emailSettings[0] : null
+  };
+  console.log({ selectedUser });
+  logger("Successfully got user for admin: ", req);
+  return res.status(200).json(responseBody);
+});
 
 export default router;

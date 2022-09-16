@@ -8,7 +8,7 @@ import { alertUsersOfDeletion } from "../../../email";
 import {
   forbiddenResponse,
   notFoundResponse,
-  unauthorizedResponse,
+  unauthorizedResponse
 } from "../../../utils/httpHelpers";
 const moment = require("moment");
 const express = require("express");
@@ -78,28 +78,6 @@ router.post("/new", async (req, res, next) => {
   }
 });
 
-router.get("/", async (req, res) => {
-  try {
-    const reservations = await getReservations();
-    console.log(
-      "Successfully sent GET for reservations. ",
-      req.ips,
-      new Date().toLocaleString({ timeZone: "American/Denver" })
-    );
-    return res.status(200).json({ reservations });
-  } catch (err) {
-    console.error(
-      "Error sending GET Reservations Response: ",
-      { err },
-      "for",
-      req.ip,
-      " at ",
-      new Date().toLocaleDateString()
-    );
-    return res.status(500).json({ msg: "Error sending reservations.", err });
-  }
-});
-
 router.get("/new", async (req, res, next) => {
   return unauthorizedResponse(
     res,
@@ -133,7 +111,10 @@ router.put("/:reservation_id", async (req, res, next) => {
     reservation
   );
   console.log({ conflictingReservations });
-  if (conflictingReservations.length > 1) {
+  if (
+    conflictingReservations.length > 1 ||
+    Number(conflictingReservations[0].id) !== reservationId
+  ) {
     return res
       .status(422)
       .json({ error: "This reservation conflicts with another." });
@@ -204,7 +185,7 @@ const addReservation = async (reservation) => {
     "title",
     "start",
     "end",
-    "notes",
+    "notes"
   ]);
 };
 

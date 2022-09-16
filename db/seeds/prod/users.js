@@ -16,13 +16,13 @@ const mockUsers = [
       city: "Laurel",
       state: "MD",
       zipcode: "20708",
-      phone: "443-248-0718",
+      phone: "443-248-0718"
     },
-    reservations: [],
+    reservations: []
   },
   {
     id: "4a9f8b3c-436b-43f2-b92a-275168fabe8d",
-    email: "bradschipke86.com",
+    email: "bradschipke86gmail.com",
     profile: {
       name: "Brad Schipke",
       status: "D1",
@@ -30,9 +30,9 @@ const mockUsers = [
       city: "Myrtle",
       state: "MS",
       zipcode: "38650",
-      phone: "662-231-3216",
+      phone: "662-231-3216"
     },
-    reservations: [],
+    reservations: []
   },
   {
     id: uuidv4(),
@@ -44,7 +44,7 @@ const mockUsers = [
       city: "Colorado Springs",
       state: "CO",
       zipcode: "80918",
-      phone: "719-532-1201",
+      phone: "719-532-1201"
     },
     reservations: [
       {
@@ -54,7 +54,7 @@ const mockUsers = [
             hour: 0,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         end: moment("2022-09-05")
@@ -63,10 +63,10 @@ const mockUsers = [
             hour: 12,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
-        title: "Brian Schipke",
+        title: "Brian Schipke"
       },
       {
         start: moment("2023-06-05")
@@ -75,7 +75,7 @@ const mockUsers = [
             hour: 0,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         end: moment("2023-06-05")
@@ -84,10 +84,10 @@ const mockUsers = [
             hour: 12,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
-        title: "Brian Schipke",
+        title: "Brian Schipke"
       },
       {
         start: moment("2024-08-05")
@@ -96,7 +96,7 @@ const mockUsers = [
             hour: 0,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         end: moment("2024-08-05")
@@ -105,12 +105,12 @@ const mockUsers = [
             hour: 12,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
-        title: "Brian Schipke",
-      },
-    ],
+        title: "Brian Schipke"
+      }
+    ]
   },
   {
     id: uuidv4(),
@@ -122,7 +122,7 @@ const mockUsers = [
       city: "Austin",
       state: "TX",
       zipcode: "78749",
-      phone: "512-284-8528",
+      phone: "512-284-8528"
     },
     reservations: [
       {
@@ -132,13 +132,13 @@ const mockUsers = [
             hour: 0,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .set({
             hour: 0,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         end: moment("2022-08-22")
@@ -147,10 +147,10 @@ const mockUsers = [
             hour: 12,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
-        title: "Jill Orwick",
+        title: "Jill Orwick"
       },
       {
         start: moment("2023-07-17")
@@ -159,13 +159,13 @@ const mockUsers = [
             hour: 0,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .set({
             hour: 0,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         end: moment("2023-07-17")
@@ -174,10 +174,10 @@ const mockUsers = [
             hour: 12,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
-        title: "Jill Orwick",
+        title: "Jill Orwick"
       },
       {
         start: moment("2024-10-14")
@@ -186,13 +186,13 @@ const mockUsers = [
             hour: 0,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .set({
             hour: 0,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         end: moment("2024-10-14")
@@ -201,12 +201,12 @@ const mockUsers = [
             hour: 12,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
-        title: "Jill Orwick",
-      },
-    ],
+        title: "Jill Orwick"
+      }
+    ]
   },
   {
     id: uuidv4(),
@@ -218,8 +218,8 @@ const mockUsers = [
       city: "Tupelo",
       state: "MS",
       zipcode: "38804",
-      phone: "662-213-8941",
-    },
+      phone: "662-213-8941"
+    }
   },
   {
     id: uuidv4(),
@@ -231,7 +231,7 @@ const mockUsers = [
       city: "Rapid City",
       state: "SD",
       zipcode: "57703",
-      phone: "605-391-0678",
+      phone: "605-391-0678"
     },
     reservations: [
       {
@@ -241,7 +241,7 @@ const mockUsers = [
             hour: 0,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         end: moment("2022-06-06")
@@ -250,10 +250,10 @@ const mockUsers = [
             hour: 12,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
-        title: "Melanie Garstenshiager",
+        title: "Melanie Garstenshiager"
       },
       {
         start: moment("2023-10-16")
@@ -262,7 +262,7 @@ const mockUsers = [
             hour: 0,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         end: moment("2023-10-16")
@@ -271,10 +271,10 @@ const mockUsers = [
             hour: 12,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
-        title: "Melanie Garstenshiager",
+        title: "Melanie Garstenshiager"
       },
       {
         start: moment("2024-06-10")
@@ -283,7 +283,7 @@ const mockUsers = [
             hour: 0,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         end: moment("2024-06-10")
@@ -292,12 +292,12 @@ const mockUsers = [
             hour: 12,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
-        title: "Melanie Garstenshiager",
-      },
-    ],
+        title: "Melanie Garstenshiager"
+      }
+    ]
   },
   {
     id: uuidv4(),
@@ -309,8 +309,8 @@ const mockUsers = [
       city: "San Francisco",
       state: "CA",
       zipcode: "94123",
-      phone: "605-490-3170",
-    },
+      phone: "605-490-3170"
+    }
   },
   {
     id: uuidv4(),
@@ -322,8 +322,8 @@ const mockUsers = [
       city: "Denver",
       state: "CO",
       zipcode: "80246",
-      phone: "605-431-9294",
-    },
+      phone: "605-431-9294"
+    }
   },
   {
     id: uuidv4(),
@@ -335,8 +335,8 @@ const mockUsers = [
       city: "Louin",
       state: "MS",
       zipcode: "39338",
-      phone: "662-871-3205",
-    },
+      phone: "662-871-3205"
+    }
   },
   {
     id: uuidv4(),
@@ -348,8 +348,8 @@ const mockUsers = [
       city: "Zachary",
       state: "LA",
       zipcode: "70791",
-      phone: "662-722-0547",
-    },
+      phone: "662-722-0547"
+    }
   },
   {
     id: uuidv4(),
@@ -361,7 +361,7 @@ const mockUsers = [
       city: "Tracy",
       state: "CA",
       zipcode: "95376",
-      phone: "925-548-0458",
+      phone: "925-548-0458"
     },
     reservations: [
       {
@@ -371,7 +371,7 @@ const mockUsers = [
             hour: 0,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         end: moment("2022-09-19")
@@ -380,10 +380,10 @@ const mockUsers = [
             hour: 12,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
-        title: "Stephanie Schipke",
+        title: "Stephanie Schipke"
       },
       {
         start: moment("2023-09-18")
@@ -392,7 +392,7 @@ const mockUsers = [
             hour: 0,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         end: moment("2023-09-18")
@@ -401,10 +401,10 @@ const mockUsers = [
             hour: 12,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
-        title: "Stephanie Schipke",
+        title: "Stephanie Schipke"
       },
       {
         start: moment("2024-07-15")
@@ -413,7 +413,7 @@ const mockUsers = [
             hour: 0,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         end: moment("2024-07-15")
@@ -422,12 +422,12 @@ const mockUsers = [
             hour: 12,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
-        title: "Stephanie Schipke",
-      },
-    ],
+        title: "Stephanie Schipke"
+      }
+    ]
   },
   {
     id: uuidv4(),
@@ -439,8 +439,8 @@ const mockUsers = [
       city: "NA",
       state: "",
       zipcode: "NA",
-      phone: "605-858-3848",
-    },
+      phone: "605-858-3848"
+    }
   },
   {
     id: uuidv4(),
@@ -452,7 +452,7 @@ const mockUsers = [
       city: "Madison",
       state: "WI",
       zipcode: "53719",
-      phone: "608-497-1570",
+      phone: "608-497-1570"
     },
     reservations: [
       {
@@ -462,7 +462,7 @@ const mockUsers = [
             hour: 0,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         end: moment("2022-10-10")
@@ -471,10 +471,10 @@ const mockUsers = [
             hour: 12,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
-        title: "Chris Kuster",
+        title: "Chris Kuster"
       },
       {
         start: moment("2023-08-07")
@@ -483,7 +483,7 @@ const mockUsers = [
             hour: 0,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         end: moment("2023-08-07")
@@ -492,10 +492,10 @@ const mockUsers = [
             hour: 12,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
-        title: "Chris Kuster",
+        title: "Chris Kuster"
       },
       {
         start: moment("2024-05-27")
@@ -504,7 +504,7 @@ const mockUsers = [
             hour: 0,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         end: moment("2024-05-27")
@@ -513,12 +513,12 @@ const mockUsers = [
             hour: 12,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
-        title: "Chris Kuster",
-      },
-    ],
+        title: "Chris Kuster"
+      }
+    ]
   },
   {
     id: uuidv4(),
@@ -530,7 +530,7 @@ const mockUsers = [
       city: "Parker",
       state: "CO",
       zipcode: "80138",
-      phone: "720-420-9695",
+      phone: "720-420-9695"
     },
     reservations: [
       {
@@ -540,7 +540,7 @@ const mockUsers = [
             hour: 0,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         end: moment("2022-06-20")
@@ -549,10 +549,10 @@ const mockUsers = [
             hour: 12,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
-        title: "Chris Schipke",
+        title: "Chris Schipke"
       },
       {
         start: moment("2023-07-03")
@@ -561,7 +561,7 @@ const mockUsers = [
             hour: 0,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         end: moment("2023-07-03")
@@ -570,10 +570,10 @@ const mockUsers = [
             hour: 12,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
-        title: "Chris Schipke",
+        title: "Chris Schipke"
       },
       {
         start: moment("2024-08-26")
@@ -582,7 +582,7 @@ const mockUsers = [
             hour: 0,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         end: moment("2024-08-26")
@@ -591,12 +591,12 @@ const mockUsers = [
             hour: 12,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
-        title: "Chris Schipke",
-      },
-    ],
+        title: "Chris Schipke"
+      }
+    ]
   },
   {
     id: uuidv4(),
@@ -608,7 +608,7 @@ const mockUsers = [
       city: "Piedmont",
       state: "SD",
       zipcode: "57769",
-      phone: "605-209-8769",
+      phone: "605-209-8769"
     },
     reservations: [
       {
@@ -618,7 +618,7 @@ const mockUsers = [
             hour: 0,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         end: moment("2022-08-08")
@@ -627,10 +627,10 @@ const mockUsers = [
             hour: 12,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
-        title: "Christine Orwick",
+        title: "Christine Orwick"
       },
       {
         start: moment("2023-09-11")
@@ -639,7 +639,7 @@ const mockUsers = [
             hour: 0,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         end: moment("2023-09-11")
@@ -648,10 +648,10 @@ const mockUsers = [
             hour: 12,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
-        title: "Christine Orwick",
+        title: "Christine Orwick"
       },
       {
         start: moment("2024-09-30")
@@ -660,7 +660,7 @@ const mockUsers = [
             hour: 0,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         end: moment("2024-09-30")
@@ -669,12 +669,12 @@ const mockUsers = [
             hour: 12,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
-        title: "Christine Orwick",
-      },
-    ],
+        title: "Christine Orwick"
+      }
+    ]
   },
   {
     id: uuidv4(),
@@ -686,7 +686,7 @@ const mockUsers = [
       city: "Newell",
       state: "SD",
       zipcode: "57760",
-      phone: "605-569-6675",
+      phone: "605-569-6675"
     },
     reservations: [
       {
@@ -696,7 +696,7 @@ const mockUsers = [
             hour: 0,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         end: moment("2022-08-15")
@@ -705,10 +705,10 @@ const mockUsers = [
             hour: 12,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
-        title: "Demian Heinert",
+        title: "Demian Heinert"
       },
       {
         start: moment("2023-08-21")
@@ -717,7 +717,7 @@ const mockUsers = [
             hour: 0,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         end: moment("2023-08-21")
@@ -726,10 +726,10 @@ const mockUsers = [
             hour: 12,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
-        title: "Demian Heinert",
+        title: "Demian Heinert"
       },
       {
         start: moment("2024-09-23")
@@ -738,7 +738,7 @@ const mockUsers = [
             hour: 0,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         end: moment("2024-09-23")
@@ -747,12 +747,12 @@ const mockUsers = [
             hour: 12,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
-        title: "Demian Heinert",
-      },
-    ],
+        title: "Demian Heinert"
+      }
+    ]
   },
   {
     id: uuidv4(),
@@ -764,7 +764,7 @@ const mockUsers = [
       city: "Newell",
       state: "SD",
       zipcode: "57760",
-      phone: "605-456-2419",
+      phone: "605-456-2419"
     },
     reservations: [
       {
@@ -774,7 +774,7 @@ const mockUsers = [
             hour: 0,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         end: moment("2022-05-23")
@@ -783,11 +783,11 @@ const mockUsers = [
             hour: 12,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         allDay: true,
-        title: "Denise Smeenk",
+        title: "Denise Smeenk"
       },
       {
         start: moment("2023-07-24")
@@ -796,7 +796,7 @@ const mockUsers = [
             hour: 0,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         end: moment("2023-07-24")
@@ -805,11 +805,11 @@ const mockUsers = [
             hour: 12,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         allDay: true,
-        title: "Denise Smeenk",
+        title: "Denise Smeenk"
       },
       {
         start: moment("2024-07-01")
@@ -818,7 +818,7 @@ const mockUsers = [
             hour: 0,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         end: moment("2024-07-01")
@@ -827,13 +827,13 @@ const mockUsers = [
             hour: 12,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         allDay: true,
-        title: "Denise Smeenk",
-      },
-    ],
+        title: "Denise Smeenk"
+      }
+    ]
   },
   {
     id: uuidv4(),
@@ -845,7 +845,7 @@ const mockUsers = [
       city: "Riverton",
       state: "WY",
       zipcode: "82501",
-      phone: "307-856-6617",
+      phone: "307-856-6617"
     },
     reservations: [
       {
@@ -855,7 +855,7 @@ const mockUsers = [
             hour: 0,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         end: moment("2022-07-11")
@@ -864,10 +864,10 @@ const mockUsers = [
             hour: 12,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
-        title: "Dick Kuster",
+        title: "Dick Kuster"
       },
       {
         start: moment("2023-07-31")
@@ -876,7 +876,7 @@ const mockUsers = [
             hour: 0,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         end: moment("2023-07-31")
@@ -885,10 +885,10 @@ const mockUsers = [
             hour: 12,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
-        title: "Dick Kuster",
+        title: "Dick Kuster"
       },
       {
         start: moment("2024-09-16")
@@ -897,7 +897,7 @@ const mockUsers = [
             hour: 0,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         end: moment("2024-09-16")
@@ -906,12 +906,12 @@ const mockUsers = [
             hour: 12,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
-        title: "Dick Kuster",
-      },
-    ],
+        title: "Dick Kuster"
+      }
+    ]
   },
   {
     id: uuidv4(),
@@ -923,7 +923,7 @@ const mockUsers = [
       city: "Scenic",
       state: "SD",
       zipcode: "57780",
-      phone: "605-786-6536",
+      phone: "605-786-6536"
     },
     reservations: [
       {
@@ -933,7 +933,7 @@ const mockUsers = [
             hour: 0,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         end: moment("2022-06-27")
@@ -942,10 +942,10 @@ const mockUsers = [
             hour: 12,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
-        title: "Doug Albertson",
+        title: "Doug Albertson"
       },
       {
         start: moment("2023-05-22")
@@ -954,7 +954,7 @@ const mockUsers = [
             hour: 0,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         end: moment("2023-05-22")
@@ -963,10 +963,10 @@ const mockUsers = [
             hour: 12,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
-        title: "Doug Albertson",
+        title: "Doug Albertson"
       },
       {
         start: moment("2024-08-19")
@@ -975,7 +975,7 @@ const mockUsers = [
             hour: 0,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         end: moment("2024-08-19")
@@ -984,12 +984,12 @@ const mockUsers = [
             hour: 12,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
-        title: "Doug Albertson",
-      },
-    ],
+        title: "Doug Albertson"
+      }
+    ]
   },
   {
     id: uuidv4(),
@@ -1001,8 +1001,8 @@ const mockUsers = [
       city: "Rapid City",
       state: "SD",
       zipcode: "57702",
-      phone: "605-388-0328",
-    },
+      phone: "605-388-0328"
+    }
   },
   {
     id: uuidv4(),
@@ -1014,7 +1014,7 @@ const mockUsers = [
       city: "Surprise",
       state: "AZ",
       zipcode: "85379",
-      phone: "623-376-2357",
+      phone: "623-376-2357"
     },
     reservations: [
       {
@@ -1024,7 +1024,7 @@ const mockUsers = [
             hour: 0,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         end: moment("2022-07-25")
@@ -1033,10 +1033,10 @@ const mockUsers = [
             hour: 12,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
-        title: "Mike Albertson",
+        title: "Mike Albertson"
       },
       {
         start: moment("2023-09-25")
@@ -1045,7 +1045,7 @@ const mockUsers = [
             hour: 0,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         end: moment("2023-09-25")
@@ -1054,10 +1054,10 @@ const mockUsers = [
             hour: 12,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
-        title: "Mike Albertson",
+        title: "Mike Albertson"
       },
       {
         start: moment("2024-08-12")
@@ -1066,7 +1066,7 @@ const mockUsers = [
             hour: 0,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         end: moment("2024-08-12")
@@ -1075,12 +1075,12 @@ const mockUsers = [
             hour: 12,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
-        title: "Mike Albertson",
-      },
-    ],
+        title: "Mike Albertson"
+      }
+    ]
   },
   {
     id: uuidv4(),
@@ -1092,7 +1092,7 @@ const mockUsers = [
       city: "Deadwood",
       state: "SD",
       zipcode: "57732",
-      phone: "605-578-3276",
+      phone: "605-578-3276"
     },
     reservations: [
       {
@@ -1102,7 +1102,7 @@ const mockUsers = [
             hour: 0,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         end: moment("2022-05-30")
@@ -1111,10 +1111,10 @@ const mockUsers = [
             hour: 12,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
-        title: "Paul Schipke",
+        title: "Paul Schipke"
       },
       {
         start: moment("2023-10-09")
@@ -1123,7 +1123,7 @@ const mockUsers = [
             hour: 0,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         end: moment("2023-10-09")
@@ -1132,10 +1132,10 @@ const mockUsers = [
             hour: 12,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
-        title: "Paul Schipke",
+        title: "Paul Schipke"
       },
       {
         start: moment("2024-07-22")
@@ -1144,7 +1144,7 @@ const mockUsers = [
             hour: 0,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         end: moment("2024-07-22")
@@ -1153,12 +1153,12 @@ const mockUsers = [
             hour: 12,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
-        title: "Paul Schipke",
-      },
-    ],
+        title: "Paul Schipke"
+      }
+    ]
   },
   {
     id: uuidv4(),
@@ -1170,7 +1170,7 @@ const mockUsers = [
       city: "Helena",
       state: "MT",
       zipcode: "59601",
-      phone: "406-461-3359",
+      phone: "406-461-3359"
     },
     reservations: [
       {
@@ -1180,7 +1180,7 @@ const mockUsers = [
             hour: 0,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         end: moment("2022-06-13")
@@ -1189,10 +1189,10 @@ const mockUsers = [
             hour: 12,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
-        title: "Stephanie Kuster",
+        title: "Stephanie Kuster"
       },
       {
         start: moment("2023-05-29")
@@ -1201,7 +1201,7 @@ const mockUsers = [
             hour: 0,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         end: moment("2023-05-29")
@@ -1210,10 +1210,10 @@ const mockUsers = [
             hour: 12,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
-        title: "Stephanie Kuster",
+        title: "Stephanie Kuster"
       },
       {
         start: moment("2024-06-17")
@@ -1222,7 +1222,7 @@ const mockUsers = [
             hour: 0,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         end: moment("2024-06-17")
@@ -1231,12 +1231,12 @@ const mockUsers = [
             hour: 12,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
-        title: "Stephanie Kuster",
-      },
-    ],
+        title: "Stephanie Kuster"
+      }
+    ]
   },
   {
     id: uuidv4(),
@@ -1248,7 +1248,7 @@ const mockUsers = [
       city: "Black Hawk",
       state: "SD",
       zipcode: "57719",
-      phone: "605-393-5125",
+      phone: "605-393-5125"
     },
     reservations: [
       {
@@ -1258,7 +1258,7 @@ const mockUsers = [
             hour: 0,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         end: moment("2022-07-04")
@@ -1267,10 +1267,10 @@ const mockUsers = [
             hour: 12,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
-        title: "Steven Schipke",
+        title: "Steven Schipke"
       },
       {
         start: moment("2023-08-28")
@@ -1279,7 +1279,7 @@ const mockUsers = [
             hour: 0,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         end: moment("2023-08-28")
@@ -1288,10 +1288,10 @@ const mockUsers = [
             hour: 12,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
-        title: "Steven Schipke",
+        title: "Steven Schipke"
       },
       {
         start: moment("2024-10-07")
@@ -1300,7 +1300,7 @@ const mockUsers = [
             hour: 0,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         end: moment("2024-10-07")
@@ -1309,12 +1309,12 @@ const mockUsers = [
             hour: 12,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
-        title: "Steven Schipke",
-      },
-    ],
+        title: "Steven Schipke"
+      }
+    ]
   },
   {
     id: uuidv4(),
@@ -1326,7 +1326,7 @@ const mockUsers = [
       city: "Piedmont",
       state: "SD",
       zipcode: "57769",
-      phone: "605-787-6462",
+      phone: "605-787-6462"
     },
     reservations: [
       {
@@ -1336,7 +1336,7 @@ const mockUsers = [
             hour: 0,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         end: moment("2022-10-17")
@@ -1345,10 +1345,10 @@ const mockUsers = [
             hour: 12,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
-        title: "Sue Orwick",
+        title: "Sue Orwick"
       },
       {
         start: moment("2023-06-26")
@@ -1357,7 +1357,7 @@ const mockUsers = [
             hour: 0,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         end: moment("2023-06-26")
@@ -1366,10 +1366,10 @@ const mockUsers = [
             hour: 12,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
-        title: "Sue Orwick",
+        title: "Sue Orwick"
       },
       {
         start: moment("2024-05-20")
@@ -1378,7 +1378,7 @@ const mockUsers = [
             hour: 0,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         end: moment("2024-05-20")
@@ -1387,12 +1387,12 @@ const mockUsers = [
             hour: 12,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
-        title: "Sue Orwick",
-      },
-    ],
+        title: "Sue Orwick"
+      }
+    ]
   },
   {
     id: uuidv4(),
@@ -1404,7 +1404,7 @@ const mockUsers = [
       city: "Piedmont",
       state: "SD",
       zipcode: "57769",
-      phone: "605-787-6927",
+      phone: "605-787-6927"
     },
     reservations: [
       {
@@ -1414,7 +1414,7 @@ const mockUsers = [
             hour: 0,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         end: moment("2022-09-12")
@@ -1423,10 +1423,10 @@ const mockUsers = [
             hour: 12,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
-        title: "Kelli Wieczorek",
+        title: "Kelli Wieczorek"
       },
       {
         start: moment("2023-06-19")
@@ -1435,7 +1435,7 @@ const mockUsers = [
             hour: 0,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         end: moment("2023-06-19")
@@ -1444,10 +1444,10 @@ const mockUsers = [
             hour: 12,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
-        title: "Kelli Wieczorek",
+        title: "Kelli Wieczorek"
       },
       {
         start: moment("2024-06-03")
@@ -1456,7 +1456,7 @@ const mockUsers = [
             hour: 0,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         end: moment("2024-06-03")
@@ -1465,12 +1465,12 @@ const mockUsers = [
             hour: 12,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
-        title: "Kelli Wieczorek",
-      },
-    ],
+        title: "Kelli Wieczorek"
+      }
+    ]
   },
   {
     id: uuidv4(),
@@ -1482,7 +1482,7 @@ const mockUsers = [
       city: "Richmond Heights",
       state: "MO",
       zipcode: "63117",
-      phone: "303-803-2580",
+      phone: "303-803-2580"
     },
     reservations: [
       {
@@ -1492,7 +1492,7 @@ const mockUsers = [
             hour: 0,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         end: moment("2022-07-18")
@@ -1501,10 +1501,10 @@ const mockUsers = [
             hour: 12,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
-        title: "Wendy Huft",
+        title: "Wendy Huft"
       },
       {
         start: moment("2023-06-12")
@@ -1513,7 +1513,7 @@ const mockUsers = [
             hour: 0,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         end: moment("2023-06-12")
@@ -1522,10 +1522,10 @@ const mockUsers = [
             hour: 12,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
-        title: "Wendy Huft",
+        title: "Wendy Huft"
       },
       {
         start: moment("2024-07-29")
@@ -1534,7 +1534,7 @@ const mockUsers = [
             hour: 0,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         end: moment("2024-07-29")
@@ -1543,12 +1543,12 @@ const mockUsers = [
             hour: 12,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
-        title: "Wendy Huft",
-      },
-    ],
+        title: "Wendy Huft"
+      }
+    ]
   },
   {
     id: uuidv4(),
@@ -1560,8 +1560,8 @@ const mockUsers = [
       city: "Richmond Heights",
       state: "MO",
       zipcode: "63117",
-      phone: "505-800-1631",
-    },
+      phone: "505-800-1631"
+    }
   },
   {
     id: uuidv4(),
@@ -1573,7 +1573,7 @@ const mockUsers = [
       city: "Tupelo",
       state: "MS",
       zipcode: "38804",
-      phone: "662-255-8942",
+      phone: "662-255-8942"
     },
     reservations: [
       {
@@ -1583,7 +1583,7 @@ const mockUsers = [
             hour: 0,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         end: moment("2022-08-29")
@@ -1592,10 +1592,10 @@ const mockUsers = [
             hour: 12,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
-        title: "Dwight Schipke",
+        title: "Dwight Schipke"
       },
       {
         start: moment("2022-09-26")
@@ -1604,7 +1604,7 @@ const mockUsers = [
             hour: 0,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         end: moment("2022-09-26")
@@ -1613,10 +1613,10 @@ const mockUsers = [
             hour: 12,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
-        title: "Dwight Schipke",
+        title: "Dwight Schipke"
       },
       {
         start: moment("2023-07-10")
@@ -1625,7 +1625,7 @@ const mockUsers = [
             hour: 0,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         end: moment("2023-07-10")
@@ -1634,10 +1634,10 @@ const mockUsers = [
             hour: 12,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
-        title: "Dwight Schipke",
+        title: "Dwight Schipke"
       },
       {
         start: moment("2023-08-14")
@@ -1646,7 +1646,7 @@ const mockUsers = [
             hour: 0,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         end: moment("2023-08-14")
@@ -1655,10 +1655,10 @@ const mockUsers = [
             hour: 12,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
-        title: "Dwight Schipke",
+        title: "Dwight Schipke"
       },
       {
         start: moment("2024-06-24")
@@ -1667,7 +1667,7 @@ const mockUsers = [
             hour: 0,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         end: moment("2024-06-24")
@@ -1676,10 +1676,10 @@ const mockUsers = [
             hour: 12,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
-        title: "Dwight Schipke",
+        title: "Dwight Schipke"
       },
       {
         start: moment("2024-07-08")
@@ -1688,7 +1688,7 @@ const mockUsers = [
             hour: 0,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         end: moment("2024-07-08")
@@ -1697,12 +1697,12 @@ const mockUsers = [
             hour: 12,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
-        title: "Dwight Schipke",
-      },
-    ],
+        title: "Dwight Schipke"
+      }
+    ]
   },
   {
     id: uuidv4(),
@@ -1714,8 +1714,8 @@ const mockUsers = [
       city: "Spring",
       state: "TX",
       zipcode: "77389",
-      phone: "832-492-8009",
-    },
+      phone: "832-492-8009"
+    }
   },
   {
     id: uuidv4(),
@@ -1727,8 +1727,8 @@ const mockUsers = [
       city: "Belle Fourche",
       state: "SD",
       zipcode: "57717",
-      phone: "605-645-0613",
-    },
+      phone: "605-645-0613"
+    }
   },
   {
     id: uuidv4(),
@@ -1740,8 +1740,8 @@ const mockUsers = [
       city: "Rapid City",
       state: "SD",
       zipcode: "57702",
-      phone: "707-812-8949",
-    },
+      phone: "707-812-8949"
+    }
   },
   {
     id: uuidv4(),
@@ -1753,8 +1753,8 @@ const mockUsers = [
       city: "Buffalo Gap",
       state: "SD",
       zipcode: "57722",
-      phone: "605-833-2225",
-    },
+      phone: "605-833-2225"
+    }
   },
   {
     id: uuidv4(),
@@ -1766,8 +1766,8 @@ const mockUsers = [
       city: "Seaton",
       state: "IL",
       zipcode: "61476",
-      phone: "309-586-6151",
-    },
+      phone: "309-586-6151"
+    }
   },
   {
     id: uuidv4(),
@@ -1779,7 +1779,7 @@ const mockUsers = [
       city: "Rapid City",
       state: "SD",
       zipcode: "57702",
-      phone: "605-718-1735",
+      phone: "605-718-1735"
     },
     reservations: [
       {
@@ -1789,7 +1789,7 @@ const mockUsers = [
             hour: 0,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         end: moment("2022-10-03")
@@ -1798,10 +1798,10 @@ const mockUsers = [
             hour: 12,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
-        title: "Gale Schipke",
+        title: "Gale Schipke"
       },
       {
         start: moment("2023-10-02")
@@ -1810,7 +1810,7 @@ const mockUsers = [
             hour: 0,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         end: moment("2023-10-02")
@@ -1819,10 +1819,10 @@ const mockUsers = [
             hour: 12,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
-        title: "Gale Schipke",
+        title: "Gale Schipke"
       },
       {
         start: moment("2024-09-02")
@@ -1831,7 +1831,7 @@ const mockUsers = [
             hour: 0,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         end: moment("2024-09-02")
@@ -1840,12 +1840,12 @@ const mockUsers = [
             hour: 12,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
-        title: "Gale Schipke",
-      },
-    ],
+        title: "Gale Schipke"
+      }
+    ]
   },
   {
     id: uuidv4(),
@@ -1857,7 +1857,7 @@ const mockUsers = [
       city: "Malberne",
       state: "NY",
       zipcode: "11565",
-      phone: "516-353-8266",
+      phone: "516-353-8266"
     },
     reservations: [
       {
@@ -1867,7 +1867,7 @@ const mockUsers = [
             hour: 0,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         end: moment("2022-08-01")
@@ -1876,10 +1876,10 @@ const mockUsers = [
             hour: 12,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
-        title: "Mark Snoozy",
+        title: "Mark Snoozy"
       },
       {
         start: moment("2023-09-04")
@@ -1888,7 +1888,7 @@ const mockUsers = [
             hour: 0,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         end: moment("2023-09-04")
@@ -1897,10 +1897,10 @@ const mockUsers = [
             hour: 12,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
-        title: "Mark Snoozy",
+        title: "Mark Snoozy"
       },
       {
         start: moment("2024-09-09")
@@ -1909,7 +1909,7 @@ const mockUsers = [
             hour: 0,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         end: moment("2024-09-09")
@@ -1918,12 +1918,12 @@ const mockUsers = [
             hour: 12,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
-        title: "Mark Snoozy",
-      },
-    ],
+        title: "Mark Snoozy"
+      }
+    ]
   },
   {
     id: uuidv4(),
@@ -1946,7 +1946,7 @@ const mockUsers = [
             hour: 0,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         end: moment("2022-11-30")
@@ -1955,9 +1955,9 @@ const mockUsers = [
             hour: 12,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
-          .toISOString(),
+          .toISOString()
       },
       {
         notes: "During deer hunting season the cabin is open to all.",
@@ -1968,7 +1968,7 @@ const mockUsers = [
             hour: 0,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         end: moment("2023-11-30")
@@ -1977,9 +1977,9 @@ const mockUsers = [
             hour: 12,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
-          .toISOString(),
+          .toISOString()
       },
       {
         notes: "During deer hunting season the cabin is open to all.",
@@ -1990,7 +1990,7 @@ const mockUsers = [
             hour: 0,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         end: moment("2024-11-30")
@@ -1999,9 +1999,9 @@ const mockUsers = [
             hour: 12,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
-          .toISOString(),
+          .toISOString()
       },
       {
         notes: "During deer hunting season the cabin is open to all.",
@@ -2012,7 +2012,7 @@ const mockUsers = [
             hour: 0,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         end: moment("2025-11-30")
@@ -2021,9 +2021,9 @@ const mockUsers = [
             hour: 12,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
-          .toISOString(),
+          .toISOString()
       },
       {
         start: moment("2022-05-21")
@@ -2031,7 +2031,7 @@ const mockUsers = [
             hour: 0,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         end: moment("2022-05-21")
@@ -2039,11 +2039,11 @@ const mockUsers = [
             hour: 20,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         title: "Cabin Cleaning",
-        notes: "Cabin cleaning and anual board meeting.",
+        notes: "Cabin cleaning and anual board meeting."
       },
       {
         start: moment("2023-05-20")
@@ -2051,7 +2051,7 @@ const mockUsers = [
             hour: 0,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         end: moment("2023-05-20")
@@ -2059,11 +2059,11 @@ const mockUsers = [
             hour: 20,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         title: "Cabin Cleaning",
-        notes: "Cabin cleaning and anual board meeting.",
+        notes: "Cabin cleaning and anual board meeting."
       },
       {
         start: moment("2024-05-18")
@@ -2071,7 +2071,7 @@ const mockUsers = [
             hour: 0,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         end: moment("2024-05-18")
@@ -2079,11 +2079,11 @@ const mockUsers = [
             hour: 20,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         title: "Cabin Cleaning",
-        notes: "Cabin cleaning and anual board meeting.",
+        notes: "Cabin cleaning and anual board meeting."
       },
       {
         start: moment("2025-05-17")
@@ -2091,7 +2091,7 @@ const mockUsers = [
             hour: 0,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         end: moment("2025-05-17")
@@ -2099,35 +2099,35 @@ const mockUsers = [
             hour: 20,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         title: "Cabin Cleaning",
-        notes: "Cabin cleaning and anual board meeting.",
-      },
-    ],
-  },
+        notes: "Cabin cleaning and anual board meeting."
+      }
+    ]
+  }
 ];
 
-const createUser = async (knex, user) => {
+const checkUsers = (user, index) => {
+  if (!user.email) {
+    console.error("Missing email! ", user.email, index);
+  }
+};
+
+const createUser = async (knex, user, index) => {
   user.password = generatePassword();
-  return sendWelcomeEmail(user)
-    .then(() => {
-      const { email, password, id } = user;
-      const hash = bcrypt.hashSync(password, saltRounds);
-      return knex("user").insert(
-        {
-          email,
-          password: hash,
-          id,
-        },
-        "id"
-      );
-    })
-    .catch((err) => {
-      console.error("ERR: ", err);
-      throw new Error("Error in createUser ", err);
-    })
+  const { email, password, id } = user;
+  const hash = bcrypt.hashSync(password, saltRounds);
+  return knex("user")
+    .insert(
+      {
+        email,
+        password: hash,
+        id
+      },
+      "id"
+    )
     .then(() => {
       const { profile } = user;
       return createProfile(knex, profile, user.id);
@@ -2142,7 +2142,12 @@ const createUser = async (knex, user) => {
           );
         });
         return Promise.all(reservationPromises);
+      } else {
+        return Promise.resolve();
       }
+    })
+    .then(async () => {
+      await sendWelcomeEmail(user, index);
     })
     .catch((err) => {
       console.error("97: ", err);
@@ -2160,14 +2165,13 @@ const createUser = async (knex, user) => {
 
 const createReservations = (knex, reservation, userId) => {
   const { start, title, end, notes } = reservation;
-  console.log({ reservation });
   return knex("reservation")
     .insert({
       notes: notes ? notes : "",
       start,
       end,
       title,
-      user_id: userId,
+      user_id: userId
     })
     .catch((error) => {
       console.error(error);
@@ -2187,7 +2191,7 @@ const createProfile = (knex, profile, user_id) => {
         city,
         state,
         zipcode,
-        phone,
+        phone
       },
       "id"
     )
@@ -2199,13 +2203,15 @@ exports.seed = function (knex) {
   return knex("userprofile")
     .del()
     .then(() => knex("reservation").del())
+    .then(() => knex("userprofile").del())
     .then(() => knex("session").del())
     .then(() => knex("email_setting").del())
     .then(() => knex("user").del())
     .then(() => {
       let userPromises = [];
-      mockUsers.forEach((user) => {
-        userPromises.push(createUser(knex, user));
+      console.log("Number of users to add: ", mockUsers.length);
+      mockUsers.forEach((user, index) => {
+        userPromises.push(createUser(knex, user, index));
       });
       return Promise.all(userPromises);
     })
