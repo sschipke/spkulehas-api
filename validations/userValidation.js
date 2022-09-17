@@ -162,5 +162,5 @@ export const validateEmailSetting = (emailSetting, value) => {
 };
 
 export const isAdmin = (user) => {
-  return user.status === "ADMIN";
+  return user && user.status === "ADMIN";
 };

@@ -325,7 +325,7 @@ router.put("/email_setting/:userId", async (req, res) => {
   }
 });
 
-router.get("/:userId", async (req, res) => {
+router.get("/select/:userId", async (req, res) => {
   const { userId } = req.params;
   console.log({ userId });
   const userFromJwt = res.locals.user;
