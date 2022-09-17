@@ -7,25 +7,26 @@ const moment = require("moment");
 require("dotenv").config();
 
 const transporter = nodemailer.createTransport({
+  pool: true,
   service: "Gmail",
   auth: {
     user: process.env.ADMIN_EMAIL,
-    pass: process.env.ADMIN_EMAIL_PASSWORD,
-  },
+    pass: process.env.ADMIN_EMAIL_PASSWORD
+  }
 });
 
 const handlebarOptions = {
   viewEngine: {
     partialsDir: path.resolve("./email/templates/"),
-    defaultLayout: false,
+    defaultLayout: false
   },
-  viewPath: path.resolve("./email/templates/"),
+  viewPath: path.resolve("./email/templates/")
 };
 
 // use a template file with nodemailer
 transporter.use("compile", hbs(handlebarOptions));
 
-const sendWelcomeEmail = async (user) => {
+const sendWelcomeEmail = async (user, index) => {
   const loginUrl = `${process.env.FRONT_END_BASE_URL}login`;
   const mailOptions = {
     from: process.env.ADMIN_EMAIL, // sender address
@@ -34,18 +35,36 @@ const sendWelcomeEmail = async (user) => {
     template: "welcome",
     context: {
       user,
-      loginUrl,
-    },
+      loginUrl
+    }
   };
 
-  console.log(
-    "Sending welcome email: ",
-    user.email,
-    user.profile.name,
-    process.env.NODE_ENV,
-    mailOptions
-  );
-  return transporter.sendMail(mailOptions);
+  return new Promise((resolve, reject) => {
+    console.log(
+      "Sending welcome email: ",
+      user.email,
+      user.profile.name,
+      process.env.NODE_ENV || "development"
+    );
+    transporter.sendMail(mailOptions, async (error, info) => {
+      if (error) {
+        console.error(
+          "Unable to send welcome email. ",
+          error,
+          user.email,
+          mailOptions
+        );
+        reject("Could not send welcome email" + error, user.email);
+      } else {
+        console.log(
+          "Successfully sent welcome email! Sent to: ",
+          user.email,
+          index
+        );
+        resolve(true);
+      }
+    });
+  });
 };
 
 const sendPasswordResetEmail = async (user, url) => {
@@ -56,8 +75,8 @@ const sendPasswordResetEmail = async (user, url) => {
     template: "password-reset",
     context: {
       user,
-      url,
-    },
+      url
+    }
   };
 
   console.log(
@@ -85,8 +104,8 @@ const alertUsersOfDeletion = async (members, reservation) => {
       startDate,
       endDate,
       title,
-      url,
-    },
+      url
+    }
   };
 
   console.log("Sending deletion email: ", mailOptions);
@@ -96,5 +115,5 @@ const alertUsersOfDeletion = async (members, reservation) => {
 module.exports = {
   sendWelcomeEmail,
   sendPasswordResetEmail,
-  alertUsersOfDeletion,
+  alertUsersOfDeletion
 };

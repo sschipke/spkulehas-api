@@ -2,7 +2,7 @@ const POSSIBLE_STATUSES = ["ADMIN", "D2", "D1", "S2", "S1", "U"];
 const POSSIBLE_EMAIL_SETTINGS = [
   "reservation_deleted",
   "reservation_shortened",
-  "reservation_reminder",
+  "reservation_reminder"
 ];
 
 const USER_ID_REGEX = new RegExp(
@@ -143,7 +143,7 @@ export const validatePassword = (newPassword) => {
   }
   if (!HAS_SPECIAL_CHARACTER_REGEX.test(newPassword)) {
     return {
-      error: "Password must contain at least one of the following: !@#$%^&*",
+      error: "Password must contain at least one of the following: !@#$%^&*"
     };
   }
   if (HAS_WHITE_SPACE.test(newPassword)) {
@@ -156,5 +156,11 @@ export const validatePassword = (newPassword) => {
 };
 
 export const validateEmailSetting = (emailSetting, value) => {
-  return POSSIBLE_EMAIL_SETTINGS.includes(emailSetting) && typeof value === "boolean"
-}
+  return (
+    POSSIBLE_EMAIL_SETTINGS.includes(emailSetting) && typeof value === "boolean"
+  );
+};
+
+export const isAdmin = (user) => {
+  return user.status === "ADMIN";
+};
