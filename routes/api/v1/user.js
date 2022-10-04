@@ -192,6 +192,11 @@ router.put("/update/email/:id", async (req, res) => {
     return res.status(404).json({ error: "Invalid user ID." });
   }
 
+  //TODO: Add to lower case!!
+  if (foundUser.email === "spkulehas@gmail.com") {
+    return forbiddenResponse(res, "Cannot update this admin email.");
+  }
+
   if (!canUserUpdate(userFromJwt, id)) {
     return res.status(403).status({ error: "Unauthorized." });
   }
@@ -325,7 +330,7 @@ router.put("/email_setting/:userId", async (req, res) => {
   }
 });
 
-router.get("/:userId", async (req, res) => {
+router.get("/select/:userId", async (req, res) => {
   const { userId } = req.params;
   console.log({ userId });
   const userFromJwt = res.locals.user;
