@@ -6,23 +6,24 @@ export const database = require("knex")(configuration);
 import { validateOrigin } from "./middleware/auth";
 import { logRequest } from "./utils/logging";
 import { errorHandler } from "./middleware/errors";
-import reservations from "./routes/api/v1/reservations"
+import { deleteOldSessions } from "./cronJobs/cronJobs";
+import reservations from "./routes/api/v1/reservations";
 import user from "./routes/api/v1/user";
 import sessionsRouter from "./routes/api/v1/session";
 if (environment === "development") {
-  console.log("loaded")
+  console.log("loaded");
   require("dotenv").config();
 }
 
 if (environment !== "production") {
-  console.log("Using environment: ", {environment});
+  console.log("Using environment: ", { environment });
 }
 const app = express();
 app.locals.title = "SpKuLeHaS API";
 app.use(cors());
 app.use(express.json());
 app.use(logRequest);
-app.disable('x-powered-by');
+app.disable("x-powered-by");
 
 app.use((err, req, res, next) => {
   if (err) {
@@ -39,8 +40,10 @@ app.use("/api/v1/session", sessionsRouter);
 
 app.get("/api/v1/teapot", (request, response) => {
   return response
-  .status(418)
-  .json("The server refuses the attempt to brew coffee with a teapot");
-})
+    .status(418)
+    .json("The server refuses the attempt to brew coffee with a teapot");
+});
+
+deleteOldSessions.start();
 
 export default app;
