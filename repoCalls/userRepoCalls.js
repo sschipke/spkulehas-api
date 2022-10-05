@@ -144,3 +144,8 @@ export const addEmailSettingForUser = async (userId, settingName, value) => {
     value
   });
 };
+
+export const updateLogin = async (id) => {
+  const now = moment().toISOString();
+  return database("user").where({ id }).update({ last_login: now });
+};
