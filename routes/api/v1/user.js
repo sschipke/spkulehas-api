@@ -192,7 +192,6 @@ router.put("/update/email/:id", async (req, res) => {
     return res.status(404).json({ error: "Invalid user ID." });
   }
 
-  //TODO: Add to lower case!!
   if ((foundUser.email || "").toLowerCase() === "spkulehas@gmail.com") {
     return forbiddenResponse(res, "Cannot update this admin email.");
   }
