@@ -11,7 +11,7 @@ export const createResetSessionForUser = async (userId) => {
     id,
     user_id: userId,
     type: RESET_TYPE,
-    expires: now.toISOString(),
+    expires: now.toISOString()
   };
   return database("session").insert(session, ["id"]);
 };
@@ -32,7 +32,7 @@ export const invalidateOtherSessions = async (userId, type) => {
 export const checkSession = async (sessionId, type, userId) => {
   const validationInfo = {
     isValid: true,
-    message: "This link is not valid. Please Request another.",
+    message: "This link is not valid. Please Request another."
   };
   const now = moment();
   return database("session")
@@ -84,4 +84,12 @@ export const validateSession = async (sessionId, type, userId) => {
       return validationInfo;
     }
   });
+};
+
+export const deleteInvalidSessions = async () => {
+  const now = moment().toISOString();
+  return database("session")
+    .where({ valid: false })
+    .orWhere("expires", "<=", now)
+    .del();
 };
