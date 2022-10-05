@@ -35,7 +35,8 @@ import {
   updatePassword,
   updateEmail,
   processEmailSettingUpdate,
-  findAllEmailSettingsByUserId
+  findAllEmailSettingsByUserId,
+  updateLogin
 } from "../../../repoCalls/userRepoCalls";
 import {
   forbiddenResponse,
@@ -74,7 +75,8 @@ router.post("/login", loginLimiter, async (request, res) => {
   };
   console.log({ user });
   logger("Successful login for user: ", request);
-  return res.status(200).json(responseBody);
+  res.status(200).json(responseBody).send();
+  updateLogin(foundUser[0].id);
 });
 
 router.put("/update/password/:id", passwordResetLimiter, async (req, res) => {
