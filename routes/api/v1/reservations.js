@@ -10,6 +10,7 @@ import {
   notFoundResponse,
   unauthorizedResponse
 } from "../../../utils/httpHelpers";
+import { isAdmin } from "../../../validations/userValidation";
 const moment = require("moment");
 const express = require("express");
 const router = express.Router();
@@ -23,7 +24,7 @@ router.get("/", async (req, res) => {
     const reservations = await getReservations();
     console.log(
       "Successfully sent GET for reservations. ",
-      req.ips,
+      req.ip,
       new Date().toLocaleString({ timeZone: "American/Denver" })
     );
     return res.status(200).json({ reservations });
@@ -50,7 +51,7 @@ router.post("/new", async (req, res, next) => {
     return forbiddenResponse(res);
   }
 
-  const error = validateReservation(reservation);
+  const error = validateReservation(reservation, isAdmin(user));
   if (Object.keys(error).length) {
     console.error("Unable to create reservation: ", error);
     return res.status(422).json(error);
@@ -103,7 +104,7 @@ router.put("/:reservation_id", async (req, res, next) => {
       "Unable to find reservation with id: " + reservationId
     );
   }
-  const error = validateReservation(reservation);
+  const error = validateReservation(reservation, isAdmin(user));
   if (Object.keys(error).length) {
     return res.status(422).json(error);
   }
@@ -128,7 +129,7 @@ router.put("/:reservation_id", async (req, res, next) => {
 
 router.delete("/:id", async (req, response) => {
   const id = Number(req.params.id);
-  const { reservation } = req.body;
+  const { reservation, shouldSendDeletionEmail } = req.body;
   const { user } = response.locals;
   const currentReservation = await findReservationById(id);
   console.log({ currentReservation });
@@ -155,7 +156,11 @@ router.delete("/:id", async (req, response) => {
       }
       logger("Sucessfully deleted reservation: ", req);
       response.status(200).json("Reservation successfully removed.").send();
-      handleDeletionEmail(currentReservation, user.id);
+      if (shouldSendDeletionEmail) {
+        handleDeletionEmail(currentReservation, user.id);
+      } else {
+        console.log("Not sending deletion email due to admin's request.");
+      }
     });
 });
 

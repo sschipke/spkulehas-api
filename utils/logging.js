@@ -1,10 +1,10 @@
 export const timeZone = { timeZone: "American/Denver" };
 
-export const timeString = new Date().toLocaleString(timeZone);
+export const timeString = () => new Date().toLocaleString(timeZone);
 
 export const logger = (message, req) => {
-    const { ip, headers } = req;
-    const { origin } = headers;
+  const { ip, headers } = req;
+  const { origin } = headers;
   console.log(
     `${message} at IP:`,
     ip,
@@ -13,7 +13,7 @@ export const logger = (message, req) => {
     " from: ",
     origin,
     " at ",
-    timeString
+    timeString()
   );
 };
 
@@ -31,7 +31,7 @@ export const logRequest = (req, res, next) => {
     " from: ",
     origin,
     "at:",
-    timeString
+    timeString()
   );
   return next();
 };
