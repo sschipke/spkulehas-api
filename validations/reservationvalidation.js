@@ -7,7 +7,7 @@ const WINTER_SEASON_END_2023 = "2024-05-20";
 const WINTER_SEASON_START_2024 = "2024-10-21";
 const WINTER_SEASON_END_2024 = "2025-05-18";
 
-export const validateReservation = (reservation) => {
+export const validateReservation = (reservation, isAdmin) => {
   const minDate = process.env.MINIMUM_RESERVATION_DATE;
   const maxReservationDate = process.env.MAXIMUM_RESERVATION_DATE;
   //Note: This method will mutate/update the reservation's notes & title with trimmed values
@@ -46,7 +46,7 @@ export const validateReservation = (reservation) => {
   if (moment(end).isAfter(maxReservationDate)) {
     return { error: "Reservation is too late." };
   }
-  if (!isReservationLengthValid(start, end)) {
+  if (!isReservationLengthValid(start, end) && !isAdmin) {
     return { error: "Invalid reservation length." };
   }
   processReserVationDates(reservation);
@@ -87,12 +87,12 @@ export const isInWinter = (date) => {
 };
 
 const processReserVationDates = (reservation) => {
-  //If the reservation starts or ends at midnight,we update it to noon
+  //If the reservation ends at midnight,we update it to noon
   const noonObject = {
     hour: 12,
     minute: 0,
     second: 0,
-    millisecond: 0,
+    millisecond: 0
   };
   const { start, end } = reservation;
   const checkInHour = moment(start).hours();

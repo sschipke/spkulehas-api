@@ -112,8 +112,64 @@ const alertUsersOfDeletion = async (members, reservation) => {
   return transporter.sendMail(mailOptions);
 };
 
+const sendSessionDeletionEmail = async (count) => {
+  const date = moment().format("dddd, MMMM DD, YYYY, HH:MM");
+  const environment = process.env.NODE_ENV || "development";
+  const isSingular = count === 1;
+  const mailOptions = {
+    from: process.env.ADMIN_EMAIL,
+    to: "swschipke@gmail.com",
+    subject: "Session Deletion from SpKuLeHaS",
+    template: "session-deletion-count",
+    context: {
+      count,
+      isSingular,
+      date,
+      environment
+    }
+  };
+
+  return new Promise((resolve, reject) => {
+    console.log("Sending session deletion Email.", { mailOptions });
+    transporter.sendMail(mailOptions, async (error, info) => {
+      if (error) {
+        console.error(
+          "Unable to send session deletion email. ",
+          error,
+          user.email,
+          mailOptions
+        );
+        reject("Could not send session deletion welcome email. " + date);
+      } else {
+        console.log("Successfully sent session deletion email!");
+        resolve(true);
+      }
+    });
+  });
+};
+
+const sendSessionDeletionErrorEmail = async (error) => {
+  const date = moment().format("dddd, MMMM DD, YYYY, HH:MM");
+  const environment = process.env.NODE_ENV || "development";
+  const mailOptions = {
+    from: process.env.ADMIN_EMAIL, // sender address
+    to: "swschipke@gmail.com",
+    subject: "ERROR: Session Deletion from SpKuLeHaS",
+    template: "session-deletion-count",
+    context: {
+      date,
+      environment,
+      error
+    }
+  };
+
+  return transporter.sendMail(mailOptions);
+};
+
 module.exports = {
   sendWelcomeEmail,
   sendPasswordResetEmail,
-  alertUsersOfDeletion
+  alertUsersOfDeletion,
+  sendSessionDeletionEmail,
+  sendSessionDeletionErrorEmail
 };
