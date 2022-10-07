@@ -164,3 +164,7 @@ export const validateEmailSetting = (emailSetting, value) => {
 export const isAdmin = (user) => {
   return user && user.status === "ADMIN";
 };
+
+export const determineNameChange = (oldUser, updatedUser) => {
+  return oldUser.name !== updatedUser.name;
+};
