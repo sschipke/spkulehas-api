@@ -8,7 +8,8 @@ import {
   validateStatus,
   validatePassword,
   validateEmailSetting,
-  isAdmin
+  isAdmin,
+  determineNameChange
 } from "../../../validations/userValidation";
 import {
   loginLimiter,
@@ -42,6 +43,7 @@ import {
   forbiddenResponse,
   notFoundResponse
 } from "../../../utils/httpHelpers";
+import { processNameChange } from "../../../utils/helpers";
 const SEND_EMAIL_DELAY_MS = 900;
 
 const express = require("express");
@@ -259,10 +261,15 @@ router.put("/:id", async (req, res) => {
   const { user } = req.body;
   const jwtUser = res.locals.user;
 
-  if (!canUserUpdate(jwtUser, id)) {
-    return res.status(403).status({ error: "Unauthorized." });
+  if (!user) {
+    return res
+      .status(409)
+      .json({ error: "Must include a profile to updated." });
   }
 
+  if (!canUserUpdate(jwtUser, id)) {
+    return res.status(403).json({ error: "Unauthorized." });
+  }
   let profileToUpdate = await getUserProfileById(id);
 
   if (!profileToUpdate) {
@@ -292,9 +299,22 @@ router.put("/:id", async (req, res) => {
 
       const newUserProfile = await getUserProfileById(id);
       console.log({ newUserProfile });
+      const nameHasChanged = determineNameChange(
+        profileToUpdate,
+        newUserProfile
+      );
       logger("Sucessfully updated profile.", req);
       const webToken = generateWebtoken(user, "1hr");
-      return res.status(200).json({ user: newUserProfile, token: webToken });
+      const responseBody = {
+        user: newUserProfile,
+        token: webToken,
+        updatedReservations: null
+      };
+      if (nameHasChanged) {
+        processNameChange(res, newUserProfile, profileToUpdate, responseBody);
+      } else {
+        res.status(200).json(responseBody).send();
+      }
     })
     .catch((err) => {
       console.error("Unable to successfuly update profile.", err);

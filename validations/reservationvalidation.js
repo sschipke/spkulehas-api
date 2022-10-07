@@ -21,7 +21,7 @@ export const validateReservation = (reservation, isAdmin) => {
     }
   }
   const trimmedTitle = title.trim();
-  if (!trimmedTitle || trimmedTitle.length > 20) {
+  if (!trimmedTitle || trimmedTitle.length > 60) {
     return { error: "The title is invalid." };
   }
   reservation.title = trimmedTitle;
