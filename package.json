@@ -9,7 +9,7 @@
     "initdb": "knex migrate:latest && knex seed:run",
     "migrate": "knex migrate:latest",
     "rollback": "knex migrate:rollback",
-    "seed-cleaning": "knex seed:run --specific=cabin-cleaning.js",
+    "updateNames": "knex migrate:latest && knex seed:run --specific=updateNames.js",
     "down": "knex migrate:down",
     "test": "jest --forceExit",
     "test:watch": "jest --watchAll"
