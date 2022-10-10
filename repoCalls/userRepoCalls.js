@@ -2,6 +2,13 @@ import { database } from "../app";
 import moment from "moment";
 const bcrypt = require("bcrypt");
 
+export const mapProfileToModel = (profile) => {
+  const { firstName, lastName } = profile;
+  profile.first_name = firstName.trim();
+  profile.last_name = lastName.trim();
+  profile.name = `${profile.first_name} ${profile.last_name}`;
+};
+
 export const findUserByEmail = async (email) => {
   return database("user").where({ email: email.toLowerCase() });
 };
@@ -18,6 +25,8 @@ export const getUserProfileById = async (id) => {
     .where({ user_id: id })
     .columns([
       "name",
+      "first_name AS firstName",
+      "last_name AS lastName",
       "status",
       "street",
       "city",
@@ -32,11 +41,17 @@ export const getUserProfileById = async (id) => {
 };
 
 export const mapUserToProfile = (user) => {
-  const { id, name, status, street, city, state, zipcode, phone } = user;
+  const { id, firstName, lastName, status, street, city, state, zipcode, phone } = user;
+  const first_name = firstName.trim();
+  const last_name = lastName.trim();
+  const fullName = `${first_name} ${last_name}`;
+  
   const updated_at = moment().toISOString();
   const profile = {
     user_id: id,
-    name,
+    first_name,
+    last_name,
+    name: fullName,
     status,
     street,
     city,
