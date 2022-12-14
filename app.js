@@ -10,6 +10,7 @@ import { deleteOldSessions } from "./cronJobs/cronJobs";
 import reservations from "./routes/api/v1/reservations";
 import user from "./routes/api/v1/user";
 import sessionsRouter from "./routes/api/v1/session";
+import adminRouter from "./routes/api/v1/admin";
 if (environment === "development") {
   console.log("loaded");
   require("dotenv").config();
@@ -37,6 +38,7 @@ app.use(validateOrigin);
 app.use("/api/v1/user", user);
 app.use("/api/v1/reservations", reservations);
 app.use("/api/v1/session", sessionsRouter);
+app.use("/api/v1/admin", adminRouter);
 
 app.get("/api/v1/teapot", (request, response) => {
   return response

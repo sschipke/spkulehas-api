@@ -27,6 +27,7 @@ export const getUserProfileById = async (id) => {
       "name",
       "first_name AS firstName",
       "last_name AS lastName",
+      "isadmin AS isAdmin",
       "status",
       "street",
       "city",
@@ -41,17 +42,29 @@ export const getUserProfileById = async (id) => {
 };
 
 export const mapUserToProfile = (user) => {
-  const { id, firstName, lastName, status, street, city, state, zipcode, phone } = user;
+  const {
+    id,
+    firstName,
+    lastName,
+    status,
+    street,
+    city,
+    state,
+    zipcode,
+    phone,
+    isAdmin
+  } = user;
   const first_name = firstName.trim();
   const last_name = lastName.trim();
   const fullName = `${first_name} ${last_name}`;
-  
+
   const updated_at = moment().toISOString();
   const profile = {
     user_id: id,
     first_name,
     last_name,
     name: fullName,
+    isadmin: isAdmin,
     status,
     street,
     city,
@@ -163,4 +176,33 @@ export const addEmailSettingForUser = async (userId, settingName, value) => {
 export const updateLogin = async (id) => {
   const now = moment().toISOString();
   return database("user").where({ id }).update({ last_login: now });
+};
+
+export const getUserProfilesDetailView = async () => {
+  // const memberDetails = await
+  return database("userprofile")
+    .whereNot({ status: "ADMIN" })
+    .columns([
+      "name",
+      "isadmin AS isAdmin",
+      "status",
+      "street",
+      "city",
+      "state",
+      "zipcode",
+      "phone",
+      "user_id AS id"
+    ])
+    .innerJoin("user", "user.id", "userprofile.user_id")
+    .columns(["email"])
+    .orderByRaw(
+      `
+  CASE status
+    WHEN 'S2' THEN 1
+    WHEN 'S1' THEN 2
+    WHEN 'D1' THEN 3
+    WHEN 'D2' THEN 4
+    ELSE 5
+  END;`
+    );
 };

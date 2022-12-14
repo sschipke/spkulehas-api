@@ -1,6 +1,6 @@
 import "@babel/polyfill";
 const jwt = require("jsonwebtoken");
-import { unauthorizedResponse } from "../utils/httpHelpers";
+import { unauthorizedResponse, forbiddenResponse } from "../utils/httpHelpers";
 
 export const validateRequestToken = (req, res, next) => {
   const signature = process.env.TOKEN_SECRET;
@@ -40,6 +40,14 @@ export const validateRequestToken = (req, res, next) => {
   }
 };
 
+export const allowOnlyAdmin = (req, res, next) => {
+  if (!res.locals.user.isAdmin) {
+    return forbiddenResponse(res);
+  } else {
+    next();
+  }
+};
+
 export const generateWebtoken = (userProfile, expiration, type, sessionId) => {
   if (!expiration || !expiration.includes("hr")) {
     throw new Error("No expiration time inlcuded in generate request.");
@@ -48,12 +56,13 @@ export const generateWebtoken = (userProfile, expiration, type, sessionId) => {
     type = "login";
   }
   const signature = process.env.TOKEN_SECRET;
-  const { id, email, name, status } = userProfile;
+  const { id, email, name, status, isAdmin } = userProfile;
   const data = {
     id,
     email,
     name,
-    status
+    status,
+    isAdmin
   };
   return jwt.sign({ user: data, type, sessionId }, signature, {
     expiresIn: expiration
