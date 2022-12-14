@@ -1,11 +1,10 @@
-import moment from "moment";
 import { logger } from "../../../utils/logging";
 import { sendPasswordResetEmail } from "../../../email";
 import {
   validateUserProfile,
   canUserUpdate,
   validateEmail,
-  validateStatus,
+  canUpdateStatusOrPrivileges,
   validatePassword,
   validateEmailSetting,
   isAdmin,
@@ -279,12 +278,13 @@ router.put("/:id", async (req, res) => {
   }
 
   const profile = mapUserToProfile(user);
-  if (!validateStatus(jwtUser, profileToUpdate, profile)) {
+  if (!canUpdateStatusOrPrivileges(jwtUser, profileToUpdate, profile)) {
     return res
       .status(403)
-      .json({ error: "Only the admin can update a member's status." });
+      .json({ error: "Only an admin can update a member's status or privileges." });
   }
-  const error = validateUserProfile(profile);
+
+  const error = validateUserProfile(profile, user.email);
   if (Object.keys(error).length) {
     return res.status(422).json(error);
   }
@@ -349,30 +349,6 @@ router.put("/email_setting/:userId", async (req, res) => {
     console.error("Unable to update password. ", error);
     return res.status(500).json({ error: "Unable to update email setting." });
   }
-});
-
-router.get("/select/:userId", async (req, res) => {
-  const { userId } = req.params;
-  console.log({ userId });
-  const userFromJwt = res.locals.user;
-  if (!isAdmin(userFromJwt)) {
-    return forbiddenResponse(res);
-  }
-
-  const selectedUser = await getUserProfileById(userId);
-  const emailSettings = await findAllEmailSettingsByUserId(userId);
-  //TODO: For now there should only be one email setting for deletion emails
-  //Once we support more, we can remove the index here
-  if (!selectedUser) {
-    return notFoundResponse(res, `Unable to find user with id: ${userId}`);
-  }
-  const responseBody = {
-    selectedMember: selectedUser,
-    selectedMemberEmailSettings: emailSettings.length ? emailSettings[0] : null
-  };
-  console.log({ selectedUser });
-  logger("Successfully got user for admin: ", req);
-  return res.status(200).json(responseBody);
 });
 
 export default router;

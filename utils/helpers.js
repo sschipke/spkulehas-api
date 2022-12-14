@@ -1,10 +1,7 @@
 import { updateReservationTitlesWithNewName } from "../repoCalls/reservationRepoCalls";
 
 export const canUserEdit = (user, reservation) => {
-  if (user.status === "ADMIN") {
-    return true;
-  }
-  return user.id === reservation.user_id;
+  return user.isAdmin || user.id === reservation.user_id;
 };
 
 export const processNameChange = async (
