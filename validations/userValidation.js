@@ -1,4 +1,6 @@
 const POSSIBLE_STATUSES = ["ADMIN", "D2", "D1", "S2", "S1", "U"];
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL;
+const ADMIN_STATUS = "ADMIN";
 const POSSIBLE_EMAIL_SETTINGS = [
   "reservation_deleted",
   "reservation_shortened",
@@ -37,8 +39,11 @@ const HAS_SPECIAL_CHARACTER_REGEX = new RegExp(/(?=.*[!@#$%^&*])/);
 
 const HAS_WHITE_SPACE = new RegExp(/\s/);
 
-export const validateUserProfile = (userProfile) => {
-  const { user_id, name, street, city, state, zipcode, phone } = userProfile;
+export const validateUserProfile = (userProfile, email) => {
+  const { user_id, name, street, city, state, zipcode, phone, status, isadmin } =
+    userProfile;
+
+  const processedEmail = (email || "").trim().toLowerCase();
 
   if (!USER_ID_REGEX.test(user_id)) {
     return { error: "Invalid user id." };
@@ -89,7 +94,23 @@ export const validateUserProfile = (userProfile) => {
   if (!trimmedPhoneNumber || !PHONE_REGEX.test(trimmedPhoneNumber)) {
     return { error: "Invalid phone number." };
   }
+  
+  if (processedEmail === ADMIN_EMAIL && !isadmin) {
+    return { error: "SpKuLeHaS admin must always be an admin." };
+  }
+
   userProfile.phone = trimmedPhoneNumber;
+  if (!POSSIBLE_STATUSES.includes(status)) {
+    return { error: "Invalid status." };
+  }
+  if (status === ADMIN_STATUS && processedEmail !== ADMIN_EMAIL) {
+    return { error: "ADMIN status is reserved for SpKuLeHaS admin user." };
+  }
+  console.log({ processedEmail }, { ADMIN_EMAIL }, { ADMIN_STATUS });
+  if (processedEmail === ADMIN_EMAIL && status !== ADMIN_STATUS) {
+    return { error: "The SpKuLeHaS admin status cannot be changed." };
+  }
+
   return {};
 };
 
@@ -97,21 +118,21 @@ export const canUserUpdate = (jwtUser, id, isPassword) => {
   if (isPassword) {
     return jwtUser.id === id;
   }
-  return jwtUser.status === "ADMIN" || jwtUser.id === id;
+  return jwtUser.isAdmin || jwtUser.id === id;
 };
 
-export const validateStatus = (jwtUser, dbProfile, requestedProfile) => {
+export function canUpdateStatusOrPrivileges(jwtUser, dbProfile, requestedProfile) {
+  console.log({ dbProfile }, { requestedProfile });
   const trimmedStatus = (requestedProfile.status || "").trim();
-  if (!POSSIBLE_STATUSES.includes(trimmedStatus)) {
+  if (!jwtUser.isAdmin && dbProfile.status !== trimmedStatus) {
     return false;
   }
-  if (jwtUser.status !== "ADMIN" && dbProfile.status !== trimmedStatus) {
+  if (!jwtUser.isAdmin && dbProfile.isAdmin !== requestedProfile.isadmin) {
     return false;
   }
-
   requestedProfile.status = trimmedStatus;
   return true;
-};
+}
 
 export const validateEmail = (email) => {
   const processedEmail = email.trim().toLowerCase();
@@ -162,7 +183,11 @@ export const validateEmailSetting = (emailSetting, value) => {
 };
 
 export const isAdmin = (user) => {
-  return user && user.status === "ADMIN";
+  return user && user.isAdmin;
+};
+
+export const determineNameChange = (oldUser, updatedUser) => {
+  return oldUser.name !== updatedUser.name;
 };
 
 export const determineNameChange = (oldUser, updatedUser) => {
