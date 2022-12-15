@@ -25,3 +25,25 @@ export const processNameChange = async (
     return response.status(200).json(responseBody).send();
   }
 };
+
+export const processNameChange = async (
+  response,
+  newUserProfile,
+  oldProfile,
+  responseBody
+) => {
+  const userId = newUserProfile.id;
+  const newName = newUserProfile.name;
+  const oldName = oldProfile.name;
+  const updatedReservations = await updateReservationTitlesWithNewName(
+    userId,
+    newName,
+    oldName
+  );
+  if (updatedReservations.length > 0) {
+    responseBody.updatedReservations = updatedReservations;
+    return response.status(200).json(responseBody).send();
+  } else {
+    return response.status(200).json(responseBody).send();
+  }
+};
