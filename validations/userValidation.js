@@ -189,3 +189,7 @@ export const isAdmin = (user) => {
 export const determineNameChange = (oldUser, updatedUser) => {
   return oldUser.name !== updatedUser.name;
 };
+
+export const determineNameChange = (oldUser, updatedUser) => {
+  return oldUser.name !== updatedUser.name;
+};
