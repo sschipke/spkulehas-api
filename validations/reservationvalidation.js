@@ -1,4 +1,4 @@
-const moment = require("moment");
+const moment = require("moment-timezone");
 
 const WINTER_SEASON_START_2022 = "2022-10-24";
 const WINTER_SEASON_END_2022 = "2023-05-21";
@@ -6,6 +6,7 @@ const WINTER_SEASON_START_2023 = "2023-10-23";
 const WINTER_SEASON_END_2023 = "2024-05-20";
 const WINTER_SEASON_START_2024 = "2024-10-21";
 const WINTER_SEASON_END_2024 = "2025-05-18";
+const MOUNTAIN_TZ = "America/Denver"
 
 export const validateReservation = (reservation, isAdmin) => {
   const minDate = process.env.MINIMUM_RESERVATION_DATE;
@@ -87,7 +88,7 @@ export const isInWinter = (date) => {
 };
 
 const processReserVationDates = (reservation) => {
-  //If the reservation ends at midnight,we update it to noon
+  //Default reservation times to noon
   const noonObject = {
     hour: 12,
     minute: 0,
@@ -95,12 +96,6 @@ const processReserVationDates = (reservation) => {
     millisecond: 0
   };
   const { start, end } = reservation;
-  const checkInHour = moment(start).hours();
-  const checkoutHour = moment(end).hours();
-  if (checkInHour === 0 || !checkInHour) {
-    reservation.start = moment(start).set(noonObject);
-  }
-  if (checkoutHour === 0 || !checkoutHour) {
-    reservation.end = moment(end).set(noonObject);
-  }
+    reservation.start = moment(start).tz(MOUNTAIN_TZ).set(noonObject).toISOString();
+    reservation.end = moment(end).tz(MOUNTAIN_TZ).set(noonObject).toISOString();
 };

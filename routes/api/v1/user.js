@@ -43,6 +43,7 @@ import {
   notFoundResponse
 } from "../../../utils/httpHelpers";
 import { processNameChange } from "../../../utils/helpers";
+import moment from "moment";
 const SEND_EMAIL_DELAY_MS = 900;
 
 const express = require("express");
@@ -123,11 +124,14 @@ router.post("/forgot/password", passwordResetLimiter, async (req, res) => {
     const user = usersByEmail[0];
     await invalidateOtherSessions(user.id, RESET_TYPE);
     const sessionId = await createResetSessionForUser(user.id);
+    let expiration = moment()
+      .add(2, "hours")
+      .calendar();
     const token = generateWebtoken(user, "2hr", "email", sessionId[0].id);
     const emailUrl = `${process.env.FRONT_END_BASE_URL}?reset=${token}`;
     delete user.password;
     try {
-      await sendPasswordResetEmail(user, emailUrl);
+      await sendPasswordResetEmail(user, emailUrl, expiration);
       res
         .status(200)
         .json("If a user with this email exists, an email has been sent.")

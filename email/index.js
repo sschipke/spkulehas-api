@@ -67,7 +67,7 @@ const sendWelcomeEmail = async (user, index) => {
   });
 };
 
-const sendPasswordResetEmail = async (user, url) => {
+const sendPasswordResetEmail = async (user, url, expiration) => {
   const mailOptions = {
     from: process.env.ADMIN_EMAIL,
     to: user.email,
@@ -75,7 +75,8 @@ const sendPasswordResetEmail = async (user, url) => {
     template: "password-reset",
     context: {
       user,
-      url
+      url,
+      expiration
     }
   };
 
@@ -113,7 +114,7 @@ const alertUsersOfDeletion = async (members, reservation) => {
 };
 
 const sendSessionDeletionEmail = async (count) => {
-  const date = moment().format("dddd, MMMM DD, YYYY, HH:MM");
+  const date = moment().calendar();
   const environment = process.env.NODE_ENV || "development";
   const isSingular = count === 1;
   const mailOptions = {
