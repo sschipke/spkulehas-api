@@ -1,0 +1,52 @@
+# fly.toml file generated for spkulehas-api on 2022-09-12T16:29:00-06:00
+
+app = "spkulehas-api"
+kill_signal = "SIGINT"
+kill_timeout = 5
+processes = []
+
+[build]
+  builder = "heroku/buildpacks:20"
+
+[env]
+  BASE_URL = "https://fly.io/apps/spkulehas-api/api/v1/"
+  FRONT_END_BASE_URL = "https://spkulehas.com/"
+  FRONT_END_ORIGIN_URL = "spkulehas.com"
+  MAXIMUM_RESERVATION_DATE = "2025-05-16"
+  MINIMUM_RESERVATION_DATE = "2022-05-23"
+  NODE_ENV = "production"
+  PORT = "8080"
+  TZ = "America/Denver"
+
+[experimental]
+  allowed_public_ports = []
+  auto_rollback = true
+
+[[services]]
+  http_checks = []
+  internal_port = 8080
+  processes = ["app"]
+  protocol = "tcp"
+  script_checks = []
+  [services.concurrency]
+    hard_limit = 25
+    soft_limit = 20
+    type = "connections"
+
+  [[services.ports]]
+    force_https = true
+    handlers = ["http"]
+    port = 80
+
+  [[services.ports]]
+    handlers = ["tls", "http"]
+    port = 443
+
+  [[services.tcp_checks]]
+    grace_period = "1s"
+    interval = "15s"
+    restart_limit = 0
+    timeout = "2s"
+
+[deploy]
+release_command="yarn migrate"
