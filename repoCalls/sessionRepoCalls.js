@@ -11,7 +11,7 @@ export const createResetSessionForUser = async (userId, number, unit) => {
   if (number && unit && allowedUnits.includes(unit)) {
     expiration.add(number, unit);
   } else {
-    expiration.add(2, "hrs");
+    expiration.add(2, "hours");
   }
   const session = {
     id,
