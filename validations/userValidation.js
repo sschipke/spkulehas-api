@@ -1,3 +1,4 @@
+import { safeTrim } from "../utils/helpers";
 const POSSIBLE_STATUSES = ["ADMIN", "D2", "D1", "S2", "S1", "U"];
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL;
 const ADMIN_STATUS = "ADMIN";
@@ -40,22 +41,55 @@ const HAS_SPECIAL_CHARACTER_REGEX = new RegExp(/(?=.*[!@#$%^&*])/);
 const HAS_WHITE_SPACE = new RegExp(/\s/);
 
 export const validateUserProfile = (userProfile, email) => {
-  const { user_id, name, street, city, state, zipcode, phone, status, isadmin } =
-    userProfile;
+  const {
+    user_id,
+    first_name,
+    last_name,
+    name,
+    street,
+    city,
+    state,
+    zipcode,
+    phone,
+    status,
+    isadmin
+  } = userProfile;
 
-  const processedEmail = (email || "").trim().toLowerCase();
+  const processedEmail = safeTrim(email).toLowerCase();
 
   if (!USER_ID_REGEX.test(user_id)) {
     return { error: "Invalid user id." };
   }
 
-  const trimmedName = name.trim();
+  const trimmedFirstName = safeTrim(first_name);
+  if (
+    !trimmedFirstName ||
+    trimmedFirstName.length < 1 ||
+    trimmedFirstName.length > 30
+  ) {
+    return { error: "Invalid first name." };
+  }
+
+  userProfile.first_name = trimmedFirstName;
+
+  const trimmedLastName = safeTrim(last_name);
+  if (
+    !trimmedLastName ||
+    trimmedLastName.length < 1 ||
+    trimmedLastName.length > 30
+  ) {
+    return { error: "Invalid last name." };
+  }
+
+  userProfile.last_name = trimmedLastName;
+
+  const trimmedName = safeTrim(name);
   if (!trimmedName || trimmedName.length < 2 || trimmedName.length > 30) {
     return { error: "Invalid name." };
   }
   userProfile.name = trimmedName;
 
-  const trimmedStreet = street.trim();
+  const trimmedStreet = safeTrim(street);
   if (
     !trimmedStreet ||
     trimmedStreet.length < 10 ||
@@ -65,7 +99,7 @@ export const validateUserProfile = (userProfile, email) => {
   }
   userProfile.street = trimmedStreet;
 
-  const trimmedCity = city.trim();
+  const trimmedCity = safeTrim(city);
   if (
     !trimmedCity ||
     trimmedCity.length > 20 ||
@@ -75,7 +109,7 @@ export const validateUserProfile = (userProfile, email) => {
   }
   userProfile.city = trimmedCity;
 
-  const trimmedStateCode = state.trim();
+  const trimmedStateCode = safeTrim(state);
   if (
     trimmedStateCode.length !== 2 ||
     !STATE_CODE_REGEX.test(trimmedStateCode)
@@ -84,13 +118,13 @@ export const validateUserProfile = (userProfile, email) => {
   }
   userProfile.state = trimmedStateCode;
 
-  const trimmedZipCode = zipcode.trim();
+  const trimmedZipCode = safeTrim(zipcode);
   if (trimmedZipCode.length !== 5 || !ZIP_CODE_REGEX.test(trimmedZipCode)) {
     return { error: "Invalid zip code." };
   }
   userProfile.zipcode = trimmedZipCode;
 
-  const trimmedPhoneNumber = phone.trim();
+  const trimmedPhoneNumber = safeTrim(phone);
   if (!trimmedPhoneNumber || !PHONE_REGEX.test(trimmedPhoneNumber)) {
     return { error: "Invalid phone number." };
   }
@@ -106,7 +140,7 @@ export const validateUserProfile = (userProfile, email) => {
   if (status === ADMIN_STATUS && processedEmail !== ADMIN_EMAIL) {
     return { error: "ADMIN status is reserved for SpKuLeHaS admin user." };
   }
-  console.log({ processedEmail }, { ADMIN_EMAIL }, { ADMIN_STATUS });
+
   if (processedEmail === ADMIN_EMAIL && status !== ADMIN_STATUS) {
     return { error: "The SpKuLeHaS admin status cannot be changed." };
   }

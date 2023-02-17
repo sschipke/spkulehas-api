@@ -18,12 +18,20 @@ import { allowOnlyAdmin, validateRequestToken } from "../../../middleware/auth";
 import {
   getUserProfileById,
   findAllEmailSettingsByUserId,
-  getUserProfilesDetailView
+  getUserProfilesDetailView,
+  addNewUser,
+  mapUserToProfile
 } from "../../../repoCalls/userRepoCalls";
 import {
   forbiddenResponse,
-  notFoundResponse
+  notFoundResponse,
+  unauthorizedResponse,
 } from "../../../utils/httpHelpers";
+import {
+  createIdsForNewMember,
+  handleNewUserCreationEmails,
+  confirmPassword
+} from "../../../utils/helpers";
 
 const express = require("express");
 const router = express.Router();
@@ -57,6 +65,37 @@ router.get("/member_details", async (req, res) => {
   } catch (error) {
     console.error("ERROR getting member details for admin.", error);
     return res.status(500).json({ error: "Unable to get member details." });
+  }
+});
+
+router.post("/add_member", async (req, res) => {
+  const { user, password } = req.body;
+  const admin = res.locals.user;
+  const isConfirmedPassword = await confirmPassword(admin.id, password);
+  if (!isConfirmedPassword) {
+    return unauthorizedResponse(res);
+  }
+  createIdsForNewMember(user);
+  const profile = mapUserToProfile(user)
+  user.profile = profile;
+  const errors = validateUserProfile(profile, user.email);
+  if (Object.keys(errors).length) {
+    return res.status(400).json(errors)
+  }
+  try {
+    console.log("Adding user: ", user);
+    await addNewUser(user);
+    const newlyCreatedMember = await getUserProfileById(user.id);
+    console.log({ newlyCreatedMember });
+    await handleNewUserCreationEmails(newlyCreatedMember);
+    res.status(200).json({ newMember: newlyCreatedMember }).send();
+  } catch (error) {
+    console.error("Unable to add member: ", error);
+    const { message } = error;
+    if (message && message === "Email already exists.") {
+      return res.status(409).json({ error: "This email is already in use." });
+    }
+    return res.status(500).send();
   }
 });
 

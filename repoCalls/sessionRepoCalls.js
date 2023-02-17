@@ -3,16 +3,23 @@ import moment from "moment";
 const { v4: uuidv4 } = require("uuid");
 
 export const RESET_TYPE = "password_reset";
+const allowedUnits = ["hrs", "days"];
 
-export const createResetSessionForUser = async (userId) => {
+export const createResetSessionForUser = async (userId, number, unit) => {
   const id = uuidv4();
-  const now = moment().add(2, "hours");
+  const expiration = moment()
+  if (number && unit && allowedUnits.includes(unit)) {
+    expiration.add(number, unit);
+  } else {
+    expiration.add(2, "hrs");
+  }
   const session = {
     id,
     user_id: userId,
     type: RESET_TYPE,
-    expires: now.toISOString()
+    expires: expiration.toISOString()
   };
+  console.log("Creating session: ", {session});
   return database("session").insert(session, ["id"]);
 };
 

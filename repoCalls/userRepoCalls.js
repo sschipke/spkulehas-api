@@ -54,8 +54,8 @@ export const mapUserToProfile = (user) => {
     phone,
     isAdmin
   } = user;
-  const first_name = firstName.trim();
-  const last_name = lastName.trim();
+  const first_name = firstName;
+  const last_name = lastName;
   const fullName = `${first_name} ${last_name}`;
 
   const updated_at = moment().toISOString();
@@ -64,7 +64,7 @@ export const mapUserToProfile = (user) => {
     first_name,
     last_name,
     name: fullName,
-    isadmin: isAdmin,
+    isadmin: isAdmin || false,
     status,
     street,
     city,
@@ -205,4 +205,34 @@ export const getUserProfilesDetailView = async () => {
     ELSE 5
   END;`
     );
+};
+
+export const addProfile = async (profile) => {
+  return database("userprofile")
+    .insert(profile)
+    .catch((err) => {
+      console.error("Unable to add profile: ", profile, "Error: ", err);
+      throw new Error("Unable to add profile. ", err);
+    });
+};
+
+export const addNewUser = async (user) => {
+  const { email, id, password } = user;
+  return database("user").insert({
+    id,
+    email,
+    password
+  }, "id")
+  .then(() => {
+    const { profile } = user;
+    console.log("Adding new profile: ", profile);
+    return addProfile(profile);
+  })
+  .catch(error => {
+    console.error("Error adding new user: ", error.toString())
+    if (error.toString().includes("unique")) {
+      throw { message: "Email already exists."};
+    }
+    throw new Error("Unable to add.")
+  })
 };

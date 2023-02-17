@@ -49,7 +49,7 @@ export const allowOnlyAdmin = (req, res, next) => {
 };
 
 export const generateWebtoken = (userProfile, expiration, type, sessionId) => {
-  if (!expiration || !expiration.includes("hr")) {
+  if (!expiration) {
     throw new Error("No expiration time inlcuded in generate request.");
   }
   if (!type) {
