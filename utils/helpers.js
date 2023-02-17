@@ -55,7 +55,7 @@ export const handleNewUserCreationEmails = async (user) => {
     await sendNewMemberEmail(user, createUrl, loginUrl, expiration);
     alertAdminOfMemberCreation(user);
   } catch (error) {
-    console.error("Unable to send new member emails.");
+    console.error("Unable to send new member emails. ", error);
   }
 }
 
