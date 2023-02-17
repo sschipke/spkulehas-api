@@ -1,30 +1,19 @@
+const { v4: uuidv4 } = require("uuid");
+import moment from "moment";
+import { compareSync } from "bcrypt";
+import { alertAdminOfMemberCreation, sendNewMemberEmail } from "../email";
 import { updateReservationTitlesWithNewName } from "../repoCalls/reservationRepoCalls";
+import { createResetSessionForUser } from "../repoCalls/sessionRepoCalls";
+import { generateWebtoken } from "../middleware/auth";
+import { findUserById } from "../repoCalls/userRepoCalls";
 
 export const canUserEdit = (user, reservation) => {
   return user.isAdmin || user.id === reservation.user_id;
 };
 
-export const processNameChange = async (
-  response,
-  newUserProfile,
-  oldProfile,
-  responseBody
-) => {
-  const userId = newUserProfile.id;
-  const newName = newUserProfile.name;
-  const oldName = oldProfile.name;
-  const updatedReservations = await updateReservationTitlesWithNewName(
-    userId,
-    newName,
-    oldName
-  );
-  if (updatedReservations.length > 0) {
-    responseBody.updatedReservations = updatedReservations;
-    return response.status(200).json(responseBody).send();
-  } else {
-    return response.status(200).json(responseBody).send();
-  }
-};
+export const safeTrim = (string) => {
+  return (string || "").trim();
+}
 
 export const processNameChange = async (
   response,
@@ -47,3 +36,34 @@ export const processNameChange = async (
     return response.status(200).json(responseBody).send();
   }
 };
+
+export const createIdsForNewMember = (user) => {
+  const userId = uuidv4();
+  user.id = userId;
+  user.user_id = userId;
+  user.password = uuidv4();
+}
+
+export const handleNewUserCreationEmails = async (user) => {
+  const sessionId = await createResetSessionForUser(user.id, 6, "days");
+  const expiration = moment().add(6, "days").calendar();
+  const token = generateWebtoken(user, "6days", "email", sessionId[0].id);
+  const baseUrl = process.env.FRONT_END_BASE_URL;
+  const createUrl = new URL(`${baseUrl}?reset=${token}`).href;
+  const loginUrl =  new URL(`${baseUrl}/login`).href;
+  try {
+    await sendNewMemberEmail(user, createUrl, loginUrl, expiration);
+    alertAdminOfMemberCreation(user);
+  } catch (error) {
+    console.error("Unable to send new member emails.");
+  }
+}
+
+export const confirmPassword = async (userId, password) => {
+  if (!userId || !password) {
+    return false;
+  }
+  const userToValidate = await findUserById(userId, password);
+  const hash = userToValidate.password;
+  return compareSync(password, hash);
+}

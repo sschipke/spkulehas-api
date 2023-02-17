@@ -67,7 +67,7 @@ const sendWelcomeEmail = async (user, index) => {
   });
 };
 
-const sendPasswordResetEmail = async (user, url) => {
+const sendPasswordResetEmail = async (user, url, expiration) => {
   const mailOptions = {
     from: process.env.ADMIN_EMAIL,
     to: user.email,
@@ -75,7 +75,8 @@ const sendPasswordResetEmail = async (user, url) => {
     template: "password-reset",
     context: {
       user,
-      url
+      url,
+      expiration
     }
   };
 
@@ -113,7 +114,7 @@ const alertUsersOfDeletion = async (members, reservation) => {
 };
 
 const sendSessionDeletionEmail = async (count) => {
-  const date = moment().format("dddd, MMMM DD, YYYY, HH:MM");
+  const date = moment().calendar();
   const environment = process.env.NODE_ENV || "development";
   const isSingular = count === 1;
   const mailOptions = {
@@ -166,10 +167,53 @@ const sendSessionDeletionErrorEmail = async (error) => {
   return transporter.sendMail(mailOptions);
 };
 
+const sendNewMemberEmail = async (user, createUrl, loginUrl, expiration) => {
+  const mailOptions = {
+    from: process.env.ADMIN_EMAIL,
+    to: user.email,
+    subject: `Welcome ${user.firstName}, to Schipke SpKuLeHaS!`,
+    template: "new-member",
+    context: {
+      user,
+      loginUrl,
+      createUrl,
+      expiration
+    }
+  };
+
+  console.log(
+    "Sending new member email to: ",
+    user.email,
+    process.env.NODE_ENV,
+    mailOptions
+  );
+  return transporter.sendMail(mailOptions);
+};
+
+const alertAdminOfMemberCreation = async (user) => {
+  const mailOptions = {
+    from: process.env.ADMIN_EMAIL,
+    to: process.env.ADMIN_EMAIL,
+    subject: "A New Member Has Been Created",
+    template: "new-member-alert",
+    context: {
+      user
+    }
+  };
+
+  console.log(
+    "Sending new member alert email.",
+    mailOptions
+  );
+  return transporter.sendMail(mailOptions);
+};
+
 module.exports = {
   sendWelcomeEmail,
   sendPasswordResetEmail,
   alertUsersOfDeletion,
   sendSessionDeletionEmail,
-  sendSessionDeletionErrorEmail
+  sendSessionDeletionErrorEmail,
+  sendNewMemberEmail,
+  alertAdminOfMemberCreation
 };

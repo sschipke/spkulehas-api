@@ -1,0 +1,46 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <title>Welcome to Schipke SpKuLeHaS!</title>
+    <style>
+      body { 
+        display: flex; align-items: center; justify-content: center;
+        font-family: "Roboto","Helvetica","Arial",sans-serif;
+        .ii a[href] { 
+          color: #FFFFFF; 
+          };
+        }
+      .button { font: bold 0.875rem Arial; text-decoration: none; background-color:
+      #33691E; color: #FFFFFF; padding: 2px 6px 2px 6px; border: 1px solid
+      #33691E; border-radius: 5px;
+      } 
+      .ii a[href] { 
+        color: #FFFFFF; 
+      } 
+      a { color:
+      inherit; 
+      text-decoration: none; 
+      }
+    </style>
+  </head>
+  <body>
+        <h2>Welcome {{user.name}}! </h2>
+    <p>Hello,
+      {{user.firstName}}. Welcome to the SpKuLeHaS app!
+    </p>
+    
+    <p>Before you sign in, <strong>you need to create your password.</strong> You can do so using the link below.</p>
+    <a href="{{createUrl}}" class="button">Create Password</a>
+    <p>After that, you can get to making reservations! Can't wait to see what fond memories you create at our special cabin.</p>
+    <p><strong>NOTE:</strong> the above link will expire <strong>{{expiration}}</strong> Mountain Time</p>
+    <p>If the link above has expired. You can click the link below. At the login screen, enter your email and click the "FORGOT PASSWORD?" button and follow the steps to create your password.
+    </p> 
+    <p>
+      <a href="{{loginUrl}}">login screen</a>
+    </p>
+    <p>If you have any questions you can contact the admin at
+      <a href="mailto:spkulehas@gmail.com">spkulehas@gmail.com</a>.</p>
+    <p></p>
+    <h3>Schipke SpKuLeHaS Inc.</h3>
+  </body>
