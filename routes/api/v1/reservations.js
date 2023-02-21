@@ -11,7 +11,7 @@ import {
   unauthorizedResponse
 } from "../../../utils/httpHelpers";
 import { isAdmin } from "../../../validations/userValidation";
-const moment = require("moment");
+const dayjs = require("dayjs");
 const express = require("express");
 const router = express.Router();
 
@@ -176,7 +176,7 @@ async function getReservations() {
 }
 
 const updateReservation = async (reservation) => {
-  reservation.updated_at = moment().toISOString();
+  reservation.updated_at = dayjs().toISOString();
   return database("reservation")
     .where({ id: reservation.id })
     .update(reservation, ["id", "user_id", "title", "start", "end", "notes"])

@@ -1,4 +1,10 @@
-const moment = require("moment-timezone");
+import dayjs from "dayjs";
+const utc = require("dayjs/plugin/utc")
+const timezone = require("dayjs/plugin/timezone");
+const isBetween = require("dayjs/plugin/isBetween");
+dayjs.extend(isBetween);
+dayjs.extend(utc);
+dayjs.extend(timezone);
 
 const WINTER_SEASON_START_2022 = "2022-10-24";
 const WINTER_SEASON_END_2022 = "2023-05-21";
@@ -32,19 +38,19 @@ export const validateReservation = (reservation, isAdmin) => {
   }
   reservation.notes = trimmedNotes ? trimmedNotes : "";
 
-  if (!moment(start).isValid()) {
+  if (!dayjs(start).isValid()) {
     return { error: "Invalid start date" };
   }
-  if (!moment(end).isValid()) {
+  if (!dayjs(end).isValid()) {
     return { error: "Invalid end date" };
   }
-  if (moment(reservation.start).isAfter(reservation.end)) {
+  if (dayjs(reservation.start).isAfter(reservation.end)) {
     return { error: "Start date cannot be after end date." };
   }
-  if (moment(start).isBefore(minDate, "day")) {
+  if (dayjs(start).isBefore(minDate, "day")) {
     return { error: "This reservation is too early." };
   }
-  if (moment(end).isAfter(maxReservationDate)) {
+  if (dayjs(end).isAfter(maxReservationDate)) {
     return { error: "Reservation is too late." };
   }
   if (!isReservationLengthValid(start, end) && !isAdmin) {
@@ -55,11 +61,11 @@ export const validateReservation = (reservation, isAdmin) => {
 };
 
 const isReservationLengthValid = (checkinDate, checkoutDate) => {
-  const momentCheckin = moment(checkinDate);
-  const momentCheckout = moment(checkoutDate);
+  const dayJsCheckin = dayjs(checkinDate);
+  const dayJsCheckout = dayjs(checkoutDate);
   const maxLength = isInWinter(checkinDate) ? 14 : 7;
   const minLength = 1;
-  const reservationLength = momentCheckout.diff(momentCheckin, "days");
+  const reservationLength = dayJsCheckout.diff(dayJsCheckin, "days");
   console.log({ reservationLength });
   if (reservationLength > maxLength || reservationLength < minLength) {
     return false;
@@ -69,17 +75,17 @@ const isReservationLengthValid = (checkinDate, checkoutDate) => {
 
 export const isInWinter = (date) => {
   return (
-    moment(date).isBetween(
+    dayjs(date).isBetween(
       WINTER_SEASON_START_2022,
       WINTER_SEASON_END_2022,
       "day"
     ) ||
-    moment(date).isBetween(
+    dayjs(date).isBetween(
       WINTER_SEASON_START_2023,
       WINTER_SEASON_END_2023,
       "day"
     ) ||
-    moment(date).isBetween(
+    dayjs(date).isBetween(
       WINTER_SEASON_START_2024,
       WINTER_SEASON_END_2024,
       "day"
@@ -96,6 +102,6 @@ const processReserVationDates = (reservation) => {
     millisecond: 0
   };
   const { start, end } = reservation;
-    reservation.start = moment(start).tz(MOUNTAIN_TZ).set(noonObject).toISOString();
-    reservation.end = moment(end).tz(MOUNTAIN_TZ).set(noonObject).toISOString();
+    reservation.start = dayjs(start).tz(MOUNTAIN_TZ).set(noonObject).toISOString();
+    reservation.end = dayjs(end).tz(MOUNTAIN_TZ).set(noonObject).toISOString();
 };

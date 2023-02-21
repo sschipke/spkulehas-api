@@ -1,12 +1,11 @@
 import { database } from "../app";
-import moment from "moment";
-
+import dayjs from "dayjs";
 export const updateReservationTitlesWithNewName = async (
   userId,
   newName,
   oldName
 ) => {
-  const now = moment().toISOString();
+  const now = dayjs().toISOString();
   console.log("Udpating reservations with new names.")
   return database("reservation")
     .returning(["id", "title"])

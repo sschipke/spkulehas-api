@@ -1,17 +1,20 @@
 import { database } from "../app";
-import moment from "moment";
+import dayjs from "dayjs";
+const isSameOrAfter = require("dayjs/plugin/isSameOrAfter");
 const { v4: uuidv4 } = require("uuid");
+dayjs.extend(isSameOrAfter);
 
 export const RESET_TYPE = "password_reset";
-const allowedUnits = ["hrs", "days"];
+const allowedUnits = ["hours", "days"];
 
 export const createResetSessionForUser = async (userId, number, unit) => {
   const id = uuidv4();
-  const expiration = moment()
+  const now = dayjs();
+  let expiration;
   if (number && unit && allowedUnits.includes(unit)) {
-    expiration.add(number, unit);
+    expiration = now.add(number, unit);
   } else {
-    expiration.add(2, "hours");
+    expiration = now.add(2, "hours");
   }
   const session = {
     id,
@@ -30,7 +33,7 @@ const invalidateSession = async (sessionId, now) => {
 };
 
 export const invalidateOtherSessions = async (userId, type) => {
-  const now = moment().toISOString();
+  const now = dayjs().toISOString();
   return database("session")
     .where({ user_id: userId, type, valid: true })
     .update({ valid: false, updated_at: now, expires: now });
@@ -41,7 +44,7 @@ export const checkSession = async (sessionId, type, userId) => {
     isValid: true,
     message: "This link is not valid. Please Request another."
   };
-  const now = moment();
+  const now = dayjs();
   return database("session")
     .where({ id: sessionId })
     .then((sessions) => {
@@ -77,14 +80,14 @@ export const checkSession = async (sessionId, type, userId) => {
 export const validateSession = async (sessionId, type, userId) => {
   return checkSession(sessionId, type, userId).then((validationInfo) => {
     if (validationInfo.isValid) {
-      const now = moment();
+      const now = dayjs();
       return invalidateSession(sessionId, now.toISOString())
         .then(() => validationInfo)
         .catch((err) => {
           console.error("Error updating reset session. ", err);
           validationInfo.isValid = false;
           validationInfo.message =
-            "Unable to updated session. Please try again in a few moments.";
+            "Unable to updated session. Please try again in a few dayjss.";
           return validationInfo;
         });
     } else {
@@ -94,7 +97,7 @@ export const validateSession = async (sessionId, type, userId) => {
 };
 
 export const deleteInvalidSessions = async () => {
-  const now = moment().toISOString();
+  const now = dayjs().toISOString();
   return database("session")
     .where({ valid: false })
     .orWhere("expires", "<=", now)

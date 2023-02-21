@@ -1,11 +1,14 @@
 const { v4: uuidv4 } = require("uuid");
-import moment from "moment";
+import dayjs from "dayjs";
+const calendar = require('dayjs/plugin/calendar');
 import { compareSync } from "bcrypt";
 import { alertAdminOfMemberCreation, sendNewMemberEmail } from "../email";
 import { updateReservationTitlesWithNewName } from "../repoCalls/reservationRepoCalls";
 import { createResetSessionForUser } from "../repoCalls/sessionRepoCalls";
 import { generateWebtoken } from "../middleware/auth";
 import { findUserById } from "../repoCalls/userRepoCalls";
+
+dayjs.extend(calendar);
 
 export const canUserEdit = (user, reservation) => {
   return user.isAdmin || user.id === reservation.user_id;
@@ -46,7 +49,7 @@ export const createIdsForNewMember = (user) => {
 
 export const handleNewUserCreationEmails = async (user, admin) => {
   const sessionId = await createResetSessionForUser(user.id, 6, "days");
-  const expiration = moment().add(6, "days").calendar();
+  const expiration = dayjs().add(6, "days").calendar();
   const token = generateWebtoken(user, "6days", "email", sessionId[0].id);
   const baseUrl = process.env.FRONT_END_BASE_URL;
   const createUrl = new URL(`${baseUrl}?reset=${token}`).href;
