@@ -1,5 +1,5 @@
 import { logger } from "../../../utils/logging";
-import { sendPasswordResetEmail } from "../../../email";
+import { sendPasswordResetEmail, notifyMemberOfEmailChange } from "../../../email";
 import {
   validateUserProfile,
   canUserUpdate,
@@ -193,8 +193,8 @@ router.put("/update/email/:id", async (req, res) => {
   const { id } = req.params;
   const userFromJwt = res.locals.user;
   const foundUser = await findUserById(id);
+  const oldEmail = foundUser.email;
   const isVerifiedAdmin = isAdmin(userFromJwt);
-  console.log({ foundUser });
   if (!foundUser) {
     return res.status(404).json({ error: "Invalid user ID." });
   }
@@ -208,12 +208,14 @@ router.put("/update/email/:id", async (req, res) => {
   }
 
   if (!newEmail || !password) {
-    return res.status(422).json({ error: "New email and password required." });
+    return res.status(409).json({ error: "New email and password required." });
   }
   const matchingEmails = await findUserByEmail(newEmail);
   if (matchingEmails.length > 0) {
     return res.status(409).json({ error: "This email already exists." });
   }
+
+  const didAdminChange = userFromJwt.id !== foundUser.id;
 
   if (isVerifiedAdmin) {
     let adminUser = await findUserById(userFromJwt.id);
@@ -222,13 +224,17 @@ router.put("/update/email/:id", async (req, res) => {
     if (!isValidPassword) {
       return forbiddenResponse(res);
     }
+    delete adminUser.password;
   } else {
     const hash = foundUser.password;
     let isValidPassword = bcrypt.compareSync(password, hash);
     if (!isValidPassword) {
       return res.status(401).json({ error: "Unauthorized" });
     }
+    delete foundUser.password;
   }
+
+    console.log({ foundUser });
 
   const error = validateEmail(newEmail);
 
@@ -238,7 +244,7 @@ router.put("/update/email/:id", async (req, res) => {
 
   try {
     return updateEmail(id, newEmail)
-      .then((email) => {
+      .then(async (email) => {
         logger("Sucessfully updated email to: " + email, req);
         const updatedUser = isVerifiedAdmin ? userFromJwt : foundUser;
         if (!isVerifiedAdmin) {
@@ -247,7 +253,8 @@ router.put("/update/email/:id", async (req, res) => {
           updatedUser.status = userFromJwt.status;
         }
         const webToken = generateWebtoken(updatedUser, "1hr");
-        return res.status(200).json({ email, token: webToken });
+        res.status(200).json({ email, token: webToken }).send();
+        await notifyMemberOfEmailChange(oldEmail, newEmail, userFromJwt, didAdminChange);
       })
       .catch((err) => {
         console.error("Unable to update email. ", err);

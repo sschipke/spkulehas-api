@@ -210,6 +210,28 @@ const alertAdminOfMemberCreation = async (user, admin) => {
   return transporter.sendMail(mailOptions);
 };
 
+const notifyMemberOfEmailChange = async (oldEmail, newEmail, admin, didAdminChange) => {
+  const wasAdmin = didAdminChange && admin && admin.isAdmin;
+  const mailOptions = {
+    from: process.env.ADMIN_EMAIL,
+    to: newEmail,
+    subject: "Your Email Has Changed",
+    template: "email-change-alert",
+    context: {
+      oldEmail,
+      newEmail,
+      admin,
+      wasAdmin
+    }
+  };
+
+  console.log(
+    "Notifying member of email change: ",
+    mailOptions
+  );
+  return transporter.sendMail(mailOptions);
+};
+
 module.exports = {
   sendWelcomeEmail,
   sendPasswordResetEmail,
@@ -217,5 +239,6 @@ module.exports = {
   sendSessionDeletionEmail,
   sendSessionDeletionErrorEmail,
   sendNewMemberEmail,
-  alertAdminOfMemberCreation
+  alertAdminOfMemberCreation,
+  notifyMemberOfEmailChange
 };
