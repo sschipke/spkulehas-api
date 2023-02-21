@@ -28,3 +28,13 @@ export const resetTokenValidationLimiter = rateLimit({
   standardHeaders: true,
   legacyHeaders: false,
 });
+
+export const addMemberRateLimiter = rateLimit({
+  windowMs: 5 * 86400 * 1000, // 5 days
+  max: 5,
+  message: {
+    error: "Too many add member requests. Please contact another admin if you need assistance.",
+  },
+  standardHeaders: true,
+  legacyHeaders: false,
+});

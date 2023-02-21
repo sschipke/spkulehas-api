@@ -44,7 +44,7 @@ export const createIdsForNewMember = (user) => {
   user.password = uuidv4();
 }
 
-export const handleNewUserCreationEmails = async (user) => {
+export const handleNewUserCreationEmails = async (user, admin) => {
   const sessionId = await createResetSessionForUser(user.id, 6, "days");
   const expiration = moment().add(6, "days").calendar();
   const token = generateWebtoken(user, "6days", "email", sessionId[0].id);
@@ -53,7 +53,7 @@ export const handleNewUserCreationEmails = async (user) => {
   const loginUrl =  new URL(`${baseUrl}/login`).href;
   try {
     await sendNewMemberEmail(user, createUrl, loginUrl, expiration);
-    alertAdminOfMemberCreation(user);
+    alertAdminOfMemberCreation(user, admin);
   } catch (error) {
     console.error("Unable to send new member emails. ", error);
   }

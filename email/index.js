@@ -190,14 +190,16 @@ const sendNewMemberEmail = async (user, createUrl, loginUrl, expiration) => {
   return transporter.sendMail(mailOptions);
 };
 
-const alertAdminOfMemberCreation = async (user) => {
+const alertAdminOfMemberCreation = async (user, admin) => {
   const mailOptions = {
     from: process.env.ADMIN_EMAIL,
     to: process.env.ADMIN_EMAIL,
     subject: "A New Member Has Been Created",
     template: "new-member-alert",
     context: {
-      user
+      user,
+      admin,
+      date: new Date().toLocaleString()
     }
   };
 
