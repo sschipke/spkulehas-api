@@ -8,7 +8,7 @@ dayjs.extend(timezone);
 
 const WINTER_SEASON_START_2022 = "2022-10-24";
 const WINTER_SEASON_END_2022 = "2023-05-21";
-const WINTER_SEASON_START_2023 = "2023-10-23";
+const WINTER_SEASON_START_2023 = "2023-10-22";
 const WINTER_SEASON_END_2023 = "2024-05-20";
 const WINTER_SEASON_START_2024 = "2024-10-21";
 const WINTER_SEASON_END_2024 = "2025-05-18";
@@ -95,13 +95,9 @@ export const isInWinter = (date) => {
 
 const processReserVationDates = (reservation) => {
   //Default reservation times to noon
-  const noonObject = {
-    hour: 12,
-    minute: 0,
-    second: 0,
-    millisecond: 0
-  };
+  const noonHour = 12;
   const { start, end } = reservation;
-    reservation.start = dayjs(start).tz(MOUNTAIN_TZ).set(noonObject).toISOString();
-    reservation.end = dayjs(end).tz(MOUNTAIN_TZ).set(noonObject).toISOString();
+  console.log("OUPUT?: ", dayjs(start).tz(MOUNTAIN_TZ).set("hour", noonHour).toDate())
+    reservation.start = dayjs(start).tz(MOUNTAIN_TZ).set("hour", noonHour).toISOString();
+    reservation.end = dayjs(end).tz(MOUNTAIN_TZ).set("hour", noonHour).toISOString();
 };

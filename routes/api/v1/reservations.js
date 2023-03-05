@@ -37,7 +37,7 @@ router.get("/", async (req, res) => {
       " at ",
       new Date().toLocaleDateString()
     );
-    return res.status(500).json({ msg: "Error sending reservations.", err });
+    return res.status(500).json({ error: "Error sending reservations." });
   }
 });
 
@@ -171,7 +171,7 @@ async function getReservations() {
     .orderBy("start", "asc")
     .catch((err) => {
       console.error("Error retrieving all reservations: ", err);
-      return new Error("Error retrieving all reservations: ", { err });
+      throw new Error("Error retrieving all reservations: ", { err });
     });
 }
 
