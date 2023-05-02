@@ -28,7 +28,6 @@
     "express-rate-limit": "^6.4.0",
     "jsonwebtoken": "^9.0.0",
     "knex": "^2.4.0",
-    "moment-timezone": "^0.5.40",
     "node-cron": "^3.0.2",
     "nodemailer": "^6.7.3",
     "nodemailer-express-handlebars": "^5.0.0",

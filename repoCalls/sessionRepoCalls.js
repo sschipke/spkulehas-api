@@ -22,7 +22,6 @@ export const createResetSessionForUser = async (userId, number, unit) => {
     type: RESET_TYPE,
     expires: expiration.toISOString()
   };
-  console.log("Creating session: ", {session});
   return database("session").insert(session, ["id"]);
 };
 
@@ -87,7 +86,7 @@ export const validateSession = async (sessionId, type, userId) => {
           console.error("Error updating reset session. ", err);
           validationInfo.isValid = false;
           validationInfo.message =
-            "Unable to updated session. Please try again in a few dayjss.";
+            "Unable to updated session. Please try again in a few moments.";
           return validationInfo;
         });
     } else {
