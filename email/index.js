@@ -2,7 +2,7 @@ require("@babel/polyfill");
 const nodemailer = require("nodemailer");
 const hbs = require("nodemailer-express-handlebars");
 const path = require("path");
-const moment = require("moment");
+const dayjs = require("dayjs");
 
 require("dotenv").config();
 
@@ -91,9 +91,9 @@ const sendPasswordResetEmail = async (user, url, expiration) => {
 
 const alertUsersOfDeletion = async (members, reservation) => {
   const { start, end, title } = reservation;
-  const startDate = moment(start).format("dddd, MMMM Do, YYYY");
-  const endDate = moment(end).format("dddd, MMMM Do, YYYY");
-  const url = `${process.env.FRONT_END_BASE_URL}?date=${moment(
+  const startDate = dayjs(start).format("dddd, MMMM Do, YYYY");
+  const endDate = dayjs(end).format("dddd, MMMM Do, YYYY");
+  const url = `${process.env.FRONT_END_BASE_URL}?date=${dayjs(
     start
   ).toISOString()}`;
   const mailOptions = {
@@ -114,7 +114,7 @@ const alertUsersOfDeletion = async (members, reservation) => {
 };
 
 const sendSessionDeletionEmail = async (count) => {
-  const date = moment().calendar();
+  const date = dayjs().calendar();
   const environment = process.env.NODE_ENV || "development";
   const isSingular = count === 1;
   const mailOptions = {
@@ -150,7 +150,7 @@ const sendSessionDeletionEmail = async (count) => {
 };
 
 const sendSessionDeletionErrorEmail = async (error) => {
-  const date = moment().format("dddd, MMMM DD, YYYY, HH:MM");
+  const date = dayjs().format("dddd, MMMM DD, YYYY, HH:MM");
   const environment = process.env.NODE_ENV || "development";
   const mailOptions = {
     from: process.env.ADMIN_EMAIL, // sender address
@@ -190,19 +190,43 @@ const sendNewMemberEmail = async (user, createUrl, loginUrl, expiration) => {
   return transporter.sendMail(mailOptions);
 };
 
-const alertAdminOfMemberCreation = async (user) => {
+const alertAdminOfMemberCreation = async (user, admin) => {
   const mailOptions = {
     from: process.env.ADMIN_EMAIL,
     to: process.env.ADMIN_EMAIL,
     subject: "A New Member Has Been Created",
     template: "new-member-alert",
     context: {
-      user
+      user,
+      admin,
+      date: new Date().toLocaleString()
     }
   };
 
   console.log(
     "Sending new member alert email.",
+    mailOptions
+  );
+  return transporter.sendMail(mailOptions);
+};
+
+const notifyMemberOfEmailChange = async (oldEmail, newEmail, admin, didAdminChange) => {
+  const wasAdmin = didAdminChange && admin && admin.isAdmin;
+  const mailOptions = {
+    from: process.env.ADMIN_EMAIL,
+    to: newEmail,
+    subject: "Your Email Has Changed",
+    template: "email-change-alert",
+    context: {
+      oldEmail,
+      newEmail,
+      admin,
+      wasAdmin
+    }
+  };
+
+  console.log(
+    "Notifying member of email change: ",
     mailOptions
   );
   return transporter.sendMail(mailOptions);
@@ -215,5 +239,6 @@ module.exports = {
   sendSessionDeletionEmail,
   sendSessionDeletionErrorEmail,
   sendNewMemberEmail,
-  alertAdminOfMemberCreation
+  alertAdminOfMemberCreation,
+  notifyMemberOfEmailChange
 };

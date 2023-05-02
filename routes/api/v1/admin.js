@@ -1,20 +1,7 @@
 import { logger } from "../../../utils/logging";
-import {
-  validateUserProfile,
-  canUserUpdate,
-  validateEmail,
-  canUpdateStatusOrPrivileges,
-  validatePassword,
-  validateEmailSetting,
-  isAdmin,
-  determineNameChange
-} from "../../../validations/userValidation";
-import {
-  loginLimiter,
-  passwordResetLimiter
-} from "../../../middleware/rate-limits";
+import { validateUserProfile } from "../../../validations/userValidation";
 import { allowOnlyAdmin, validateRequestToken } from "../../../middleware/auth";
-
+import { addMemberRateLimiter } from "../../../middleware/rate-limits";
 import {
   getUserProfileById,
   findAllEmailSettingsByUserId,
@@ -23,7 +10,6 @@ import {
   mapUserToProfile
 } from "../../../repoCalls/userRepoCalls";
 import {
-  forbiddenResponse,
   notFoundResponse,
   unauthorizedResponse,
 } from "../../../utils/httpHelpers";
@@ -68,7 +54,7 @@ router.get("/member_details", async (req, res) => {
   }
 });
 
-router.post("/add_member", async (req, res) => {
+router.post("/add_member", addMemberRateLimiter, async (req, res) => {
   const { user, password } = req.body;
   const admin = res.locals.user;
   const isConfirmedPassword = await confirmPassword(admin.id, password);
@@ -87,7 +73,7 @@ router.post("/add_member", async (req, res) => {
     await addNewUser(user);
     const newlyCreatedMember = await getUserProfileById(user.id);
     console.log({ newlyCreatedMember });
-    await handleNewUserCreationEmails(newlyCreatedMember);
+    await handleNewUserCreationEmails(newlyCreatedMember, admin);
     res.status(200).json({ newMember: newlyCreatedMember }).send();
   } catch (error) {
     console.error("Unable to add member: ", error);

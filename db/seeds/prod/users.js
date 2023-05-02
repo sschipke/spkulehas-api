@@ -1,4 +1,4 @@
-const moment = require("moment");
+const dayjs = require("dayjs");
 const bcrypt = require("bcrypt");
 const { v4: uuidv4 } = require("uuid");
 const saltRounds = 10;
@@ -48,7 +48,7 @@ const mockUsers = [
     },
     reservations: [
       {
-        start: moment("2022-09-05")
+        start: dayjs("2022-09-05")
           .startOf("isoWeek")
           .set({
             hour: 0,
@@ -57,7 +57,7 @@ const mockUsers = [
             millisecond: 0
           })
           .toISOString(),
-        end: moment("2022-09-05")
+        end: dayjs("2022-09-05")
           .endOf("isoWeek")
           .set({
             hour: 12,
@@ -69,7 +69,7 @@ const mockUsers = [
         title: "Brian Schipke"
       },
       {
-        start: moment("2023-06-05")
+        start: dayjs("2023-06-05")
           .startOf("isoWeek")
           .set({
             hour: 0,
@@ -78,7 +78,7 @@ const mockUsers = [
             millisecond: 0
           })
           .toISOString(),
-        end: moment("2023-06-05")
+        end: dayjs("2023-06-05")
           .endOf("isoWeek")
           .set({
             hour: 12,
@@ -90,7 +90,7 @@ const mockUsers = [
         title: "Brian Schipke"
       },
       {
-        start: moment("2024-08-05")
+        start: dayjs("2024-08-05")
           .startOf("isoWeek")
           .set({
             hour: 0,
@@ -99,7 +99,7 @@ const mockUsers = [
             millisecond: 0
           })
           .toISOString(),
-        end: moment("2024-08-05")
+        end: dayjs("2024-08-05")
           .endOf("isoWeek")
           .set({
             hour: 12,
@@ -126,7 +126,7 @@ const mockUsers = [
     },
     reservations: [
       {
-        start: moment("2022-08-22")
+        start: dayjs("2022-08-22")
           .startOf("isoWeek")
           .set({
             hour: 0,
@@ -141,7 +141,7 @@ const mockUsers = [
             millisecond: 0
           })
           .toISOString(),
-        end: moment("2022-08-22")
+        end: dayjs("2022-08-22")
           .endOf("isoWeek")
           .set({
             hour: 12,
@@ -153,7 +153,7 @@ const mockUsers = [
         title: "Jill Orwick"
       },
       {
-        start: moment("2023-07-17")
+        start: dayjs("2023-07-17")
           .startOf("isoWeek")
           .set({
             hour: 0,
@@ -168,7 +168,7 @@ const mockUsers = [
             millisecond: 0
           })
           .toISOString(),
-        end: moment("2023-07-17")
+        end: dayjs("2023-07-17")
           .endOf("isoWeek")
           .set({
             hour: 12,
@@ -180,7 +180,7 @@ const mockUsers = [
         title: "Jill Orwick"
       },
       {
-        start: moment("2024-10-14")
+        start: dayjs("2024-10-14")
           .startOf("isoWeek")
           .set({
             hour: 0,
@@ -195,7 +195,7 @@ const mockUsers = [
             millisecond: 0
           })
           .toISOString(),
-        end: moment("2024-10-14")
+        end: dayjs("2024-10-14")
           .endOf("isoWeek")
           .set({
             hour: 12,
@@ -235,7 +235,7 @@ const mockUsers = [
     },
     reservations: [
       {
-        start: moment("2022-06-06")
+        start: dayjs("2022-06-06")
           .startOf("isoWeek")
           .set({
             hour: 0,
@@ -244,7 +244,7 @@ const mockUsers = [
             millisecond: 0
           })
           .toISOString(),
-        end: moment("2022-06-06")
+        end: dayjs("2022-06-06")
           .endOf("isoWeek")
           .set({
             hour: 12,
@@ -256,7 +256,7 @@ const mockUsers = [
         title: "Melanie Garstenshiager"
       },
       {
-        start: moment("2023-10-16")
+        start: dayjs("2023-10-16")
           .startOf("isoWeek")
           .set({
             hour: 0,
@@ -265,7 +265,7 @@ const mockUsers = [
             millisecond: 0
           })
           .toISOString(),
-        end: moment("2023-10-16")
+        end: dayjs("2023-10-16")
           .endOf("isoWeek")
           .set({
             hour: 12,
@@ -277,7 +277,7 @@ const mockUsers = [
         title: "Melanie Garstenshiager"
       },
       {
-        start: moment("2024-06-10")
+        start: dayjs("2024-06-10")
           .startOf("isoWeek")
           .set({
             hour: 0,
@@ -286,7 +286,7 @@ const mockUsers = [
             millisecond: 0
           })
           .toISOString(),
-        end: moment("2024-06-10")
+        end: dayjs("2024-06-10")
           .endOf("isoWeek")
           .set({
             hour: 12,
@@ -365,7 +365,7 @@ const mockUsers = [
     },
     reservations: [
       {
-        start: moment("2022-09-19")
+        start: dayjs("2022-09-19")
           .startOf("isoWeek")
           .set({
             hour: 0,
@@ -374,7 +374,7 @@ const mockUsers = [
             millisecond: 0
           })
           .toISOString(),
-        end: moment("2022-09-19")
+        end: dayjs("2022-09-19")
           .endOf("isoWeek")
           .set({
             hour: 12,
@@ -386,7 +386,7 @@ const mockUsers = [
         title: "Stephanie Schipke"
       },
       {
-        start: moment("2023-09-18")
+        start: dayjs("2023-09-18")
           .startOf("isoWeek")
           .set({
             hour: 0,
@@ -395,7 +395,7 @@ const mockUsers = [
             millisecond: 0
           })
           .toISOString(),
-        end: moment("2023-09-18")
+        end: dayjs("2023-09-18")
           .endOf("isoWeek")
           .set({
             hour: 12,
@@ -407,7 +407,7 @@ const mockUsers = [
         title: "Stephanie Schipke"
       },
       {
-        start: moment("2024-07-15")
+        start: dayjs("2024-07-15")
           .startOf("isoWeek")
           .set({
             hour: 0,
@@ -416,7 +416,7 @@ const mockUsers = [
             millisecond: 0
           })
           .toISOString(),
-        end: moment("2024-07-15")
+        end: dayjs("2024-07-15")
           .endOf("isoWeek")
           .set({
             hour: 12,
@@ -456,7 +456,7 @@ const mockUsers = [
     },
     reservations: [
       {
-        start: moment("2022-10-10")
+        start: dayjs("2022-10-10")
           .startOf("isoWeek")
           .set({
             hour: 0,
@@ -465,7 +465,7 @@ const mockUsers = [
             millisecond: 0
           })
           .toISOString(),
-        end: moment("2022-10-10")
+        end: dayjs("2022-10-10")
           .endOf("isoWeek")
           .set({
             hour: 12,
@@ -477,7 +477,7 @@ const mockUsers = [
         title: "Chris Kuster"
       },
       {
-        start: moment("2023-08-07")
+        start: dayjs("2023-08-07")
           .startOf("isoWeek")
           .set({
             hour: 0,
@@ -486,7 +486,7 @@ const mockUsers = [
             millisecond: 0
           })
           .toISOString(),
-        end: moment("2023-08-07")
+        end: dayjs("2023-08-07")
           .endOf("isoWeek")
           .set({
             hour: 12,
@@ -498,7 +498,7 @@ const mockUsers = [
         title: "Chris Kuster"
       },
       {
-        start: moment("2024-05-27")
+        start: dayjs("2024-05-27")
           .startOf("isoWeek")
           .set({
             hour: 0,
@@ -507,7 +507,7 @@ const mockUsers = [
             millisecond: 0
           })
           .toISOString(),
-        end: moment("2024-05-27")
+        end: dayjs("2024-05-27")
           .endOf("isoWeek")
           .set({
             hour: 12,
@@ -534,7 +534,7 @@ const mockUsers = [
     },
     reservations: [
       {
-        start: moment("2022-06-20")
+        start: dayjs("2022-06-20")
           .startOf("isoWeek")
           .set({
             hour: 0,
@@ -543,7 +543,7 @@ const mockUsers = [
             millisecond: 0
           })
           .toISOString(),
-        end: moment("2022-06-20")
+        end: dayjs("2022-06-20")
           .endOf("isoWeek")
           .set({
             hour: 12,
@@ -555,7 +555,7 @@ const mockUsers = [
         title: "Chris Schipke"
       },
       {
-        start: moment("2023-07-03")
+        start: dayjs("2023-07-03")
           .startOf("isoWeek")
           .set({
             hour: 0,
@@ -564,7 +564,7 @@ const mockUsers = [
             millisecond: 0
           })
           .toISOString(),
-        end: moment("2023-07-03")
+        end: dayjs("2023-07-03")
           .endOf("isoWeek")
           .set({
             hour: 12,
@@ -576,7 +576,7 @@ const mockUsers = [
         title: "Chris Schipke"
       },
       {
-        start: moment("2024-08-26")
+        start: dayjs("2024-08-26")
           .startOf("isoWeek")
           .set({
             hour: 0,
@@ -585,7 +585,7 @@ const mockUsers = [
             millisecond: 0
           })
           .toISOString(),
-        end: moment("2024-08-26")
+        end: dayjs("2024-08-26")
           .endOf("isoWeek")
           .set({
             hour: 12,
@@ -612,7 +612,7 @@ const mockUsers = [
     },
     reservations: [
       {
-        start: moment("2022-08-08")
+        start: dayjs("2022-08-08")
           .startOf("isoWeek")
           .set({
             hour: 0,
@@ -621,7 +621,7 @@ const mockUsers = [
             millisecond: 0
           })
           .toISOString(),
-        end: moment("2022-08-08")
+        end: dayjs("2022-08-08")
           .endOf("isoWeek")
           .set({
             hour: 12,
@@ -633,7 +633,7 @@ const mockUsers = [
         title: "Christine Orwick"
       },
       {
-        start: moment("2023-09-11")
+        start: dayjs("2023-09-11")
           .startOf("isoWeek")
           .set({
             hour: 0,
@@ -642,7 +642,7 @@ const mockUsers = [
             millisecond: 0
           })
           .toISOString(),
-        end: moment("2023-09-11")
+        end: dayjs("2023-09-11")
           .endOf("isoWeek")
           .set({
             hour: 12,
@@ -654,7 +654,7 @@ const mockUsers = [
         title: "Christine Orwick"
       },
       {
-        start: moment("2024-09-30")
+        start: dayjs("2024-09-30")
           .startOf("isoWeek")
           .set({
             hour: 0,
@@ -663,7 +663,7 @@ const mockUsers = [
             millisecond: 0
           })
           .toISOString(),
-        end: moment("2024-09-30")
+        end: dayjs("2024-09-30")
           .endOf("isoWeek")
           .set({
             hour: 12,
@@ -690,7 +690,7 @@ const mockUsers = [
     },
     reservations: [
       {
-        start: moment("2022-08-15")
+        start: dayjs("2022-08-15")
           .startOf("isoWeek")
           .set({
             hour: 0,
@@ -699,7 +699,7 @@ const mockUsers = [
             millisecond: 0
           })
           .toISOString(),
-        end: moment("2022-08-15")
+        end: dayjs("2022-08-15")
           .endOf("isoWeek")
           .set({
             hour: 12,
@@ -711,7 +711,7 @@ const mockUsers = [
         title: "Demian Heinert"
       },
       {
-        start: moment("2023-08-21")
+        start: dayjs("2023-08-21")
           .startOf("isoWeek")
           .set({
             hour: 0,
@@ -720,7 +720,7 @@ const mockUsers = [
             millisecond: 0
           })
           .toISOString(),
-        end: moment("2023-08-21")
+        end: dayjs("2023-08-21")
           .endOf("isoWeek")
           .set({
             hour: 12,
@@ -732,7 +732,7 @@ const mockUsers = [
         title: "Demian Heinert"
       },
       {
-        start: moment("2024-09-23")
+        start: dayjs("2024-09-23")
           .startOf("isoWeek")
           .set({
             hour: 0,
@@ -741,7 +741,7 @@ const mockUsers = [
             millisecond: 0
           })
           .toISOString(),
-        end: moment("2024-09-23")
+        end: dayjs("2024-09-23")
           .endOf("isoWeek")
           .set({
             hour: 12,
@@ -768,7 +768,7 @@ const mockUsers = [
     },
     reservations: [
       {
-        start: moment("2022-05-23")
+        start: dayjs("2022-05-23")
           .startOf("isoWeek")
           .set({
             hour: 0,
@@ -777,7 +777,7 @@ const mockUsers = [
             millisecond: 0
           })
           .toISOString(),
-        end: moment("2022-05-23")
+        end: dayjs("2022-05-23")
           .endOf("isoWeek")
           .set({
             hour: 12,
@@ -790,7 +790,7 @@ const mockUsers = [
         title: "Denise Smeenk"
       },
       {
-        start: moment("2023-07-24")
+        start: dayjs("2023-07-24")
           .startOf("isoWeek")
           .set({
             hour: 0,
@@ -799,7 +799,7 @@ const mockUsers = [
             millisecond: 0
           })
           .toISOString(),
-        end: moment("2023-07-24")
+        end: dayjs("2023-07-24")
           .endOf("isoWeek")
           .set({
             hour: 12,
@@ -812,7 +812,7 @@ const mockUsers = [
         title: "Denise Smeenk"
       },
       {
-        start: moment("2024-07-01")
+        start: dayjs("2024-07-01")
           .startOf("isoWeek")
           .set({
             hour: 0,
@@ -821,7 +821,7 @@ const mockUsers = [
             millisecond: 0
           })
           .toISOString(),
-        end: moment("2024-07-01")
+        end: dayjs("2024-07-01")
           .endOf("isoWeek")
           .set({
             hour: 12,
@@ -849,7 +849,7 @@ const mockUsers = [
     },
     reservations: [
       {
-        start: moment("2022-07-11")
+        start: dayjs("2022-07-11")
           .startOf("isoWeek")
           .set({
             hour: 0,
@@ -858,7 +858,7 @@ const mockUsers = [
             millisecond: 0
           })
           .toISOString(),
-        end: moment("2022-07-11")
+        end: dayjs("2022-07-11")
           .endOf("isoWeek")
           .set({
             hour: 12,
@@ -870,7 +870,7 @@ const mockUsers = [
         title: "Dick Kuster"
       },
       {
-        start: moment("2023-07-31")
+        start: dayjs("2023-07-31")
           .startOf("isoWeek")
           .set({
             hour: 0,
@@ -879,7 +879,7 @@ const mockUsers = [
             millisecond: 0
           })
           .toISOString(),
-        end: moment("2023-07-31")
+        end: dayjs("2023-07-31")
           .endOf("isoWeek")
           .set({
             hour: 12,
@@ -891,7 +891,7 @@ const mockUsers = [
         title: "Dick Kuster"
       },
       {
-        start: moment("2024-09-16")
+        start: dayjs("2024-09-16")
           .startOf("isoWeek")
           .set({
             hour: 0,
@@ -900,7 +900,7 @@ const mockUsers = [
             millisecond: 0
           })
           .toISOString(),
-        end: moment("2024-09-16")
+        end: dayjs("2024-09-16")
           .endOf("isoWeek")
           .set({
             hour: 12,
@@ -927,7 +927,7 @@ const mockUsers = [
     },
     reservations: [
       {
-        start: moment("2022-06-27")
+        start: dayjs("2022-06-27")
           .startOf("isoWeek")
           .set({
             hour: 0,
@@ -936,7 +936,7 @@ const mockUsers = [
             millisecond: 0
           })
           .toISOString(),
-        end: moment("2022-06-27")
+        end: dayjs("2022-06-27")
           .endOf("isoWeek")
           .set({
             hour: 12,
@@ -948,7 +948,7 @@ const mockUsers = [
         title: "Doug Albertson"
       },
       {
-        start: moment("2023-05-22")
+        start: dayjs("2023-05-22")
           .startOf("isoWeek")
           .set({
             hour: 0,
@@ -957,7 +957,7 @@ const mockUsers = [
             millisecond: 0
           })
           .toISOString(),
-        end: moment("2023-05-22")
+        end: dayjs("2023-05-22")
           .endOf("isoWeek")
           .set({
             hour: 12,
@@ -969,7 +969,7 @@ const mockUsers = [
         title: "Doug Albertson"
       },
       {
-        start: moment("2024-08-19")
+        start: dayjs("2024-08-19")
           .startOf("isoWeek")
           .set({
             hour: 0,
@@ -978,7 +978,7 @@ const mockUsers = [
             millisecond: 0
           })
           .toISOString(),
-        end: moment("2024-08-19")
+        end: dayjs("2024-08-19")
           .endOf("isoWeek")
           .set({
             hour: 12,
@@ -1018,7 +1018,7 @@ const mockUsers = [
     },
     reservations: [
       {
-        start: moment("2022-07-25")
+        start: dayjs("2022-07-25")
           .startOf("isoWeek")
           .set({
             hour: 0,
@@ -1027,7 +1027,7 @@ const mockUsers = [
             millisecond: 0
           })
           .toISOString(),
-        end: moment("2022-07-25")
+        end: dayjs("2022-07-25")
           .endOf("isoWeek")
           .set({
             hour: 12,
@@ -1039,7 +1039,7 @@ const mockUsers = [
         title: "Mike Albertson"
       },
       {
-        start: moment("2023-09-25")
+        start: dayjs("2023-09-25")
           .startOf("isoWeek")
           .set({
             hour: 0,
@@ -1048,7 +1048,7 @@ const mockUsers = [
             millisecond: 0
           })
           .toISOString(),
-        end: moment("2023-09-25")
+        end: dayjs("2023-09-25")
           .endOf("isoWeek")
           .set({
             hour: 12,
@@ -1060,7 +1060,7 @@ const mockUsers = [
         title: "Mike Albertson"
       },
       {
-        start: moment("2024-08-12")
+        start: dayjs("2024-08-12")
           .startOf("isoWeek")
           .set({
             hour: 0,
@@ -1069,7 +1069,7 @@ const mockUsers = [
             millisecond: 0
           })
           .toISOString(),
-        end: moment("2024-08-12")
+        end: dayjs("2024-08-12")
           .endOf("isoWeek")
           .set({
             hour: 12,
@@ -1096,7 +1096,7 @@ const mockUsers = [
     },
     reservations: [
       {
-        start: moment("2022-05-30")
+        start: dayjs("2022-05-30")
           .startOf("isoWeek")
           .set({
             hour: 0,
@@ -1105,7 +1105,7 @@ const mockUsers = [
             millisecond: 0
           })
           .toISOString(),
-        end: moment("2022-05-30")
+        end: dayjs("2022-05-30")
           .endOf("isoWeek")
           .set({
             hour: 12,
@@ -1117,7 +1117,7 @@ const mockUsers = [
         title: "Paul Schipke"
       },
       {
-        start: moment("2023-10-09")
+        start: dayjs("2023-10-09")
           .startOf("isoWeek")
           .set({
             hour: 0,
@@ -1126,7 +1126,7 @@ const mockUsers = [
             millisecond: 0
           })
           .toISOString(),
-        end: moment("2023-10-09")
+        end: dayjs("2023-10-09")
           .endOf("isoWeek")
           .set({
             hour: 12,
@@ -1138,7 +1138,7 @@ const mockUsers = [
         title: "Paul Schipke"
       },
       {
-        start: moment("2024-07-22")
+        start: dayjs("2024-07-22")
           .startOf("isoWeek")
           .set({
             hour: 0,
@@ -1147,7 +1147,7 @@ const mockUsers = [
             millisecond: 0
           })
           .toISOString(),
-        end: moment("2024-07-22")
+        end: dayjs("2024-07-22")
           .endOf("isoWeek")
           .set({
             hour: 12,
@@ -1174,7 +1174,7 @@ const mockUsers = [
     },
     reservations: [
       {
-        start: moment("2022-06-13")
+        start: dayjs("2022-06-13")
           .startOf("isoWeek")
           .set({
             hour: 0,
@@ -1183,7 +1183,7 @@ const mockUsers = [
             millisecond: 0
           })
           .toISOString(),
-        end: moment("2022-06-13")
+        end: dayjs("2022-06-13")
           .endOf("isoWeek")
           .set({
             hour: 12,
@@ -1195,7 +1195,7 @@ const mockUsers = [
         title: "Stephanie Kuster"
       },
       {
-        start: moment("2023-05-29")
+        start: dayjs("2023-05-29")
           .startOf("isoWeek")
           .set({
             hour: 0,
@@ -1204,7 +1204,7 @@ const mockUsers = [
             millisecond: 0
           })
           .toISOString(),
-        end: moment("2023-05-29")
+        end: dayjs("2023-05-29")
           .endOf("isoWeek")
           .set({
             hour: 12,
@@ -1216,7 +1216,7 @@ const mockUsers = [
         title: "Stephanie Kuster"
       },
       {
-        start: moment("2024-06-17")
+        start: dayjs("2024-06-17")
           .startOf("isoWeek")
           .set({
             hour: 0,
@@ -1225,7 +1225,7 @@ const mockUsers = [
             millisecond: 0
           })
           .toISOString(),
-        end: moment("2024-06-17")
+        end: dayjs("2024-06-17")
           .endOf("isoWeek")
           .set({
             hour: 12,
@@ -1252,7 +1252,7 @@ const mockUsers = [
     },
     reservations: [
       {
-        start: moment("2022-07-04")
+        start: dayjs("2022-07-04")
           .startOf("isoWeek")
           .set({
             hour: 0,
@@ -1261,7 +1261,7 @@ const mockUsers = [
             millisecond: 0
           })
           .toISOString(),
-        end: moment("2022-07-04")
+        end: dayjs("2022-07-04")
           .endOf("isoWeek")
           .set({
             hour: 12,
@@ -1273,7 +1273,7 @@ const mockUsers = [
         title: "Steven Schipke"
       },
       {
-        start: moment("2023-08-28")
+        start: dayjs("2023-08-28")
           .startOf("isoWeek")
           .set({
             hour: 0,
@@ -1282,7 +1282,7 @@ const mockUsers = [
             millisecond: 0
           })
           .toISOString(),
-        end: moment("2023-08-28")
+        end: dayjs("2023-08-28")
           .endOf("isoWeek")
           .set({
             hour: 12,
@@ -1294,7 +1294,7 @@ const mockUsers = [
         title: "Steven Schipke"
       },
       {
-        start: moment("2024-10-07")
+        start: dayjs("2024-10-07")
           .startOf("isoWeek")
           .set({
             hour: 0,
@@ -1303,7 +1303,7 @@ const mockUsers = [
             millisecond: 0
           })
           .toISOString(),
-        end: moment("2024-10-07")
+        end: dayjs("2024-10-07")
           .endOf("isoWeek")
           .set({
             hour: 12,
@@ -1330,7 +1330,7 @@ const mockUsers = [
     },
     reservations: [
       {
-        start: moment("2022-10-17")
+        start: dayjs("2022-10-17")
           .startOf("isoWeek")
           .set({
             hour: 0,
@@ -1339,7 +1339,7 @@ const mockUsers = [
             millisecond: 0
           })
           .toISOString(),
-        end: moment("2022-10-17")
+        end: dayjs("2022-10-17")
           .endOf("isoWeek")
           .set({
             hour: 12,
@@ -1351,7 +1351,7 @@ const mockUsers = [
         title: "Sue Orwick"
       },
       {
-        start: moment("2023-06-26")
+        start: dayjs("2023-06-26")
           .startOf("isoWeek")
           .set({
             hour: 0,
@@ -1360,7 +1360,7 @@ const mockUsers = [
             millisecond: 0
           })
           .toISOString(),
-        end: moment("2023-06-26")
+        end: dayjs("2023-06-26")
           .endOf("isoWeek")
           .set({
             hour: 12,
@@ -1372,7 +1372,7 @@ const mockUsers = [
         title: "Sue Orwick"
       },
       {
-        start: moment("2024-05-20")
+        start: dayjs("2024-05-20")
           .startOf("isoWeek")
           .set({
             hour: 0,
@@ -1381,7 +1381,7 @@ const mockUsers = [
             millisecond: 0
           })
           .toISOString(),
-        end: moment("2024-05-20")
+        end: dayjs("2024-05-20")
           .endOf("isoWeek")
           .set({
             hour: 12,
@@ -1408,7 +1408,7 @@ const mockUsers = [
     },
     reservations: [
       {
-        start: moment("2022-09-12")
+        start: dayjs("2022-09-12")
           .startOf("isoWeek")
           .set({
             hour: 0,
@@ -1417,7 +1417,7 @@ const mockUsers = [
             millisecond: 0
           })
           .toISOString(),
-        end: moment("2022-09-12")
+        end: dayjs("2022-09-12")
           .endOf("isoWeek")
           .set({
             hour: 12,
@@ -1429,7 +1429,7 @@ const mockUsers = [
         title: "Kelli Wieczorek"
       },
       {
-        start: moment("2023-06-19")
+        start: dayjs("2023-06-19")
           .startOf("isoWeek")
           .set({
             hour: 0,
@@ -1438,7 +1438,7 @@ const mockUsers = [
             millisecond: 0
           })
           .toISOString(),
-        end: moment("2023-06-19")
+        end: dayjs("2023-06-19")
           .endOf("isoWeek")
           .set({
             hour: 12,
@@ -1450,7 +1450,7 @@ const mockUsers = [
         title: "Kelli Wieczorek"
       },
       {
-        start: moment("2024-06-03")
+        start: dayjs("2024-06-03")
           .startOf("isoWeek")
           .set({
             hour: 0,
@@ -1459,7 +1459,7 @@ const mockUsers = [
             millisecond: 0
           })
           .toISOString(),
-        end: moment("2024-06-03")
+        end: dayjs("2024-06-03")
           .endOf("isoWeek")
           .set({
             hour: 12,
@@ -1486,7 +1486,7 @@ const mockUsers = [
     },
     reservations: [
       {
-        start: moment("2022-07-18")
+        start: dayjs("2022-07-18")
           .startOf("isoWeek")
           .set({
             hour: 0,
@@ -1495,7 +1495,7 @@ const mockUsers = [
             millisecond: 0
           })
           .toISOString(),
-        end: moment("2022-07-18")
+        end: dayjs("2022-07-18")
           .endOf("isoWeek")
           .set({
             hour: 12,
@@ -1507,7 +1507,7 @@ const mockUsers = [
         title: "Wendy Huft"
       },
       {
-        start: moment("2023-06-12")
+        start: dayjs("2023-06-12")
           .startOf("isoWeek")
           .set({
             hour: 0,
@@ -1516,7 +1516,7 @@ const mockUsers = [
             millisecond: 0
           })
           .toISOString(),
-        end: moment("2023-06-12")
+        end: dayjs("2023-06-12")
           .endOf("isoWeek")
           .set({
             hour: 12,
@@ -1528,7 +1528,7 @@ const mockUsers = [
         title: "Wendy Huft"
       },
       {
-        start: moment("2024-07-29")
+        start: dayjs("2024-07-29")
           .startOf("isoWeek")
           .set({
             hour: 0,
@@ -1537,7 +1537,7 @@ const mockUsers = [
             millisecond: 0
           })
           .toISOString(),
-        end: moment("2024-07-29")
+        end: dayjs("2024-07-29")
           .endOf("isoWeek")
           .set({
             hour: 12,
@@ -1577,7 +1577,7 @@ const mockUsers = [
     },
     reservations: [
       {
-        start: moment("2022-08-29")
+        start: dayjs("2022-08-29")
           .startOf("isoWeek")
           .set({
             hour: 0,
@@ -1586,7 +1586,7 @@ const mockUsers = [
             millisecond: 0
           })
           .toISOString(),
-        end: moment("2022-08-29")
+        end: dayjs("2022-08-29")
           .endOf("isoWeek")
           .set({
             hour: 12,
@@ -1598,7 +1598,7 @@ const mockUsers = [
         title: "Dwight Schipke"
       },
       {
-        start: moment("2022-09-26")
+        start: dayjs("2022-09-26")
           .startOf("isoWeek")
           .set({
             hour: 0,
@@ -1607,7 +1607,7 @@ const mockUsers = [
             millisecond: 0
           })
           .toISOString(),
-        end: moment("2022-09-26")
+        end: dayjs("2022-09-26")
           .endOf("isoWeek")
           .set({
             hour: 12,
@@ -1619,7 +1619,7 @@ const mockUsers = [
         title: "Dwight Schipke"
       },
       {
-        start: moment("2023-07-10")
+        start: dayjs("2023-07-10")
           .startOf("isoWeek")
           .set({
             hour: 0,
@@ -1628,7 +1628,7 @@ const mockUsers = [
             millisecond: 0
           })
           .toISOString(),
-        end: moment("2023-07-10")
+        end: dayjs("2023-07-10")
           .endOf("isoWeek")
           .set({
             hour: 12,
@@ -1640,7 +1640,7 @@ const mockUsers = [
         title: "Dwight Schipke"
       },
       {
-        start: moment("2023-08-14")
+        start: dayjs("2023-08-14")
           .startOf("isoWeek")
           .set({
             hour: 0,
@@ -1649,7 +1649,7 @@ const mockUsers = [
             millisecond: 0
           })
           .toISOString(),
-        end: moment("2023-08-14")
+        end: dayjs("2023-08-14")
           .endOf("isoWeek")
           .set({
             hour: 12,
@@ -1661,7 +1661,7 @@ const mockUsers = [
         title: "Dwight Schipke"
       },
       {
-        start: moment("2024-06-24")
+        start: dayjs("2024-06-24")
           .startOf("isoWeek")
           .set({
             hour: 0,
@@ -1670,7 +1670,7 @@ const mockUsers = [
             millisecond: 0
           })
           .toISOString(),
-        end: moment("2024-06-24")
+        end: dayjs("2024-06-24")
           .endOf("isoWeek")
           .set({
             hour: 12,
@@ -1682,7 +1682,7 @@ const mockUsers = [
         title: "Dwight Schipke"
       },
       {
-        start: moment("2024-07-08")
+        start: dayjs("2024-07-08")
           .startOf("isoWeek")
           .set({
             hour: 0,
@@ -1691,7 +1691,7 @@ const mockUsers = [
             millisecond: 0
           })
           .toISOString(),
-        end: moment("2024-07-08")
+        end: dayjs("2024-07-08")
           .endOf("isoWeek")
           .set({
             hour: 12,
@@ -1783,7 +1783,7 @@ const mockUsers = [
     },
     reservations: [
       {
-        start: moment("2022-10-03")
+        start: dayjs("2022-10-03")
           .startOf("isoWeek")
           .set({
             hour: 0,
@@ -1792,7 +1792,7 @@ const mockUsers = [
             millisecond: 0
           })
           .toISOString(),
-        end: moment("2022-10-03")
+        end: dayjs("2022-10-03")
           .endOf("isoWeek")
           .set({
             hour: 12,
@@ -1804,7 +1804,7 @@ const mockUsers = [
         title: "Gale Schipke"
       },
       {
-        start: moment("2023-10-02")
+        start: dayjs("2023-10-02")
           .startOf("isoWeek")
           .set({
             hour: 0,
@@ -1813,7 +1813,7 @@ const mockUsers = [
             millisecond: 0
           })
           .toISOString(),
-        end: moment("2023-10-02")
+        end: dayjs("2023-10-02")
           .endOf("isoWeek")
           .set({
             hour: 12,
@@ -1825,7 +1825,7 @@ const mockUsers = [
         title: "Gale Schipke"
       },
       {
-        start: moment("2024-09-02")
+        start: dayjs("2024-09-02")
           .startOf("isoWeek")
           .set({
             hour: 0,
@@ -1834,7 +1834,7 @@ const mockUsers = [
             millisecond: 0
           })
           .toISOString(),
-        end: moment("2024-09-02")
+        end: dayjs("2024-09-02")
           .endOf("isoWeek")
           .set({
             hour: 12,
@@ -1861,7 +1861,7 @@ const mockUsers = [
     },
     reservations: [
       {
-        start: moment("2022-08-01")
+        start: dayjs("2022-08-01")
           .startOf("isoWeek")
           .set({
             hour: 0,
@@ -1870,7 +1870,7 @@ const mockUsers = [
             millisecond: 0
           })
           .toISOString(),
-        end: moment("2022-08-01")
+        end: dayjs("2022-08-01")
           .endOf("isoWeek")
           .set({
             hour: 12,
@@ -1882,7 +1882,7 @@ const mockUsers = [
         title: "Mark Snoozy"
       },
       {
-        start: moment("2023-09-04")
+        start: dayjs("2023-09-04")
           .startOf("isoWeek")
           .set({
             hour: 0,
@@ -1891,7 +1891,7 @@ const mockUsers = [
             millisecond: 0
           })
           .toISOString(),
-        end: moment("2023-09-04")
+        end: dayjs("2023-09-04")
           .endOf("isoWeek")
           .set({
             hour: 12,
@@ -1903,7 +1903,7 @@ const mockUsers = [
         title: "Mark Snoozy"
       },
       {
-        start: moment("2024-09-09")
+        start: dayjs("2024-09-09")
           .startOf("isoWeek")
           .set({
             hour: 0,
@@ -1912,7 +1912,7 @@ const mockUsers = [
             millisecond: 0
           })
           .toISOString(),
-        end: moment("2024-09-09")
+        end: dayjs("2024-09-09")
           .endOf("isoWeek")
           .set({
             hour: 12,
@@ -1940,7 +1940,7 @@ const mockUsers = [
       {
         notes: "During deer hunting season the cabin is open to all.",
         title: "Open For Hunters",
-        start: moment("2022-11-01")
+        start: dayjs("2022-11-01")
           .startOf("isoMonth")
           .set({
             hour: 0,
@@ -1949,7 +1949,7 @@ const mockUsers = [
             millisecond: 0
           })
           .toISOString(),
-        end: moment("2022-11-30")
+        end: dayjs("2022-11-30")
           .endOf("isoMonth")
           .set({
             hour: 12,
@@ -1962,7 +1962,7 @@ const mockUsers = [
       {
         notes: "During deer hunting season the cabin is open to all.",
         title: "Open For Hunters",
-        start: moment("2023-11-01")
+        start: dayjs("2023-11-01")
           .startOf("isoMonth")
           .set({
             hour: 0,
@@ -1971,7 +1971,7 @@ const mockUsers = [
             millisecond: 0
           })
           .toISOString(),
-        end: moment("2023-11-30")
+        end: dayjs("2023-11-30")
           .endOf("isoMonth")
           .set({
             hour: 12,
@@ -1984,7 +1984,7 @@ const mockUsers = [
       {
         notes: "During deer hunting season the cabin is open to all.",
         title: "Open For Hunters",
-        start: moment("2024-11-01")
+        start: dayjs("2024-11-01")
           .startOf("isoMonth")
           .set({
             hour: 0,
@@ -1993,7 +1993,7 @@ const mockUsers = [
             millisecond: 0
           })
           .toISOString(),
-        end: moment("2024-11-30")
+        end: dayjs("2024-11-30")
           .endOf("isoMonth")
           .set({
             hour: 12,
@@ -2006,7 +2006,7 @@ const mockUsers = [
       {
         notes: "During deer hunting season the cabin is open to all.",
         title: "Open For Hunters",
-        start: moment("2025-11-01")
+        start: dayjs("2025-11-01")
           .startOf("isoMonth")
           .set({
             hour: 0,
@@ -2015,7 +2015,7 @@ const mockUsers = [
             millisecond: 0
           })
           .toISOString(),
-        end: moment("2025-11-30")
+        end: dayjs("2025-11-30")
           .endOf("isoMonth")
           .set({
             hour: 12,
@@ -2026,7 +2026,7 @@ const mockUsers = [
           .toISOString()
       },
       {
-        start: moment("2022-05-21")
+        start: dayjs("2022-05-21")
           .set({
             hour: 0,
             minute: 0,
@@ -2034,7 +2034,7 @@ const mockUsers = [
             millisecond: 0
           })
           .toISOString(),
-        end: moment("2022-05-21")
+        end: dayjs("2022-05-21")
           .set({
             hour: 20,
             minute: 0,
@@ -2046,7 +2046,7 @@ const mockUsers = [
         notes: "Cabin cleaning and anual board meeting."
       },
       {
-        start: moment("2023-05-20")
+        start: dayjs("2023-05-20")
           .set({
             hour: 0,
             minute: 0,
@@ -2054,7 +2054,7 @@ const mockUsers = [
             millisecond: 0
           })
           .toISOString(),
-        end: moment("2023-05-20")
+        end: dayjs("2023-05-20")
           .set({
             hour: 20,
             minute: 0,
@@ -2066,7 +2066,7 @@ const mockUsers = [
         notes: "Cabin cleaning and anual board meeting."
       },
       {
-        start: moment("2024-05-18")
+        start: dayjs("2024-05-18")
           .set({
             hour: 0,
             minute: 0,
@@ -2074,7 +2074,7 @@ const mockUsers = [
             millisecond: 0
           })
           .toISOString(),
-        end: moment("2024-05-18")
+        end: dayjs("2024-05-18")
           .set({
             hour: 20,
             minute: 0,
@@ -2086,7 +2086,7 @@ const mockUsers = [
         notes: "Cabin cleaning and anual board meeting."
       },
       {
-        start: moment("2025-05-17")
+        start: dayjs("2025-05-17")
           .set({
             hour: 0,
             minute: 0,
@@ -2094,7 +2094,7 @@ const mockUsers = [
             millisecond: 0
           })
           .toISOString(),
-        end: moment("2025-05-17")
+        end: dayjs("2025-05-17")
           .set({
             hour: 20,
             minute: 0,
