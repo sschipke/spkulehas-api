@@ -91,8 +91,8 @@ const sendPasswordResetEmail = async (user, url, expiration) => {
 
 const alertUsersOfDeletion = async (members, reservation) => {
   const { start, end, title } = reservation;
-  const startDate = dayjs(start).format("dddd, MMMM Do, YYYY");
-  const endDate = dayjs(end).format("dddd, MMMM Do, YYYY");
+  const startDate = dayjs(start).format("dddd, MMMM D, YYYY");
+  const endDate = dayjs(end).format("dddd, MMMM D, YYYY");
   const url = `${process.env.FRONT_END_BASE_URL}?date=${dayjs(
     start
   ).toISOString()}`;
