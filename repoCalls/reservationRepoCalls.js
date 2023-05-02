@@ -6,7 +6,12 @@ export const updateReservationTitlesWithNewName = async (
   oldName
 ) => {
   const now = dayjs().toISOString();
-  console.log("Udpating reservations with new names.")
+  console.log(
+    "Udpating reservations with new name. Changing from: ",
+    oldName,
+    "to: ",
+    newName
+  );
   return database("reservation")
     .returning(["id", "title"])
     .where({ user_id: userId })
