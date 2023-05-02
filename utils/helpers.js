@@ -7,6 +7,7 @@ import { updateReservationTitlesWithNewName } from "../repoCalls/reservationRepo
 import { createResetSessionForUser } from "../repoCalls/sessionRepoCalls";
 import { generateWebtoken } from "../middleware/auth";
 import { findUserById } from "../repoCalls/userRepoCalls";
+import { updateReservationsEtag } from "./contstants";
 
 dayjs.extend(calendar);
 
@@ -32,8 +33,10 @@ export const processNameChange = async (
     newName,
     oldName
   );
+  const newEtag = updateReservationsEtag();
   if (updatedReservations.length > 0) {
     responseBody.updatedReservations = updatedReservations;
+    responseBody.reservationsEtag = newEtag;
     return response.status(200).json(responseBody).send();
   } else {
     return response.status(200).json(responseBody).send();
@@ -71,7 +74,7 @@ export const confirmPassword = async (userId, password) => {
   return compareSync(password, hash);
 }
 
-export const generateEtag = () => {
+export function generateEtag() {
   return (
     Math.random().toString(36).slice(8) +
     Math.random().toString(36).toUpperCase().slice(8)
