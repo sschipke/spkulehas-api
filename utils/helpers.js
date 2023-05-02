@@ -70,3 +70,10 @@ export const confirmPassword = async (userId, password) => {
   const hash = userToValidate.password;
   return compareSync(password, hash);
 }
+
+export const generateEtag = () => {
+  return (
+    Math.random().toString(36).slice(8) +
+    Math.random().toString(36).toUpperCase().slice(8)
+  );
+};

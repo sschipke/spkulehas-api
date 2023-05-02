@@ -11,6 +11,7 @@ import {
   unauthorizedResponse
 } from "../../../utils/httpHelpers";
 import { isAdmin } from "../../../validations/userValidation";
+import { reservationsEtag, updateReservationsEtag } from "../../../utils/contstants";
 const dayjs = require("dayjs");
 const express = require("express");
 const router = express.Router();
@@ -24,10 +25,11 @@ router.get("/", async (req, res) => {
     const reservations = await getReservations();
     console.log(
       "Successfully sent GET for reservations. ",
+      {reservationsEtag},
       req.ip,
       new Date().toLocaleString({ timeZone: "American/Denver" })
     );
-    return res.status(200).json({ reservations });
+    return res.status(200).json({ reservations, reservationsEtag });
   } catch (err) {
     console.error(
       "Error sending GET Reservations Response: ",
@@ -70,7 +72,7 @@ router.post("/new", async (req, res, next) => {
     console.log({ addedReservation });
     logger("Successfully added reservation!", req);
     const response = addedReservation[0];
-    return res.status(200).json({ reservation: response });
+    return res.status(200).json({ reservation: response, reservationsEtag: updateReservationsEtag() });
   } catch (error) {
     console.error("Unable to add reservation.", { reservation }, error);
     return res
@@ -124,7 +126,8 @@ router.put("/:reservation_id", async (req, res, next) => {
   console.log({ updatedReservation });
   const response = updatedReservation[0];
   logger(`Successfully updated reservation.`, req);
-  return res.status(200).json({ reservation: response });
+  updateReservationsEtag();
+  return res.status(200).json({ reservation: response, reservationsEtag });
 });
 
 router.delete("/:id", async (req, response) => {
@@ -155,13 +158,24 @@ router.delete("/:id", async (req, response) => {
         );
       }
       logger("Sucessfully deleted reservation: ", req);
-      response.status(200).json("Reservation successfully removed.").send();
+      updateReservationsEtag();
+      response.status(200).json({reservationsEtag}).send();
       if (shouldSendDeletionEmail) {
         handleDeletionEmail(currentReservation, user.id);
       } else {
         console.log("Not sending deletion email due to admin's request.");
       }
     });
+});
+
+router.get("/validate/:etag", async (req, res) => {
+  const { etag } = req.params;
+  console.log("Comparing reservation etags: ", "etag in req: ", etag, "beEtag: ", reservationsEtag);
+  if (etag === reservationsEtag) {
+    return res.status(204).send();
+  } else {
+    return res.status(412).send();
+  }
 });
 
 async function getReservations() {

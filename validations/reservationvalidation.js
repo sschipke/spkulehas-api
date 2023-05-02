@@ -97,7 +97,6 @@ const processReserVationDates = (reservation) => {
   //Default reservation times to noon
   const noonHour = 12;
   const { start, end } = reservation;
-  console.log("OUPUT?: ", dayjs(start).tz(MOUNTAIN_TZ).set("hour", noonHour).toDate())
     reservation.start = dayjs(start).tz(MOUNTAIN_TZ).set("hour", noonHour).toISOString();
     reservation.end = dayjs(end).tz(MOUNTAIN_TZ).set("hour", noonHour).toISOString();
 };
