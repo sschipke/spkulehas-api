@@ -12,6 +12,7 @@ import {
 } from "../../../utils/httpHelpers";
 import { isAdmin } from "../../../validations/userValidation";
 import { reservationsEtag, updateReservationsEtag } from "../../../utils/contstants";
+import { conflictResponse } from "../../../utils/httpHelpers";
 const dayjs = require("dayjs");
 const express = require("express");
 const router = express.Router();
@@ -56,16 +57,14 @@ router.post("/new", async (req, res, next) => {
   const error = validateReservation(reservation, isAdmin(user));
   if (Object.keys(error).length) {
     console.error("Unable to create reservation: ", error);
-    return res.status(422).json(error);
+    return conflictResponse(error)
   }
   const conflictingReservations = await checkForConflictingReservations(
     reservation
   );
   if (conflictingReservations.length) {
     console.error("Unable to create reservation: Conflicting Reservation.");
-    return res
-      .status(422)
-      .json({ error: "This reservation conflicts with another." });
+    return conflictResponse("This reservation conflicts with another.");
   }
   try {
     const addedReservation = await addReservation(reservation);
@@ -108,7 +107,7 @@ router.put("/:reservation_id", async (req, res, next) => {
   }
   const error = validateReservation(reservation, isAdmin(user));
   if (Object.keys(error).length) {
-    return res.status(422).json(error);
+    return conflictResponse(error);
   }
   const conflictingReservations = await checkForConflictingReservations(
     reservation
@@ -116,11 +115,10 @@ router.put("/:reservation_id", async (req, res, next) => {
   console.log({ conflictingReservations });
   if (
     conflictingReservations.length > 1 ||
-    Number(conflictingReservations[0].id) !== reservationId
+    (conflictingReservations.length &&
+      Number(conflictingReservations[0].id) !== reservationId)
   ) {
-    return res
-      .status(422)
-      .json({ error: "This reservation conflicts with another." });
+    return conflictResponse("This reservation conflicts with another.");
   }
   const updatedReservation = await updateReservation(reservation);
   console.log({ updatedReservation });
