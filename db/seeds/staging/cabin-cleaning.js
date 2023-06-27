@@ -1,8 +1,8 @@
-const moment = require("moment");
+const dayjs = require("dayjs");
 
 const cabinCleanings = [
   {
-    start: moment("2022-05-21")
+    start: dayjs("2022-05-21")
       .set({
         hour: 0,
         minute: 0,
@@ -10,7 +10,7 @@ const cabinCleanings = [
         millisecond: 0,
       })
       .toISOString(),
-    end: moment("2022-05-21")
+    end: dayjs("2022-05-21")
       .set({
         hour: 20,
         minute: 0,
@@ -22,7 +22,7 @@ const cabinCleanings = [
     notes: "Cabin cleaning and anual board meeting.",
   },
   {
-    start: moment("2023-05-20")
+    start: dayjs("2023-05-20")
       .set({
         hour: 0,
         minute: 0,
@@ -30,7 +30,7 @@ const cabinCleanings = [
         millisecond: 0,
       })
       .toISOString(),
-    end: moment("2023-05-20")
+    end: dayjs("2023-05-20")
       .set({
         hour: 20,
         minute: 0,
@@ -42,7 +42,7 @@ const cabinCleanings = [
     notes: "Cabin cleaning and anual board meeting.",
   },
   {
-    start: moment("2024-05-18")
+    start: dayjs("2024-05-18")
       .set({
         hour: 0,
         minute: 0,
@@ -50,7 +50,7 @@ const cabinCleanings = [
         millisecond: 0,
       })
       .toISOString(),
-    end: moment("2024-05-18")
+    end: dayjs("2024-05-18")
       .set({
         hour: 20,
         minute: 0,
@@ -62,7 +62,7 @@ const cabinCleanings = [
     notes: "Cabin cleaning and anual board meeting.",
   },
   {
-    start: moment("2025-05-17")
+    start: dayjs("2025-05-17")
       .set({
         hour: 0,
         minute: 0,
@@ -70,7 +70,7 @@ const cabinCleanings = [
         millisecond: 0,
       })
       .toISOString(),
-    end: moment("2025-05-17")
+    end: dayjs("2025-05-17")
       .set({
         hour: 20,
         minute: 0,

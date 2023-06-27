@@ -1,5 +1,5 @@
 import { database } from "../app";
-import moment from "moment";
+import dayjs from "dayjs";
 const bcrypt = require("bcrypt");
 
 export const mapProfileToModel = (profile) => {
@@ -58,7 +58,7 @@ export const mapUserToProfile = (user) => {
   const last_name = lastName;
   const fullName = `${first_name} ${last_name}`;
 
-  const updated_at = moment().toISOString();
+  const updated_at = dayjs().toISOString();
   const profile = {
     user_id: id,
     first_name,
@@ -96,7 +96,7 @@ export const getAllUsersIdNameAndEmail = async () => {
 };
 
 export const updatePassword = async (id, password) => {
-  const now = moment().toISOString();
+  const now = dayjs().toISOString();
   const hash = bcrypt.hashSync(password, 10);
   return database("user")
     .where({ id: id })
@@ -104,7 +104,7 @@ export const updatePassword = async (id, password) => {
 };
 
 export const updateEmail = async (id, newEmail) => {
-  const now = moment().toISOString();
+  const now = dayjs().toISOString();
   return database("user")
     .where({ id })
     .update({ email: newEmail, updated_at: now }, ["email"])
@@ -159,7 +159,7 @@ export const findAllEmailSettingsByUserId = async (userId) => {
 };
 
 export const updateEmailSetting = async (settingId, value) => {
-  const now = moment().toISOString();
+  const now = dayjs().toISOString();
   return database("email_setting")
     .where({ id: settingId })
     .update({ value, updated_at: now });
@@ -174,7 +174,7 @@ export const addEmailSettingForUser = async (userId, settingName, value) => {
 };
 
 export const updateLogin = async (id) => {
-  const now = moment().toISOString();
+  const now = dayjs().toISOString();
   return database("user").where({ id }).update({ last_login: now });
 };
 

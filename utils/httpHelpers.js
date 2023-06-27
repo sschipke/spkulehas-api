@@ -17,3 +17,8 @@ export const unknownErrorResponse = (response, message) => {
   const errorMessage = message ? message : "Something went wrong.";
   return response.status(500).json({ error: errorMessage });
 };
+
+export const conflictResponse = (response, message) => {
+  const errorMessage = message ? message : "Something went wrong.";
+  return response.status(409).json({ error: errorMessage });
+};

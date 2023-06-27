@@ -1,0 +1,29 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <title>Email Change Notice</title>
+    <style>
+      body { display: flex; align-items: center; justify-content: center;
+      font-family: "Roboto","Helvetica","Arial",sans-serif; .ii a[href] { color:
+      #FFFFFF; }; } h2,p { color: red; }
+    </style>
+  </head>
+  <body>Your email has been changed.</h2>
+    <p>
+      Hello,
+    </p>
+    <p>
+      Your email has been updated from <strong>{{oldEmail}}</strong> to <strong>{{newEmail}}</strong>.
+    </p>
+    <p>
+      {{#if wasAdmin}}
+        This change was made by: <strong>{{admin.name}}</strong>.
+      {{/if}}
+    </p>
+    <p>
+      If this change is incorrect, please contact the admin.
+    </p>
+    </body>
+  </body>
+</html>

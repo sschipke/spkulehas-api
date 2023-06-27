@@ -1,4 +1,4 @@
-const moment = require("moment");
+const dayjs = require("dayjs");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
 const { copyUser, resetPassFile } = require("../../../utils/filewriter");
@@ -20,8 +20,8 @@ const mockUsers = [
     },
     reservations: [
       {
-        start: moment("2022-10-03").startOf("isoWeek").toISOString(),
-        end: moment("2022-10-03")
+        start: dayjs("2022-10-03").startOf("isoWeek").toISOString(),
+        end: dayjs("2022-10-03")
           .endOf("isoWeek")
           .set({
             hour: 12,
@@ -34,8 +34,8 @@ const mockUsers = [
         user_id: "2be3704b-3ab5-4cd4-9630-a056d76a2bc0",
       },
       {
-        start: moment("2023-10-02").startOf("isoWeek").toISOString(),
-        end: moment("2023-10-02")
+        start: dayjs("2023-10-02").startOf("isoWeek").toISOString(),
+        end: dayjs("2023-10-02")
           .endOf("isoWeek")
           .set({
             hour: 12,
@@ -63,8 +63,8 @@ const mockUsers = [
     },
     reservations: [
       {
-        start: moment("2022-08-01").startOf("isoWeek").toISOString(),
-        end: moment("2022-08-01")
+        start: dayjs("2022-08-01").startOf("isoWeek").toISOString(),
+        end: dayjs("2022-08-01")
           .endOf("isoWeek")
           .set({
             hour: 12,
@@ -83,8 +83,8 @@ const mockUsers = [
         user_id: "3acc19ea71dd",
       },
       {
-        start: moment("2023-09-04").startOf("isoWeek").toISOString(),
-        end: moment("2023-09-05").endOf("isoWeek").toISOString(),
+        start: dayjs("2023-09-04").startOf("isoWeek").toISOString(),
+        end: dayjs("2023-09-05").endOf("isoWeek").toISOString(),
         title: "Steven Schipke",
         user_id: "eb3169b4-3935-4bf3-9feb-3acc19ea71dd",
       },

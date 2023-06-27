@@ -11,7 +11,9 @@ import {
   unauthorizedResponse
 } from "../../../utils/httpHelpers";
 import { isAdmin } from "../../../validations/userValidation";
-const moment = require("moment");
+import { reservationsEtag, updateReservationsEtag } from "../../../utils/contstants";
+import { conflictResponse } from "../../../utils/httpHelpers";
+const dayjs = require("dayjs");
 const express = require("express");
 const router = express.Router();
 
@@ -24,10 +26,11 @@ router.get("/", async (req, res) => {
     const reservations = await getReservations();
     console.log(
       "Successfully sent GET for reservations. ",
+      {reservationsEtag},
       req.ip,
       new Date().toLocaleString({ timeZone: "American/Denver" })
     );
-    return res.status(200).json({ reservations });
+    return res.status(200).json({ reservations, reservationsEtag });
   } catch (err) {
     console.error(
       "Error sending GET Reservations Response: ",
@@ -37,7 +40,7 @@ router.get("/", async (req, res) => {
       " at ",
       new Date().toLocaleDateString()
     );
-    return res.status(500).json({ msg: "Error sending reservations.", err });
+    return res.status(500).json({ error: "Error sending reservations." });
   }
 });
 
@@ -54,23 +57,21 @@ router.post("/new", async (req, res, next) => {
   const error = validateReservation(reservation, isAdmin(user));
   if (Object.keys(error).length) {
     console.error("Unable to create reservation: ", error);
-    return res.status(422).json(error);
+    return conflictResponse(error)
   }
   const conflictingReservations = await checkForConflictingReservations(
     reservation
   );
   if (conflictingReservations.length) {
     console.error("Unable to create reservation: Conflicting Reservation.");
-    return res
-      .status(422)
-      .json({ error: "This reservation conflicts with another." });
+    return conflictResponse("This reservation conflicts with another.");
   }
   try {
     const addedReservation = await addReservation(reservation);
     console.log({ addedReservation });
     logger("Successfully added reservation!", req);
     const response = addedReservation[0];
-    return res.status(200).json({ reservation: response });
+    return res.status(200).json({ reservation: response, reservationsEtag: updateReservationsEtag() });
   } catch (error) {
     console.error("Unable to add reservation.", { reservation }, error);
     return res
@@ -106,7 +107,7 @@ router.put("/:reservation_id", async (req, res, next) => {
   }
   const error = validateReservation(reservation, isAdmin(user));
   if (Object.keys(error).length) {
-    return res.status(422).json(error);
+    return conflictResponse(error);
   }
   const conflictingReservations = await checkForConflictingReservations(
     reservation
@@ -114,17 +115,17 @@ router.put("/:reservation_id", async (req, res, next) => {
   console.log({ conflictingReservations });
   if (
     conflictingReservations.length > 1 ||
-    Number(conflictingReservations[0].id) !== reservationId
+    (conflictingReservations.length &&
+      Number(conflictingReservations[0].id) !== reservationId)
   ) {
-    return res
-      .status(422)
-      .json({ error: "This reservation conflicts with another." });
+    return conflictResponse("This reservation conflicts with another.");
   }
   const updatedReservation = await updateReservation(reservation);
   console.log({ updatedReservation });
   const response = updatedReservation[0];
   logger(`Successfully updated reservation.`, req);
-  return res.status(200).json({ reservation: response });
+  updateReservationsEtag();
+  return res.status(200).json({ reservation: response, reservationsEtag });
 });
 
 router.delete("/:id", async (req, response) => {
@@ -155,13 +156,24 @@ router.delete("/:id", async (req, response) => {
         );
       }
       logger("Sucessfully deleted reservation: ", req);
-      response.status(200).json("Reservation successfully removed.").send();
+      updateReservationsEtag();
+      response.status(200).json({reservationsEtag}).send();
       if (shouldSendDeletionEmail) {
         handleDeletionEmail(currentReservation, user.id);
       } else {
         console.log("Not sending deletion email due to admin's request.");
       }
     });
+});
+
+router.get("/validate/:etag", async (req, res) => {
+  const { etag } = req.params;
+  console.log("Comparing reservation etags: ", "etag in req: ", etag, "beEtag: ", reservationsEtag);
+  if (etag === reservationsEtag) {
+    return res.status(204).send();
+  } else {
+    return res.status(412).send();
+  }
 });
 
 async function getReservations() {
@@ -171,12 +183,12 @@ async function getReservations() {
     .orderBy("start", "asc")
     .catch((err) => {
       console.error("Error retrieving all reservations: ", err);
-      return new Error("Error retrieving all reservations: ", { err });
+      throw new Error("Error retrieving all reservations: ", { err });
     });
 }
 
 const updateReservation = async (reservation) => {
-  reservation.updated_at = moment().toISOString();
+  reservation.updated_at = dayjs().toISOString();
   return database("reservation")
     .where({ id: reservation.id })
     .update(reservation, ["id", "user_id", "title", "start", "end", "notes"])
