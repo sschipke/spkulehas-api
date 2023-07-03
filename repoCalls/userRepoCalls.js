@@ -41,6 +41,18 @@ export const getUserProfileById = async (id) => {
     .first();
 };
 
+export const getMemberNameAndEmailById = async (id) => {
+  return database("userprofile")
+    .where({ user_id: id })
+    .columns([
+      "name",
+      "user_id AS id"
+    ])
+    .innerJoin("user", "user.id", "userprofile.user_id")
+    .columns(["email"])
+    .first();
+};
+
 export const mapUserToProfile = (user) => {
   const {
     id,
