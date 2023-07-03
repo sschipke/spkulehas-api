@@ -13,7 +13,7 @@ processes = []
   FRONT_END_BASE_URL = "https://spkulehas.com/"
   FRONT_END_ORIGIN_URL = "spkulehas.com"
   MAXIMUM_RESERVATION_DATE = "2025-05-16"
-  MINIMUM_RESERVATION_DATE = "2022-05-23"
+  MINIMUM_RESERVATION_DATE = "2026-05-15"
   NODE_ENV = "production"
   PORT = "8080"
   TZ = "America/Denver"
@@ -49,4 +49,4 @@ processes = []
     timeout = "2s"
 
 [deploy]
-  release_command = "yarn addNewSeasonReservations"
+  release_command = "yarn migrate"
