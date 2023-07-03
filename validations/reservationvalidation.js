@@ -51,7 +51,7 @@ export const validateReservation = (reservation, isAdmin) => {
     return { error: "This reservation is too early." };
   }
   if (dayjs(end).isAfter(maxReservationDate)) {
-    return { error: "Reservation is too late." };
+    return { error: "At this time, reservations cannot be made after " + maxReservationDate };
   }
   if (!isReservationLengthValid(start, end) && !isAdmin) {
     return { error: "Invalid reservation length." };

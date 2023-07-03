@@ -26,6 +26,8 @@ const handlebarOptions = {
 // use a template file with nodemailer
 transporter.use("compile", hbs(handlebarOptions));
 
+const formatDate = (date) => dayjs(date).format("MM/DD/YYYY");
+
 const sendWelcomeEmail = async (user, index) => {
   const loginUrl = `${process.env.FRONT_END_BASE_URL}login`;
   const mailOptions = {
@@ -203,14 +205,16 @@ const alertAdminOfMemberCreation = async (user, admin) => {
     }
   };
 
-  console.log(
-    "Sending new member alert email.",
-    mailOptions
-  );
+  console.log("Sending new member alert email.", mailOptions);
   return transporter.sendMail(mailOptions);
 };
 
-const notifyMemberOfEmailChange = async (oldEmail, newEmail, admin, didAdminChange) => {
+const notifyMemberOfEmailChange = async (
+  oldEmail,
+  newEmail,
+  admin,
+  didAdminChange
+) => {
   const wasAdmin = didAdminChange && admin && admin.isAdmin;
   const mailOptions = {
     from: process.env.ADMIN_EMAIL,
@@ -225,10 +229,40 @@ const notifyMemberOfEmailChange = async (oldEmail, newEmail, admin, didAdminChan
     }
   };
 
-  console.log(
-    "Notifying member of email change: ",
-    mailOptions
-  );
+  console.log("Notifying member of email change: ", mailOptions);
+  return transporter.sendMail(mailOptions);
+};
+
+const emailMembersOfReservationChange = async (
+  previousMember,
+  currentMember,
+  oldReservation,
+  newReservation,
+  admin
+) => {
+  const viewReservationUrl = new URL(
+    `${process.env.FRONT_END_BASE_URL}?reservationId=${newReservation.id}`
+  ).href;
+  oldReservation.start = formatDate(oldReservation.start);
+  oldReservation.end = formatDate(oldReservation.end);
+  newReservation.start = formatDate(newReservation.start);
+  newReservation.end = formatDate(newReservation.end);
+  const mailOptions = {
+    from: process.env.ADMIN_EMAIL,
+    to: [previousMember.email, currentMember.email],
+    subject: "Your Reservation Has Changed",
+    template: "reservation-change",
+    context: {
+      previousMember,
+      currentMember,
+      oldReservation,
+      newReservation,
+      viewReservationUrl,
+      admin
+    }
+  };
+
+  console.info("Notifying members of reservation change. ", mailOptions);
   return transporter.sendMail(mailOptions);
 };
 
@@ -240,5 +274,6 @@ module.exports = {
   sendSessionDeletionErrorEmail,
   sendNewMemberEmail,
   alertAdminOfMemberCreation,
-  notifyMemberOfEmailChange
+  notifyMemberOfEmailChange,
+  emailMembersOfReservationChange
 };

@@ -9,7 +9,7 @@
     "initdb": "knex migrate:latest && knex seed:run",
     "migrate": "knex migrate:latest",
     "rollback": "knex migrate:rollback",
-    "updateNames": "knex migrate:latest && knex seed:run --specific=updateNames.js",
+    "addNewSeasonReservations": "knex seed:run --specific=add_2025_reservations.js",
     "down": "knex migrate:down",
     "test": "jest --forceExit",
     "test:watch": "jest --watchAll"

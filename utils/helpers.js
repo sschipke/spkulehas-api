@@ -2,11 +2,11 @@ const { v4: uuidv4 } = require("uuid");
 import dayjs from "dayjs";
 const calendar = require('dayjs/plugin/calendar');
 import { compareSync } from "bcrypt";
-import { alertAdminOfMemberCreation, sendNewMemberEmail } from "../email";
+import { alertAdminOfMemberCreation, sendNewMemberEmail, emailMembersOfReservationChange } from "../email";
 import { updateReservationTitlesWithNewName } from "../repoCalls/reservationRepoCalls";
 import { createResetSessionForUser } from "../repoCalls/sessionRepoCalls";
 import { generateWebtoken } from "../middleware/auth";
-import { findUserById } from "../repoCalls/userRepoCalls";
+import { getMemberNameAndEmailById } from "../repoCalls/userRepoCalls";
 import { updateReservationsEtag } from "./contstants";
 
 dayjs.extend(calendar);
@@ -80,3 +80,16 @@ export function generateEtag() {
     Math.random().toString(36).toUpperCase().slice(8)
   );
 };
+
+export const notifyUsersOfReservationUpdateByAdmin = async (oldReservation, newReservation, adminUser) => {
+  console.info("Notifying users of Admin Reservation Change.");
+  try {
+    const oldMember = await getMemberNameAndEmailById(oldReservation.user_id);
+    const newMember = await getMemberNameAndEmailById(newReservation.user_id);
+    return await emailMembersOfReservationChange(oldMember, newMember, oldReservation, newReservation, adminUser);
+
+  } catch (error) {
+    console.error("Unable to notify users of reservation Update. Err: ", error);
+    throw new Error("Unable to notify users of reservation change.");
+  }
+}
