@@ -1,0 +1,43 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <title>Reservation Change</title>
+    <style>
+      body { display: flex; align-items: center; justify-content: center;
+      font-family: "Roboto","Helvetica","Arial",sans-serif; } .button { font:
+      bold 0.875rem Arial; text-decoration: none; background-color: #33691E;
+      color: #FFFFFF; padding: 2px 6px 2px 6px; border: 1px solid #33691E;
+      border-radius: 5px; } .ii a[href] { color: #FFFFFF; } a { color: inherit;
+      text-decoration: none; }
+    </style>
+  </head>
+  <body>
+    <h2>Reservation Change</h2>
+    <p>The reservation for:
+      <strong>{{previousMember.name}}</strong>
+      begining on
+      <strong>{{oldReservation.start}}</strong>
+      and ending
+      <strong>{{oldReservation.end}}</strong>
+      has been changed.</p>
+    <p></p>
+    <p>The reservation is now for
+      <strong>{{currentMember.name}}</strong>
+      begining on
+      <strong>{{newReservation.start}}</strong>
+      and ending
+      <strong>{{newReservation.end}}</strong>.
+    </p>
+    <a href="{{viewReservationUrl}}">Click here</a>
+    to view the updated reservation.
+    <p></p>
+    <p></p>
+    <p>This change was made by the admin:
+      <strong>{{admin.name}}</strong>. If this has been done in error, please
+      contact them at:
+      <strong>{{admin.email}}</strong>.</p>
+
+    <h3>Schipke SpKuLeHaS Inc.</h3>
+  </body>
+</html>
