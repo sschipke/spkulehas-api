@@ -6,3 +6,4 @@ passwords*.json
 ssh
 ssh-cert.pub
 fly.toml
+yarn-error.log

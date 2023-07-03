@@ -14,7 +14,7 @@ processes = []
   FRONT_END_BASE_URL="https://spkulehas-staging.netlify.app/"
   FRONT_END_ORIGIN_URL="spkulehas-staging.netlify.app"
   MINIMUM_RESERVATION_DATE="2022-05-23"
-  MAXIMUM_RESERVATION_DATE="2025-05-16"
+  MAXIMUM_RESERVATION_DATE="2026-05-15"
   TZ="America/Denver"
   NODE_ENV="staging"
 
@@ -49,4 +49,4 @@ processes = []
     timeout = "2s"
 
 [deploy]
-  release_command = "yarn migrate && yarn addNewSeasonReservations"
+  release_command = "yarn migrate"
