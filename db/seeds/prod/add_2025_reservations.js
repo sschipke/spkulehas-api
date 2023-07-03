@@ -24,9 +24,14 @@ const insertNewReservation = async (knex, reservation) => {
 exports.seed = async function (knex) {
   console.log("# of reservations: ", reservations.length);
   const reservationPromises = [];
-  reservations.forEach(async (reservation) => {
-    reservationPromises.push(getUserIdByTitle(knex, reservation));
-  });
-  console.log("Promise length: ", reservationPromises.length);
-  return Promise.all(reservationPromises);
+  try {
+    reservations.forEach(async (reservation) => {
+      reservationPromises.push(getUserIdByTitle(knex, reservation));
+    });
+    console.log("Promise length: ", reservationPromises.length);
+    return Promise.all(reservationPromises);
+  } catch (error) {
+    console.error("ERROR CREATING 2025 Reservations: ", error);
+    return Promise.resolve();
+  }
 };
