@@ -12,14 +12,15 @@ import {
   forbiddenResponse,
   notFoundResponse,
   unauthorizedResponse,
-  unknownErrorResponse
+  unknownErrorResponse,
+  conflictResponse,
+  preconditionFailedResponse 
 } from "../../../utils/httpHelpers";
 import { isAdmin } from "../../../validations/userValidation";
 import {
   reservationsEtag,
   updateReservationsEtag
 } from "../../../utils/contstants";
-import { conflictResponse } from "../../../utils/httpHelpers";
 const dayjs = require("dayjs");
 const express = require("express");
 const router = express.Router();
@@ -59,6 +60,10 @@ router.post("/new", async (req, res, next) => {
       "Unable to create reservation: User did not have permission."
     );
     return forbiddenResponse(res);
+  }
+
+  if (!validateEtagHeader(req)) {
+    return preconditionFailedResponse(res);
   }
 
   const validationErrors = validateReservation(reservation, isAdmin(user));
@@ -103,14 +108,20 @@ router.put("/:reservation_id", async (req, res, next) => {
     const reservationId = Number(req.params.reservation_id);
     const { reservation } = req.body;
     const { user } = res.locals;
-    const reservationToUpdate = await findReservationById(reservationId);
-    if (!canUserEdit(user, reservationToUpdate)) {
-      console.warn(
-        "Unable to update reservation: user did not have permission",
-        reservationToUpdate
-      );
-      return forbiddenResponse(res);
-    }
+
+        if (!validateEtagHeader(req)) {
+          return preconditionFailedResponse(res);
+        }
+
+        const reservationToUpdate = await findReservationById(reservationId);
+
+        if (!canUserEdit(user, reservationToUpdate)) {
+          console.warn(
+            "Unable to update reservation: user did not have permission."
+          );
+          return forbiddenResponse(res);
+        }
+
     if (!reservationToUpdate) {
       return notFoundResponse(
         res,
@@ -308,6 +319,12 @@ const checkForConflictingReservations = async (reservationToCheck) => {
     .andWhere("end", "<=", end)
     .orWhere("end", ">=", start)
     .andWhere("start", "<=", end);
+};
+
+const validateEtagHeader = (req) => {
+  const eTag = req.headers["if-match"];
+  console.info("reqEtag: ", eTag, "reservationsEtag: ", reservationsEtag);
+  return eTag && eTag === reservationsEtag;
 };
 
 export default router;

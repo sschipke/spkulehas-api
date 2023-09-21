@@ -33,18 +33,22 @@ app.use((err, req, res, next) => {
   return next();
 });
 
+app.get("/api/v1/teapot", (request, response) => {
+  return response
+    .status(418)
+    .json("The server refuses the attempt to brew coffee with a teapot.");
+});
+
+app.get("/api/v1/monitor", (request, response) => {
+  return response.status(204).send();
+});
+
 app.use(validateOrigin);
 
 app.use("/api/v1/user", user);
 app.use("/api/v1/reservations", reservations);
 app.use("/api/v1/session", sessionsRouter);
 app.use("/api/v1/admin", adminRouter);
-
-app.get("/api/v1/teapot", (request, response) => {
-  return response
-    .status(418)
-    .json("The server refuses the attempt to brew coffee with a teapot");
-});
 
 deleteOldSessions.start();
 
