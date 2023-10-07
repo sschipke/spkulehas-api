@@ -6,6 +6,8 @@ const dayjs = require("dayjs");
 
 require("dotenv").config();
 
+const LOGIN_URL = new URL(`${process.env.FRONT_END_BASE_URL}/login`).href;
+
 const transporter = nodemailer.createTransport({
   pool: true,
   service: "Gmail",
@@ -29,7 +31,6 @@ transporter.use("compile", hbs(handlebarOptions));
 const formatDate = (date) => dayjs(date).format("MM/DD/YYYY");
 
 const sendWelcomeEmail = async (user, index) => {
-  const loginUrl = `${process.env.FRONT_END_BASE_URL}login`;
   const mailOptions = {
     from: process.env.ADMIN_EMAIL, // sender address
     to: user.email,
@@ -37,7 +38,7 @@ const sendWelcomeEmail = async (user, index) => {
     template: "welcome",
     context: {
       user,
-      loginUrl
+      loginUrl: LOGIN_URL
     }
   };
 
@@ -169,7 +170,7 @@ const sendSessionDeletionErrorEmail = async (error) => {
   return transporter.sendMail(mailOptions);
 };
 
-const sendNewMemberEmail = async (user, createUrl, loginUrl, expiration) => {
+const sendNewMemberEmail = async (user, createUrl, expiration) => {
   const mailOptions = {
     from: process.env.ADMIN_EMAIL,
     to: user.email,
@@ -177,7 +178,7 @@ const sendNewMemberEmail = async (user, createUrl, loginUrl, expiration) => {
     template: "new-member",
     context: {
       user,
-      loginUrl,
+      loginUrl: LOGIN_URL,
       createUrl,
       expiration
     }
@@ -266,6 +267,48 @@ const emailMembersOfReservationChange = async (
   return transporter.sendMail(mailOptions);
 };
 
+const notifyAdminOfReservationCreation = async (
+  currentMember,
+  reservation
+) => {
+  const viewReservationUrl = new URL(
+    `${process.env.FRONT_END_BASE_URL}?reservationId=${reservation.id}`
+  ).href;
+  reservation.start = formatDate(reservation.start);
+  reservation.end = formatDate(reservation.end);
+  const mailOptions = {
+    from: process.env.ADMIN_EMAIL,
+    to: process.env.ADMIN_EMAIL,
+    subject: "A Reservation Has Been Created",
+    template: "reservation-created",
+    context: {
+      currentMember,
+      reservation,
+      viewReservationUrl,
+    }
+  };
+
+  console.info("Notifying admin of reservation creation. ", mailOptions);
+  return transporter.sendMail(mailOptions);
+};
+
+export const notifyMemberOfProfileChange = async (newProfile, admin) => {
+  const mailOptions = {
+    from: process.env.ADMIN_EMAIL,
+    to: newProfile.email,
+    subject: `${newProfile.name}'s Profile Has Been Updated`,
+    template: "profile-change-notification",
+    context: {
+      newProfile,
+      admin,
+      loginUrl: LOGIN_URL
+    }
+  }
+  console.info("Notifying member of profile change. ", mailOptions);
+  return transporter.sendMail(mailOptions);
+};
+
+
 module.exports = {
   sendWelcomeEmail,
   sendPasswordResetEmail,
@@ -275,5 +318,7 @@ module.exports = {
   sendNewMemberEmail,
   alertAdminOfMemberCreation,
   notifyMemberOfEmailChange,
-  emailMembersOfReservationChange
+  emailMembersOfReservationChange,
+  notifyAdminOfReservationCreation,
+  notifyMemberOfProfileChange
 };

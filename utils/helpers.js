@@ -56,9 +56,8 @@ export const handleNewUserCreationEmails = async (user, admin) => {
   const token = generateWebtoken(user, "6days", "email", sessionId[0].id);
   const baseUrl = process.env.FRONT_END_BASE_URL;
   const createUrl = new URL(`${baseUrl}?reset=${token}`).href;
-  const loginUrl =  new URL(`${baseUrl}/login`).href;
   try {
-    await sendNewMemberEmail(user, createUrl, loginUrl, expiration);
+    await sendNewMemberEmail(user, createUrl, expiration);
     alertAdminOfMemberCreation(user, admin);
   } catch (error) {
     console.error("Unable to send new member emails. ", error);
@@ -92,4 +91,9 @@ export const notifyUsersOfReservationUpdateByAdmin = async (oldReservation, newR
     console.error("Unable to notify users of reservation Update. Err: ", error);
     throw new Error("Unable to notify users of reservation change.");
   }
+}
+
+export const determineProfileChange = (oldProfile, newProfile) => {
+  const propertiesToCompare = ["street", "city", "state", "zipcode", "phone", "name"];
+  return propertiesToCompare.some((property) => oldProfile[property] !== newProfile[property]);
 }

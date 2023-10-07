@@ -7,7 +7,7 @@ import {
 } from "../../../utils/helpers";
 import { validateReservation } from "../../../validations/reservationvalidation";
 import { validateRequestToken } from "../../../middleware/auth";
-import { alertUsersOfDeletion } from "../../../email";
+import { alertUsersOfDeletion, notifyAdminOfReservationCreation } from "../../../email";
 import {
   forbiddenResponse,
   notFoundResponse,
@@ -81,13 +81,26 @@ router.post("/new", async (req, res, next) => {
   }
   try {
     const addedReservation = await addReservation(reservation);
-    console.log({ addedReservation });
+    console.info({ addedReservation });
     logger("Successfully added reservation!", req);
-    const response = addedReservation[0];
-    return res.status(200).json({
-      reservation: response,
-      reservationsEtag: updateReservationsEtag()
-    });
+    const createdReservation = addedReservation[0];
+    res
+      .status(200)
+      .json({
+        reservation: createdReservation,
+        reservationsEtag: updateReservationsEtag()
+      })
+      .send();
+    if (user.email !== process.env.ADMIN_EMAIL) {
+      try {
+        await notifyAdminOfReservationCreation(user, createdReservation);
+      } catch (error) {
+        console.error(
+          "Unable to notify admin of reservation creation. ",
+          error
+        );
+      }
+    }
   } catch (error) {
     console.error("Unable to add reservation.", { reservation }, error);
     return res
