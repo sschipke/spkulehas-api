@@ -1,13 +1,15 @@
+const dayjs = require("dayjs");
 import { logger } from "../../../utils/logging";
 import { validateUserProfile } from "../../../validations/userValidation";
 import { allowOnlyAdmin, validateRequestToken } from "../../../middleware/auth";
-import { addMemberRateLimiter } from "../../../middleware/rate-limits";
+import { addMemberRateLimiter, defaultRateLimit } from "../../../middleware/rate-limits";
 import {
   getUserProfileById,
   findAllEmailSettingsByUserId,
   getUserProfilesDetailView,
   addNewUser,
-  mapUserToProfile
+  mapUserToProfile,
+  getUserLoginInfo
 } from "../../../repoCalls/userRepoCalls";
 import {
   notFoundResponse,
@@ -81,6 +83,20 @@ router.post("/add_member", addMemberRateLimiter, async (req, res) => {
     if (message && message === "Email already exists.") {
       return res.status(409).json({ error: "This email is already in use." });
     }
+    return res.status(500).send();
+  }
+});
+
+router.get("/dashboard", defaultRateLimit,  async(req, res) => {
+  try {
+      const loginData = await getUserLoginInfo();
+  loginData.map(user => {
+    user.lastLogin = dayjs(user.lastLogin).format("MMMM DD, YYYY HH:MM a")
+    return user;
+  })
+  return res.status(200).json(loginData);
+  } catch (err) {
+    console.error("Error fetching dasboard info: ", err);
     return res.status(500).send();
   }
 });
