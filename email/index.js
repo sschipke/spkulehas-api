@@ -292,7 +292,7 @@ const notifyAdminOfReservationCreation = async (
   return transporter.sendMail(mailOptions);
 };
 
-export const notifyMemberOfProfileChange = async (newProfile, admin) => {
+const notifyMemberOfProfileChange = async (newProfile, admin) => {
   const mailOptions = {
     from: process.env.ADMIN_EMAIL,
     to: newProfile.email,
