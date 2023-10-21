@@ -6,10 +6,12 @@ import {
 } from "../email";
 
 export const deleteOldSessions = cronJob.schedule("15 2 12 * *", async () => {
-  console.log("Running task!", new Date().toTimeString());
+  console.info("Deleting Expired Sessions.", new Date().toTimeString());
   try {
     const count = await deleteInvalidSessions();
+    if (count) {
     sendSessionDeletionEmail(count);
+    }
   } catch (error) {
     sendSessionDeletionErrorEmail(error);
   }

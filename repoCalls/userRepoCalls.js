@@ -248,3 +248,12 @@ export const addNewUser = async (user) => {
     throw new Error("Unable to add.")
   })
 };
+
+export const getUserLoginInfo = async () => {
+  return database("userprofile")
+    .columns(["name"])
+    .innerJoin("user", "user.id", "userprofile.user_id")
+    .columns(["email", "last_login AS lastLogin"])
+    .whereNotNull("last_login")
+    .orderBy("last_login", "desc");
+};

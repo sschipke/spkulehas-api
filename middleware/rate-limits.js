@@ -38,3 +38,11 @@ export const addMemberRateLimiter = rateLimit({
   standardHeaders: true,
   legacyHeaders: false,
 });
+
+export const defaultRateLimit = rateLimit({
+  windowMs: 10 * 60 * 1000, // 10 mins
+  max: 10,
+  message: { error: "Too many attempts. Please try again later." },
+  standardHeaders: true,
+  legacyHeaders: false,
+});

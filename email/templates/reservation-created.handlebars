@@ -1,0 +1,31 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <title>Reservation Created</title>
+    <style>
+      body { display: flex; align-items: center; justify-content: center;
+      font-family: "Roboto","Helvetica","Arial",sans-serif; } .button { font:
+      bold 0.875rem Arial; text-decoration: none; background-color: #33691E;
+      color: #FFFFFF; padding: 2px 6px 2px 6px; border: 1px solid #33691E;
+      border-radius: 5px; } .ii a[href] { color: #FFFFFF; } a { color: inherit;
+      text-decoration: none; }
+    </style>
+  </head>
+  <body>
+    <h2>Reservation Created</h2>
+    <p>A reservation for
+      <strong>{{currentMember.name}}</strong>
+      begining on
+      <strong>{{reservation.start}}</strong>
+      and ending
+      <strong>{{reservation.end}}</strong>
+      has been created.
+    </p>
+    <a href="{{viewReservationUrl}}">Click here</a>
+    to view the new reservation.
+    <p></p>
+    <p></p>
+    <h3>Schipke SpKuLeHaS Inc.</h3>
+  </body>
+</html>
