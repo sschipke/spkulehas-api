@@ -7,19 +7,20 @@ import {
 } from "../../../utils/helpers";
 import { validateReservation } from "../../../validations/reservationvalidation";
 import { validateRequestToken } from "../../../middleware/auth";
-import { alertUsersOfDeletion } from "../../../email";
+import { alertUsersOfDeletion, notifyAdminOfReservationCreation } from "../../../email";
 import {
   forbiddenResponse,
   notFoundResponse,
   unauthorizedResponse,
-  unknownErrorResponse
+  unknownErrorResponse,
+  conflictResponse,
+  preconditionFailedResponse 
 } from "../../../utils/httpHelpers";
 import { isAdmin } from "../../../validations/userValidation";
 import {
   reservationsEtag,
   updateReservationsEtag
 } from "../../../utils/contstants";
-import { conflictResponse } from "../../../utils/httpHelpers";
 const dayjs = require("dayjs");
 const express = require("express");
 const router = express.Router();
@@ -61,6 +62,10 @@ router.post("/new", async (req, res, next) => {
     return forbiddenResponse(res);
   }
 
+  if (!validateEtagHeader(req)) {
+    return preconditionFailedResponse(res);
+  }
+
   const validationErrors = validateReservation(reservation, isAdmin(user));
   if (Object.keys(validationErrors).length) {
     console.error("Unable to create reservation: ", error);
@@ -76,13 +81,26 @@ router.post("/new", async (req, res, next) => {
   }
   try {
     const addedReservation = await addReservation(reservation);
-    console.log({ addedReservation });
+    console.info({ addedReservation });
     logger("Successfully added reservation!", req);
-    const response = addedReservation[0];
-    return res.status(200).json({
-      reservation: response,
-      reservationsEtag: updateReservationsEtag()
-    });
+    const createdReservation = addedReservation[0];
+    res
+      .status(200)
+      .json({
+        reservation: createdReservation,
+        reservationsEtag: updateReservationsEtag()
+      })
+      .send();
+    if (user.email !== process.env.ADMIN_EMAIL) {
+      try {
+        await notifyAdminOfReservationCreation(user, createdReservation);
+      } catch (error) {
+        console.error(
+          "Unable to notify admin of reservation creation. ",
+          error
+        );
+      }
+    }
   } catch (error) {
     console.error("Unable to add reservation.", { reservation }, error);
     return res
@@ -103,14 +121,20 @@ router.put("/:reservation_id", async (req, res, next) => {
     const reservationId = Number(req.params.reservation_id);
     const { reservation } = req.body;
     const { user } = res.locals;
-    const reservationToUpdate = await findReservationById(reservationId);
-    if (!canUserEdit(user, reservationToUpdate)) {
-      console.warn(
-        "Unable to update reservation: user did not have permission",
-        reservationToUpdate
-      );
-      return forbiddenResponse(res);
-    }
+
+        if (!validateEtagHeader(req)) {
+          return preconditionFailedResponse(res);
+        }
+
+        const reservationToUpdate = await findReservationById(reservationId);
+
+        if (!canUserEdit(user, reservationToUpdate)) {
+          console.warn(
+            "Unable to update reservation: user did not have permission."
+          );
+          return forbiddenResponse(res);
+        }
+
     if (!reservationToUpdate) {
       return notFoundResponse(
         res,
@@ -308,6 +332,12 @@ const checkForConflictingReservations = async (reservationToCheck) => {
     .andWhere("end", "<=", end)
     .orWhere("end", ">=", start)
     .andWhere("start", "<=", end);
+};
+
+const validateEtagHeader = (req) => {
+  const eTag = req.headers["if-match"];
+  console.info("reqEtag: ", eTag, "reservationsEtag: ", reservationsEtag);
+  return eTag && eTag === reservationsEtag;
 };
 
 export default router;

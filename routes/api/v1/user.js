@@ -1,5 +1,5 @@
 import { logger } from "../../../utils/logging";
-import { sendPasswordResetEmail, notifyMemberOfEmailChange } from "../../../email";
+import { sendPasswordResetEmail, notifyMemberOfEmailChange, notifyMemberOfProfileChange } from "../../../email";
 import {
   validateUserProfile,
   canUserUpdate,
@@ -42,7 +42,7 @@ import {
   forbiddenResponse,
   notFoundResponse
 } from "../../../utils/httpHelpers";
-import { processNameChange } from "../../../utils/helpers";
+import { processNameChange, determineProfileChange } from "../../../utils/helpers";
 import dayjs from "dayjs";
 const SEND_EMAIL_DELAY_MS = 900;
 
@@ -325,6 +325,17 @@ router.put("/:id", async (req, res) => {
         processNameChange(res, newUserProfile, profileToUpdate, responseBody);
       } else {
         res.status(200).json(responseBody).send();
+      }
+      if (
+        newUserProfile.id !== jwtUser.id &&
+        isAdmin(jwtUser) &&
+        determineProfileChange(profileToUpdate, newUserProfile)
+      ) {
+        try {
+          await notifyMemberOfProfileChange(newUserProfile, jwtUser);
+        } catch (error) {
+          console.error("Unable to notify member of address change. ", error);
+        }
       }
     })
     .catch((err) => {
