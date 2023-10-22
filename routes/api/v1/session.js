@@ -1,6 +1,6 @@
 import {
   forbiddenResponse,
-  unknownErrorResponse,
+  unknownErrorResponse
 } from "../../../utils/httpHelpers";
 import { resetTokenValidationLimiter } from "../../../middleware/rate-limits";
 import { validateRequestToken } from "../../../middleware/auth";

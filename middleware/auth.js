@@ -76,7 +76,7 @@ export const validateOrigin = (req, res, next) => {
   console.log({ origin });
   if (!origin || !origin.includes(frontEndUrl)) {
     if (res.headersSent) {
-      return next(err);
+      return next();
     }
     return unauthorizedResponse(res);
   }

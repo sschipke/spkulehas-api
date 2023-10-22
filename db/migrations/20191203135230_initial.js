@@ -31,7 +31,7 @@ exports.up = function (knex) {
       table.string("zipcode", 5);
       table.string("phone", 12);
       table.timestamps(true, true);
-    }),
+    })
   ]);
 };
 
@@ -39,6 +39,6 @@ exports.down = function (knex) {
   return Promise.all([
     knex.schema.dropTable("reservation"),
     knex.schema.dropTable("userprofile"),
-    knex.schema.dropTable("user"),
+    knex.schema.dropTable("user")
   ]);
 };

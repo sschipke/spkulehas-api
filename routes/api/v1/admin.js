@@ -2,7 +2,10 @@ const dayjs = require("dayjs");
 import { logger } from "../../../utils/logging";
 import { validateUserProfile } from "../../../validations/userValidation";
 import { allowOnlyAdmin, validateRequestToken } from "../../../middleware/auth";
-import { addMemberRateLimiter, defaultRateLimit } from "../../../middleware/rate-limits";
+import {
+  addMemberRateLimiter,
+  defaultRateLimit
+} from "../../../middleware/rate-limits";
 import {
   getUserProfileById,
   findAllEmailSettingsByUserId,
@@ -13,7 +16,7 @@ import {
 } from "../../../repoCalls/userRepoCalls";
 import {
   notFoundResponse,
-  unauthorizedResponse,
+  unauthorizedResponse
 } from "../../../utils/httpHelpers";
 import {
   createIdsForNewMember,
@@ -64,11 +67,11 @@ router.post("/add_member", addMemberRateLimiter, async (req, res) => {
     return unauthorizedResponse(res);
   }
   createIdsForNewMember(user);
-  const profile = mapUserToProfile(user)
+  const profile = mapUserToProfile(user);
   user.profile = profile;
   const errors = validateUserProfile(profile, user.email);
   if (Object.keys(errors).length) {
-    return res.status(400).json(errors)
+    return res.status(400).json(errors);
   }
   try {
     console.log("Adding user: ", user);
@@ -87,14 +90,14 @@ router.post("/add_member", addMemberRateLimiter, async (req, res) => {
   }
 });
 
-router.get("/dashboard", defaultRateLimit,  async(req, res) => {
+router.get("/dashboard", defaultRateLimit, async (req, res) => {
   try {
-      const loginData = await getUserLoginInfo();
-  loginData.map(user => {
-    user.lastLogin = dayjs(user.lastLogin).format("MMMM DD, YYYY HH:MM a")
-    return user;
-  })
-  return res.status(200).json(loginData);
+    const loginData = await getUserLoginInfo();
+    loginData.map((user) => {
+      user.lastLogin = dayjs(user.lastLogin).format("MMMM DD, YYYY HH:MM a");
+      return user;
+    });
+    return res.status(200).json(loginData);
   } catch (err) {
     console.error("Error fetching dasboard info: ", err);
     return res.status(500).send();

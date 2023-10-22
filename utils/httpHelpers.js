@@ -1,5 +1,3 @@
-import { reservationsEtag } from "./contstants";
-
 export const unauthorizedResponse = (response, message) => {
   const errorMessage = message ? message : "Unathorized";
   return response.status(401).json({ error: errorMessage });

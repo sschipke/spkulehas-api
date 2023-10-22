@@ -22,7 +22,7 @@ exports.up = function (knex) {
       .then((profiles) => {
         const profilePromises = [];
         profiles.forEach((profile) => {
-          [firstName, lastName] = profile.name.split(" ");
+          const [firstName, lastName] = profile.name.split(" ");
           const userId = profile.user_id;
           profilePromises.push(updateName(knex, firstName, lastName, userId));
         });
