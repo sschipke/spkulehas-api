@@ -1,9 +1,9 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-echo '🏗️👷 Linting for pre-commit'
+echo '🏗️👷 Formatting for pre-commit'
 
-( yarn lint && yarn format:check) || 
+(yarn format:write && yarn lint:fix) || 
 (
     echo '❌ Linting errors found ❌'
     false;
