@@ -1,7 +1,6 @@
 const dayjs = require("dayjs");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
-const { copyUser, resetPassFile } = require("../../../utils/filewriter");
 const { sendWelcomeEmail } = require("../../../email/index");
 const { generatePassword } = require("../seed-helpers");
 
@@ -16,7 +15,7 @@ const mockUsers = [
       city: "Rapid City",
       state: "SD",
       zipcode: "57702",
-      phone: "605-718-1735",
+      phone: "605-718-1735"
     },
     reservations: [
       {
@@ -27,11 +26,11 @@ const mockUsers = [
             hour: 12,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         title: "Gale Schipke",
-        user_id: "2be3704b-3ab5-4cd4-9630-a056d76a2bc0",
+        user_id: "2be3704b-3ab5-4cd4-9630-a056d76a2bc0"
       },
       {
         start: dayjs("2023-10-02").startOf("isoWeek").toISOString(),
@@ -41,13 +40,13 @@ const mockUsers = [
             hour: 12,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         title: "Gale Schipke",
-        user_id: "2be3704b-3ab5-4cd4-9630-a056d76a2bc0",
-      },
-    ],
+        user_id: "2be3704b-3ab5-4cd4-9630-a056d76a2bc0"
+      }
+    ]
   },
   {
     id: "eb3169b4-3935-4bf3-9feb-3acc19ea71dd",
@@ -59,7 +58,7 @@ const mockUsers = [
       city: "Rapid City",
       state: "SD",
       zipcode: "57702",
-      phone: "605-393-5125",
+      phone: "605-393-5125"
     },
     reservations: [
       {
@@ -70,49 +69,48 @@ const mockUsers = [
             hour: 12,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .set({
             hour: 12,
             minute: 0,
             second: 0,
-            millisecond: 0,
+            millisecond: 0
           })
           .toISOString(),
         title: "Steven Schipke",
-        user_id: "3acc19ea71dd",
+        user_id: "3acc19ea71dd"
       },
       {
         start: dayjs("2023-09-04").startOf("isoWeek").toISOString(),
         end: dayjs("2023-09-05").endOf("isoWeek").toISOString(),
         title: "Steven Schipke",
-        user_id: "eb3169b4-3935-4bf3-9feb-3acc19ea71dd",
-      },
-    ],
+        user_id: "eb3169b4-3935-4bf3-9feb-3acc19ea71dd"
+      }
+    ]
   },
   {
     id: "nf4ec5cf-67da-4729-b34d-49e409693695",
     email: "swschipke@gmail.com",
     profile: {
       status: "D1",
-      name: "Scott Schipke",
+      name: "Scott Schipke"
     },
-    reservations: [],
+    reservations: []
   },
   {
     id: "c81ec5cf-67da-4729-b34d-49e409693695",
     email: "spkulehas@gmail.com",
     profile: {
       status: "ADMIN",
-      name: "Schipke SpKuLeHaS",
+      name: "Schipke SpKuLeHaS"
     },
-    reservations: [],
-  },
+    reservations: []
+  }
 ];
 
 const createUser = async (knex, user) => {
   user.password = generatePassword();
-  copyUser(user);
   return sendWelcomeEmail(user)
     .then(() => {
       const { email, password, id } = user;
@@ -121,7 +119,7 @@ const createUser = async (knex, user) => {
         {
           email,
           password: hash,
-          id,
+          id
         },
         "id"
       );
@@ -153,7 +151,7 @@ const createUser = async (knex, user) => {
       throw new Error("104", err);
     })
     .catch((error) => {
-      console.error(err);
+      console.error(error);
       throw new Error("Errror creating user", error);
     });
 };
@@ -166,7 +164,7 @@ const createReservations = (knex, reservation, user_id) => {
       start,
       end,
       title,
-      user_id,
+      user_id
     })
     .catch((error) => {
       console.error(error);
@@ -186,7 +184,7 @@ const createProfile = (knex, profile, user_id) => {
         city,
         state,
         zipcode,
-        phone,
+        phone
       },
       "id"
     )
@@ -196,7 +194,6 @@ const createProfile = (knex, profile, user_id) => {
 };
 
 exports.seed = function (knex) {
-  resetPassFile();
   return knex("userprofile")
     .del()
     .then(() => knex("reservation").del())

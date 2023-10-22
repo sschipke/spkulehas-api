@@ -49,7 +49,7 @@ const sendWelcomeEmail = async (user, index) => {
       user.profile.name,
       process.env.NODE_ENV || "development"
     );
-    transporter.sendMail(mailOptions, async (error, info) => {
+    transporter.sendMail(mailOptions, async (error) => {
       if (error) {
         console.error(
           "Unable to send welcome email. ",
@@ -135,12 +135,11 @@ const sendSessionDeletionEmail = async (count) => {
 
   return new Promise((resolve, reject) => {
     console.log("Sending session deletion Email.", { mailOptions });
-    transporter.sendMail(mailOptions, async (error, info) => {
+    transporter.sendMail(mailOptions, async (error) => {
       if (error) {
         console.error(
           "Unable to send session deletion email. ",
           error,
-          user.email,
           mailOptions
         );
         reject("Could not send session deletion welcome email. " + date);
@@ -267,10 +266,7 @@ const emailMembersOfReservationChange = async (
   return transporter.sendMail(mailOptions);
 };
 
-const notifyAdminOfReservationCreation = async (
-  currentMember,
-  reservation
-) => {
+const notifyAdminOfReservationCreation = async (currentMember, reservation) => {
   const viewReservationUrl = new URL(
     `${process.env.FRONT_END_BASE_URL}?reservationId=${reservation.id}`
   ).href;
@@ -284,7 +280,7 @@ const notifyAdminOfReservationCreation = async (
     context: {
       currentMember,
       reservation,
-      viewReservationUrl,
+      viewReservationUrl
     }
   };
 
@@ -303,11 +299,10 @@ const notifyMemberOfProfileChange = async (newProfile, admin) => {
       admin,
       loginUrl: LOGIN_URL
     }
-  }
+  };
   console.info("Notifying member of profile change. ", mailOptions);
   return transporter.sendMail(mailOptions);
 };
-
 
 module.exports = {
   sendWelcomeEmail,

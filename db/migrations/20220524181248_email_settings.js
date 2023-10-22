@@ -10,7 +10,7 @@ exports.up = function (knex) {
           [
             "reservation_deleted",
             "reservation_shortened",
-            "reservation_reminder",
+            "reservation_reminder"
           ],
           30
         )
@@ -27,13 +27,13 @@ exports.up = function (knex) {
       table.timestamp("expires", { useTz: true }).notNull();
       table.boolean("valid").default(true);
       table.timestamps(true, true);
-    }),
+    })
   ]);
 };
 
 exports.down = function (knex) {
   return Promise.all([
     knex.schema.dropTable("email_setting"),
-    knex.schema.dropTable("session"),
+    knex.schema.dropTable("session")
   ]);
 };

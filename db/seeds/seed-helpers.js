@@ -8,5 +8,5 @@ const generatePassword = () => {
 };
 
 module.exports = {
-  generatePassword,
+  generatePassword
 };

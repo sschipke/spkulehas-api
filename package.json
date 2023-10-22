@@ -12,7 +12,15 @@
     "addNewSeasonReservations": "knex seed:run --specific=add_2025_reservations.js",
     "down": "knex migrate:down",
     "test": "jest --forceExit",
-    "test:watch": "jest --watchAll"
+    "test:watch": "jest --watchAll",
+    "lint": "eslint .  --ext .js",
+    "lint:fix": "eslint --fix .  --ext .js",
+    "format:check": "prettier --check .",
+    "format:write": "prettier --write .",
+    "prepare": "husky install",
+    "postinstall": "husky install",
+    "prepack": "pinst --disable",
+    "postpack": "pinst --enable"
   },
   "author": "Scott Schipke",
   "license": "ISC",
@@ -41,7 +49,12 @@
   "devDependencies": {
     "babel-jest": "^24.9.0",
     "dotenv": "^16.0.0",
+    "eslint": "^8.52.0",
+    "eslint-config-prettier": "^9.0.0",
+    "husky": "^8.0.3",
     "jest": "^24.9.0",
+    "pinst": "^3.0.0",
+    "prettier": "^3.0.3",
     "regenerator-runtime": "^0.13.7",
     "supertest": "^4.0.2"
   },

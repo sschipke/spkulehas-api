@@ -7,14 +7,17 @@ import {
 } from "../../../utils/helpers";
 import { validateReservation } from "../../../validations/reservationvalidation";
 import { validateRequestToken } from "../../../middleware/auth";
-import { alertUsersOfDeletion, notifyAdminOfReservationCreation } from "../../../email";
+import {
+  alertUsersOfDeletion,
+  notifyAdminOfReservationCreation
+} from "../../../email";
 import {
   forbiddenResponse,
   notFoundResponse,
   unauthorizedResponse,
   unknownErrorResponse,
   conflictResponse,
-  preconditionFailedResponse 
+  preconditionFailedResponse
 } from "../../../utils/httpHelpers";
 import { isAdmin } from "../../../validations/userValidation";
 import {
@@ -52,7 +55,7 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.post("/new", async (req, res, next) => {
+router.post("/new", async (req, res) => {
   const { reservation } = req.body;
   const { user } = res.locals;
   if (!canUserEdit(user, reservation)) {
@@ -72,9 +75,8 @@ router.post("/new", async (req, res, next) => {
     const { error } = validationErrors;
     return conflictResponse(res, error);
   }
-  const conflictingReservations = await checkForConflictingReservations(
-    reservation
-  );
+  const conflictingReservations =
+    await checkForConflictingReservations(reservation);
   if (conflictingReservations.length) {
     console.error("Unable to create reservation: Conflicting Reservation.");
     return conflictResponse(res, "This reservation conflicts with another.");
@@ -109,31 +111,31 @@ router.post("/new", async (req, res, next) => {
   }
 });
 
-router.get("/new", async (req, res, next) => {
+router.get("/new", async (req, res) => {
   return unauthorizedResponse(
     res,
     "This session has expired. Please login again."
   );
 });
 
-router.put("/:reservation_id", async (req, res, next) => {
+router.put("/:reservation_id", async (req, res) => {
   try {
     const reservationId = Number(req.params.reservation_id);
     const { reservation } = req.body;
     const { user } = res.locals;
 
-        if (!validateEtagHeader(req)) {
-          return preconditionFailedResponse(res);
-        }
+    if (!validateEtagHeader(req)) {
+      return preconditionFailedResponse(res);
+    }
 
-        const reservationToUpdate = await findReservationById(reservationId);
+    const reservationToUpdate = await findReservationById(reservationId);
 
-        if (!canUserEdit(user, reservationToUpdate)) {
-          console.warn(
-            "Unable to update reservation: user did not have permission."
-          );
-          return forbiddenResponse(res);
-        }
+    if (!canUserEdit(user, reservationToUpdate)) {
+      console.warn(
+        "Unable to update reservation: user did not have permission."
+      );
+      return forbiddenResponse(res);
+    }
 
     if (!reservationToUpdate) {
       return notFoundResponse(
@@ -147,9 +149,8 @@ router.put("/:reservation_id", async (req, res, next) => {
       const { error } = validationErrors;
       return conflictResponse(res, error);
     }
-    const conflictingReservations = await checkForConflictingReservations(
-      reservation
-    );
+    const conflictingReservations =
+      await checkForConflictingReservations(reservation);
     console.log({ conflictingReservations });
     if (
       conflictingReservations.length > 1 ||
@@ -279,22 +280,6 @@ const getEmailsForDeletionEmail = async (userId) => {
     .innerJoin("email_setting", "email_setting.user_id", "user.id")
     .where({ setting_name: RESERVATION_DELETION })
     .andWhereNot("user_id", userId)
-    .andWhere("value", true)
-    .orderBy("email", "asc")
-    .select("email")
-    .then((emails) => {
-      if (emails.length) {
-        return emails.map((email) => email.email);
-      }
-      return emails;
-    });
-};
-
-const getEmailsForSetting = async (setting) => {
-  return database("user")
-    .column("email")
-    .innerJoin("email_setting", "email_setting.user_id", "user.id")
-    .where({ setting_name: setting })
     .andWhere("value", true)
     .orderBy("email", "asc")
     .select("email")

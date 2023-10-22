@@ -9,21 +9,24 @@
       #FFFFFF; }; } h2,p { color: red; }
     </style>
   </head>
-  <body>Your email has been changed.</h2>
+  <body><h2>Your email has been changed.</h2>
     <p>
       Hello,
     </p>
     <p>
-      Your email has been updated from <strong>{{oldEmail}}</strong> to <strong>{{newEmail}}</strong>.
+      Your email has been updated from
+      <strong>{{oldEmail}}</strong>
+      to
+      <strong>{{newEmail}}</strong>.
     </p>
     <p>
       {{#if wasAdmin}}
-        This change was made by: <strong>{{admin.name}}</strong>.
+        This change was made by:
+        <strong>{{admin.name}}</strong>.
       {{/if}}
     </p>
     <p>
       If this change is incorrect, please contact the admin.
     </p>
-    </body>
   </body>
 </html>

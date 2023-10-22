@@ -1,0 +1,12 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo '🏗️👷 Linting for pre-commit'
+
+( yarn lint && yarn format:check) || 
+(
+    echo '❌ Linting errors found ❌'
+    false;
+)
+
+echo '✅✅✅✅  Put a ring on it! ✅✅✅✅'
