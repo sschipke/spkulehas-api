@@ -1,5 +1,9 @@
 import { logger } from "../../../utils/logging";
-import { sendPasswordResetEmail, notifyMemberOfEmailChange, notifyMemberOfProfileChange } from "../../../email";
+import {
+  sendPasswordResetEmail,
+  notifyMemberOfEmailChange,
+  notifyMemberOfProfileChange
+} from "../../../email";
 import {
   validateUserProfile,
   canUserUpdate,
@@ -38,11 +42,11 @@ import {
   findAllEmailSettingsByUserId,
   updateLogin
 } from "../../../repoCalls/userRepoCalls";
+import { forbiddenResponse } from "../../../utils/httpHelpers";
 import {
-  forbiddenResponse,
-  notFoundResponse
-} from "../../../utils/httpHelpers";
-import { processNameChange, determineProfileChange } from "../../../utils/helpers";
+  processNameChange,
+  determineProfileChange
+} from "../../../utils/helpers";
 import dayjs from "dayjs";
 const SEND_EMAIL_DELAY_MS = 900;
 
@@ -124,9 +128,7 @@ router.post("/forgot/password", passwordResetLimiter, async (req, res) => {
     const user = usersByEmail[0];
     await invalidateOtherSessions(user.id, RESET_TYPE);
     const sessionId = await createResetSessionForUser(user.id);
-    let expiration = dayjs()
-      .add(2, "hours")
-      .calendar();
+    let expiration = dayjs().add(2, "hours").calendar();
     const token = generateWebtoken(user, "2hr", "email", sessionId[0].id);
     const emailUrl = `${process.env.FRONT_END_BASE_URL}?reset=${token}`;
     delete user.password;
@@ -234,7 +236,7 @@ router.put("/update/email/:id", async (req, res) => {
     delete foundUser.password;
   }
 
-    console.log({ foundUser });
+  console.log({ foundUser });
 
   const error = validateEmail(newEmail);
 
@@ -254,7 +256,12 @@ router.put("/update/email/:id", async (req, res) => {
         }
         const webToken = generateWebtoken(updatedUser, "1hr");
         res.status(200).json({ email, token: webToken }).send();
-        await notifyMemberOfEmailChange(oldEmail, newEmail, userFromJwt, didAdminChange);
+        await notifyMemberOfEmailChange(
+          oldEmail,
+          newEmail,
+          userFromJwt,
+          didAdminChange
+        );
       })
       .catch((err) => {
         console.error("Unable to update email. ", err);
@@ -290,9 +297,9 @@ router.put("/:id", async (req, res) => {
 
   const profile = mapUserToProfile(user);
   if (!canUpdateStatusOrPrivileges(jwtUser, profileToUpdate, profile)) {
-    return res
-      .status(403)
-      .json({ error: "Only an admin can update a member's status or privileges." });
+    return res.status(403).json({
+      error: "Only an admin can update a member's status or privileges."
+    });
   }
 
   const error = validateUserProfile(profile, user.email);

@@ -128,7 +128,7 @@ export const validateUserProfile = (userProfile, email) => {
   if (!trimmedPhoneNumber || !PHONE_REGEX.test(trimmedPhoneNumber)) {
     return { error: "Invalid phone number." };
   }
-  
+
   if (processedEmail === ADMIN_EMAIL && !isadmin) {
     return { error: "SpKuLeHaS admin must always be an admin." };
   }
@@ -155,7 +155,11 @@ export const canUserUpdate = (jwtUser, id, isPassword) => {
   return jwtUser.isAdmin || jwtUser.id === id;
 };
 
-export function canUpdateStatusOrPrivileges(jwtUser, dbProfile, requestedProfile) {
+export function canUpdateStatusOrPrivileges(
+  jwtUser,
+  dbProfile,
+  requestedProfile
+) {
   console.log({ dbProfile }, { requestedProfile });
   const trimmedStatus = (requestedProfile.status || "").trim();
   if (!jwtUser.isAdmin && dbProfile.status !== trimmedStatus) {

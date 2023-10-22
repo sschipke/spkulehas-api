@@ -44,10 +44,7 @@ export const getUserProfileById = async (id) => {
 export const getMemberNameAndEmailById = async (id) => {
   return database("userprofile")
     .where({ user_id: id })
-    .columns([
-      "name",
-      "user_id AS id"
-    ])
+    .columns(["name", "user_id AS id"])
     .innerJoin("user", "user.id", "userprofile.user_id")
     .columns(["email"])
     .first();
@@ -230,23 +227,27 @@ export const addProfile = async (profile) => {
 
 export const addNewUser = async (user) => {
   const { email, id, password } = user;
-  return database("user").insert({
-    id,
-    email,
-    password
-  }, "id")
-  .then(() => {
-    const { profile } = user;
-    console.log("Adding new profile: ", profile);
-    return addProfile(profile);
-  })
-  .catch(error => {
-    console.error("Error adding new user: ", error.toString())
-    if (error.toString().includes("unique")) {
-      throw { message: "Email already exists."};
-    }
-    throw new Error("Unable to add.")
-  })
+  return database("user")
+    .insert(
+      {
+        id,
+        email,
+        password
+      },
+      "id"
+    )
+    .then(() => {
+      const { profile } = user;
+      console.log("Adding new profile: ", profile);
+      return addProfile(profile);
+    })
+    .catch((error) => {
+      console.error("Error adding new user: ", error.toString());
+      if (error.toString().includes("unique")) {
+        throw { message: "Email already exists." };
+      }
+      throw new Error("Unable to add.");
+    });
 };
 
 export const getUserLoginInfo = async () => {

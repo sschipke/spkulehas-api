@@ -10,7 +10,7 @@ export const deleteOldSessions = cronJob.schedule("15 2 12 * *", async () => {
   try {
     const count = await deleteInvalidSessions();
     if (count) {
-    sendSessionDeletionEmail(count);
+      sendSessionDeletionEmail(count);
     }
   } catch (error) {
     sendSessionDeletionErrorEmail(error);

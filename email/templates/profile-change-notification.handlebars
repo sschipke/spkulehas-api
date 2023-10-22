@@ -14,20 +14,27 @@
   </head>
   <body>
     <h2>Profile Update</h2>
-    <p>Hey <strong>{{newProfile.name}}</strong>, the address associated with you is listed as: </p>
+    <p>Hey
+      <strong>{{newProfile.name}}</strong>, the address associated with you is
+      listed as:
+    </p>
     <p>
       <strong>
-      {{newProfile.street}}, {{newProfile.city}} <br/>
-      {{newProfile.state}}, {{newProfile.zipcode}}
-      </strong> 
-      <br/>
-      <br/>
-      And your phone number is: <strong>{{newProfile.phone}}</strong>.
-
+        {{newProfile.street}},
+        {{newProfile.city}}
+        <br />
+        {{newProfile.state}},
+        {{newProfile.zipcode}}
+      </strong>
+      <br />
+      <br />
+      And your phone number is:
+      <strong>{{newProfile.phone}}</strong>.
+    </p>
     <p>This change was made by:
       <strong>{{admin.name}}</strong>.
-      <br/>
-      If this information is not correct, 
+      <br />
+      If this information is not correct,
       <a href="{{loginUrl}}">click here to login</a>
       and update your information.
     </p>

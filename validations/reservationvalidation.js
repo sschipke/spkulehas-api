@@ -1,5 +1,5 @@
 import dayjs from "dayjs";
-const utc = require("dayjs/plugin/utc")
+const utc = require("dayjs/plugin/utc");
 const timezone = require("dayjs/plugin/timezone");
 const isBetween = require("dayjs/plugin/isBetween");
 dayjs.extend(isBetween);
@@ -12,7 +12,7 @@ const WINTER_SEASON_START_2023 = "2023-10-22";
 const WINTER_SEASON_END_2023 = "2024-05-20";
 const WINTER_SEASON_START_2024 = "2024-10-21";
 const WINTER_SEASON_END_2024 = "2025-05-18";
-const MOUNTAIN_TZ = "America/Denver"
+const MOUNTAIN_TZ = "America/Denver";
 
 export const validateReservation = (reservation, isAdmin) => {
   const minDate = process.env.MINIMUM_RESERVATION_DATE;
@@ -51,7 +51,10 @@ export const validateReservation = (reservation, isAdmin) => {
     return { error: "This reservation is too early." };
   }
   if (dayjs(end).isAfter(maxReservationDate)) {
-    return { error: "At this time, reservations cannot be made after " + maxReservationDate };
+    return {
+      error:
+        "At this time, reservations cannot be made after " + maxReservationDate
+    };
   }
   if (!isReservationLengthValid(start, end) && !isAdmin) {
     return { error: "Invalid reservation length." };
@@ -97,6 +100,12 @@ const processReserVationDates = (reservation) => {
   //Default reservation times to noon
   const noonHour = 12;
   const { start, end } = reservation;
-    reservation.start = dayjs(start).tz(MOUNTAIN_TZ).set("hour", noonHour).toISOString();
-    reservation.end = dayjs(end).tz(MOUNTAIN_TZ).set("hour", noonHour).toISOString();
+  reservation.start = dayjs(start)
+    .tz(MOUNTAIN_TZ)
+    .set("hour", noonHour)
+    .toISOString();
+  reservation.end = dayjs(end)
+    .tz(MOUNTAIN_TZ)
+    .set("hour", noonHour)
+    .toISOString();
 };
