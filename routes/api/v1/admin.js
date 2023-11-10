@@ -94,7 +94,7 @@ router.get("/dashboard", defaultRateLimit, async (req, res) => {
   try {
     const loginData = await getUserLoginInfo();
     loginData.map((user) => {
-      user.lastLogin = dayjs(user.lastLogin).format("MMMM DD, YYYY HH:MM a");
+      user.lastLogin = dayjs(user.lastLogin).format("MMMM DD, YYYY, h:mm a");
       return user;
     });
     return res.status(200).json(loginData);
