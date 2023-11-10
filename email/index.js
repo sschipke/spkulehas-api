@@ -102,7 +102,7 @@ const alertUsersOfDeletion = async (members, reservation) => {
   const mailOptions = {
     from: process.env.ADMIN_EMAIL,
     to: members,
-    subject: "Reservation Deleted",
+    subject: "Reservation Canceled",
     template: "reservation-deleted",
     context: {
       startDate,
@@ -152,7 +152,7 @@ const sendSessionDeletionEmail = async (count) => {
 };
 
 const sendSessionDeletionErrorEmail = async (error) => {
-  const date = dayjs().format("dddd, MMMM DD, YYYY, HH:MM");
+  const date = dayjs().format("dddd, MMMM DD, YYYY, h:mm a");
   const environment = process.env.NODE_ENV || "development";
   const mailOptions = {
     from: process.env.ADMIN_EMAIL, // sender address
