@@ -266,7 +266,7 @@ const emailMembersOfReservationChange = async (
   return transporter.sendMail(mailOptions);
 };
 
-const notifyAdminOfReservationCreation = async (currentMember, reservation) => {
+const notifyAdminOfReservationCreation = (currentMember, reservation) => {
   const viewReservationUrl = new URL(
     `${process.env.FRONT_END_BASE_URL}?reservationId=${reservation.id}`
   ).href;
