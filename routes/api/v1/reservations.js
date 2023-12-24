@@ -292,6 +292,12 @@ const getEmailsForDeletionEmail = async (userId) => {
 };
 
 const handleDeletionEmail = (reservation, userId) => {
+  const now = dayjs();
+
+  if (now.isSameOrAfter(reservation.end, "day")) {
+    console.info("Past reservation. Not sending notification.");
+    return;
+  }
   try {
     getEmailsForDeletionEmail(userId)
       .then((members) => {
