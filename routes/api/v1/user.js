@@ -2,7 +2,8 @@ import { logger } from "../../../utils/logging";
 import {
   sendPasswordResetEmail,
   notifyMemberOfEmailChange,
-  notifyMemberOfProfileChange
+  notifyMemberOfProfileChange,
+  notifyMemberOfStatusChange
 } from "../../../email";
 import {
   validateUserProfile,
@@ -12,7 +13,8 @@ import {
   validatePassword,
   validateEmailSetting,
   isAdmin,
-  determineNameChange
+  determineNameChange,
+  hasStatusChanged
 } from "../../../validations/userValidation";
 import {
   loginLimiter,
@@ -342,6 +344,13 @@ router.put("/:id", async (req, res) => {
           await notifyMemberOfProfileChange(newUserProfile, jwtUser);
         } catch (error) {
           console.error("Unable to notify member of address change. ", error);
+        }
+      }
+      if (hasStatusChanged(profileToUpdate, newUserProfile)) {
+        try {
+          await notifyMemberOfStatusChange(profileToUpdate, newUserProfile, jwtUser);
+        } catch (error) {
+          console.error("Unable to notifyl member of status update. ", error);
         }
       }
     })
