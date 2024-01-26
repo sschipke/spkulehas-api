@@ -3,7 +3,7 @@
 
 echo '🏗️👷 Formatting for pre-commit'
 
-(yarn format:write && yarn lint:fix) || 
+(yarn lint && yarn format:check) || 
 (
     echo '❌ Linting errors found ❌'
     false;
