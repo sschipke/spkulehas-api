@@ -348,7 +348,11 @@ router.put("/:id", async (req, res) => {
       }
       if (hasStatusChanged(profileToUpdate, newUserProfile)) {
         try {
-          await notifyMemberOfStatusChange(profileToUpdate, newUserProfile, jwtUser);
+          await notifyMemberOfStatusChange(
+            profileToUpdate,
+            newUserProfile,
+            jwtUser
+          );
         } catch (error) {
           console.error("Unable to notifyl member of status update. ", error);
         }

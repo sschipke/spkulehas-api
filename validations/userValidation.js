@@ -175,7 +175,7 @@ export function canUpdateStatusOrPrivileges(
 export const hasStatusChanged = (currentProfile, updatedProfile) => {
   const trimmedStatus = (updatedProfile.status || "").trim();
   return currentProfile.status !== trimmedStatus;
-}
+};
 
 export const validateEmail = (email) => {
   const processedEmail = email.trim().toLowerCase();
