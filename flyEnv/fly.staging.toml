@@ -15,6 +15,7 @@ processes = []
   FRONT_END_ORIGIN_URL="spkulehas-staging.netlify.app"
   MINIMUM_RESERVATION_DATE="2022-05-23"
   MAXIMUM_RESERVATION_DATE="2026-05-15"
+  HOSTNAME="0.0.0.0"
   TZ="America/Denver"
   NODE_ENV="staging"
 

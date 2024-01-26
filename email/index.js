@@ -304,6 +304,24 @@ const notifyMemberOfProfileChange = async (newProfile, admin) => {
   return transporter.sendMail(mailOptions);
 };
 
+const notifyMemberOfStatusChange = (oldProfile, newProfile, admin) => {
+  const isShareholder = newProfile.status === "S1";
+  const mailOptions = {
+    from: process.env.ADMIN_EMAIL,
+    to: newProfile.email,
+    subject: "Your Status Has Changed",
+    template: "status-change-alert",
+    context: {
+      oldProfile,
+      newProfile,
+      admin,
+      isShareholder
+    }
+  };
+  console.info("Notifying member of status change. ", mailOptions);
+  return transporter.sendMail(mailOptions);
+};
+
 module.exports = {
   sendWelcomeEmail,
   sendPasswordResetEmail,
@@ -315,5 +333,6 @@ module.exports = {
   notifyMemberOfEmailChange,
   emailMembersOfReservationChange,
   notifyAdminOfReservationCreation,
-  notifyMemberOfProfileChange
+  notifyMemberOfProfileChange,
+  notifyMemberOfStatusChange
 };

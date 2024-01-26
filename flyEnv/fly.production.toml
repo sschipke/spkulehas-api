@@ -16,6 +16,7 @@ processes = []
   MINIMUM_RESERVATION_DATE = "2022-05-23"
   NODE_ENV = "production"
   PORT = "8080"
+  HOSTNAME="0.0.0.0"
   TZ = "America/Denver"
 
 [experimental]

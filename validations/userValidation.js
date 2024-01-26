@@ -172,6 +172,11 @@ export function canUpdateStatusOrPrivileges(
   return true;
 }
 
+export const hasStatusChanged = (currentProfile, updatedProfile) => {
+  const trimmedStatus = (updatedProfile.status || "").trim();
+  return currentProfile.status !== trimmedStatus;
+};
+
 export const validateEmail = (email) => {
   const processedEmail = email.trim().toLowerCase();
   if (!processedEmail || !EMAIL_REGEX.test(processedEmail)) {
