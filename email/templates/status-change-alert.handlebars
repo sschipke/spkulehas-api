@@ -1,0 +1,40 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <title>Your Status Has Been Updated</title>
+    <style>
+      body { display: flex; align-items: center; justify-content: center;
+      font-family: "Roboto","Helvetica","Arial",sans-serif; } .button { font:
+      bold 0.875rem Arial; text-decoration: none; background-color: #33691E;
+      color: #FFFFFF; padding: 2px 6px 2px 6px; border: 1px solid #33691E;
+      border-radius: 5px; } .ii a[href] { color: #FFFFFF; } a { color: inherit;
+      text-decoration: none; }
+    </style>
+  </head>
+  <body>
+    <h2>Status Change</h2>
+    <p>Hey
+      {{newProfile.name}}, your status as a member has been updated from:
+    </p>
+    <p>
+      <strong>
+        {{oldProfile.status}}
+      </strong>
+      to
+      <strong>{{newProfile.status}}</strong>.
+    </p>
+    {{#if isShareholder}}
+      <p>
+        Congratulations on becoming a shareholder!
+      </p>
+    {{/if}}
+    <p>This change was made by:
+      <strong>{{admin.name}}</strong>.
+      <br />
+      If this information is not correct, please contact an administrator.
+    </p>
+
+    <h3>Schipke SpKuLeHaS Inc.</h3>
+  </body>
+</html>
