@@ -1,4 +1,4 @@
-const { reservations } = require("../common/2025_reservations");
+const { reservations } = require("../common/2026_reservations");
 
 const getUserIdByTitle = async (knex, reservation) => {
   return knex("userprofile")
