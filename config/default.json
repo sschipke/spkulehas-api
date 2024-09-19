@@ -1,0 +1,6 @@
+{
+  "minimumReservationDate": "2024-01-01",
+  "maximumReservationDate": "2027-05-15",
+  "frontEndBaseUrl": "http://localhost:3000/",
+  "frontEndOriginUrl": "localhost:3000"
+}

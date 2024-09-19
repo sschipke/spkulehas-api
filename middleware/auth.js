@@ -1,5 +1,6 @@
 import "@babel/polyfill";
 const jwt = require("jsonwebtoken");
+const config = require("config");
 import { unauthorizedResponse, forbiddenResponse } from "../utils/httpHelpers";
 
 export const validateRequestToken = (req, res, next) => {
@@ -72,7 +73,7 @@ export const generateWebtoken = (userProfile, expiration, type, sessionId) => {
 export const validateOrigin = (req, res, next) => {
   const { headers } = req;
   const { origin } = headers;
-  const frontEndUrl = process.env.FRONT_END_ORIGIN_URL || "localhost";
+  const frontEndUrl = config.get("frontEndOriginUrl") || "localhost";
   console.log({ origin });
   if (!origin || !origin.includes(frontEndUrl)) {
     if (res.headersSent) {

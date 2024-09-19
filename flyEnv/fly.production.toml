@@ -10,10 +10,6 @@ processes = []
 
 [env]
   BASE_URL = "https://fly.io/apps/spkulehas-api/api/v1/"
-  FRONT_END_BASE_URL = "https://spkulehas.com/"
-  FRONT_END_ORIGIN_URL = "spkulehas.com"
-  MAXIMUM_RESERVATION_DATE = "2026-05-15"
-  MINIMUM_RESERVATION_DATE = "2022-05-23"
   NODE_ENV = "production"
   PORT = "8080"
   HOSTNAME="0.0.0.0"

@@ -54,6 +54,7 @@ const SEND_EMAIL_DELAY_MS = 900;
 
 const express = require("express");
 const bcrypt = require("bcrypt");
+const config = require("config");
 const router = express.Router();
 router.use(validateRequestToken);
 
@@ -132,7 +133,7 @@ router.post("/forgot/password", passwordResetLimiter, async (req, res) => {
     const sessionId = await createResetSessionForUser(user.id);
     let expiration = dayjs().add(2, "hours").calendar();
     const token = generateWebtoken(user, "2hr", "email", sessionId[0].id);
-    const emailUrl = `${process.env.FRONT_END_BASE_URL}?reset=${token}`;
+    const emailUrl = `${config.get("frontEndBaseUrl")}?reset=${token}`;
     delete user.password;
     try {
       await sendPasswordResetEmail(user, emailUrl, expiration);

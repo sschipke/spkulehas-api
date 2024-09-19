@@ -13,6 +13,7 @@ import { generateWebtoken } from "../middleware/auth";
 import { getMemberNameAndEmailById } from "../repoCalls/userRepoCalls";
 import { updateReservationsEtag } from "./contstants";
 import { findUserById } from "../repoCalls/userRepoCalls";
+const config = require("config");
 
 dayjs.extend(calendar);
 
@@ -59,7 +60,7 @@ export const handleNewUserCreationEmails = async (user, admin) => {
   const sessionId = await createResetSessionForUser(user.id, 6, "days");
   const expiration = dayjs().add(6, "days").calendar();
   const token = generateWebtoken(user, "6days", "email", sessionId[0].id);
-  const baseUrl = process.env.FRONT_END_BASE_URL;
+  const baseUrl = config.get("frontEndBaseUrl");
   const createUrl = new URL(`${baseUrl}?reset=${token}`).href;
   try {
     await sendNewMemberEmail(user, createUrl, expiration);

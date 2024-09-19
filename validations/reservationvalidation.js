@@ -2,21 +2,22 @@ import dayjs from "dayjs";
 const utc = require("dayjs/plugin/utc");
 const timezone = require("dayjs/plugin/timezone");
 const isBetween = require("dayjs/plugin/isBetween");
+const config = require("config");
 dayjs.extend(isBetween);
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
-const WINTER_SEASON_START_2022 = "2022-10-24";
-const WINTER_SEASON_END_2022 = "2023-05-21";
-const WINTER_SEASON_START_2023 = "2023-10-22";
-const WINTER_SEASON_END_2023 = "2024-05-20";
 const WINTER_SEASON_START_2024 = "2024-10-21";
 const WINTER_SEASON_END_2024 = "2025-05-18";
+const WINTER_SEASON_START_2025 = "2025-10-20";
+const WINTER_SEASON_END_2025 = "2026-05-18";
+const WINTER_SEASON_START_2026 = "2026-10-25";
+const WINTER_SEASON_END_2026 = "2027-05-15";
 const MOUNTAIN_TZ = "America/Denver";
 
 export const validateReservation = (reservation, isAdmin) => {
-  const minDate = process.env.MINIMUM_RESERVATION_DATE;
-  const maxReservationDate = process.env.MAXIMUM_RESERVATION_DATE;
+  const minDate = config.get("minimumReservationDate");
+  const maxReservationDate = config.get("maximumReservationDate");
   //Note: This method will mutate/update the reservation's notes & title with trimmed values
   //TODO: Delete or add color
   delete reservation.color;
@@ -79,13 +80,13 @@ const isReservationLengthValid = (checkinDate, checkoutDate) => {
 export const isInWinter = (date) => {
   return (
     dayjs(date).isBetween(
-      WINTER_SEASON_START_2022,
-      WINTER_SEASON_END_2022,
+      WINTER_SEASON_START_2025,
+      WINTER_SEASON_END_2025,
       "day"
     ) ||
     dayjs(date).isBetween(
-      WINTER_SEASON_START_2023,
-      WINTER_SEASON_END_2023,
+      WINTER_SEASON_START_2026,
+      WINTER_SEASON_END_2026,
       "day"
     ) ||
     dayjs(date).isBetween(

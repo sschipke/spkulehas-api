@@ -3,10 +3,13 @@ const nodemailer = require("nodemailer");
 const hbs = require("nodemailer-express-handlebars");
 const path = require("path");
 const dayjs = require("dayjs");
+const config = require("config");
 
 require("dotenv").config();
 
-const LOGIN_URL = new URL(`${process.env.FRONT_END_BASE_URL}/login`).href;
+const baseUrl = config.get("frontEndBaseUrl");
+
+const LOGIN_URL = new URL(`${baseUrl}/login`).href;
 
 const transporter = nodemailer.createTransport({
   pool: true,
@@ -86,6 +89,7 @@ const sendPasswordResetEmail = async (user, url, expiration) => {
   console.log(
     "Sending reset email to: ",
     user.email,
+    "environemnt: ",
     process.env.NODE_ENV,
     mailOptions
   );
@@ -96,9 +100,7 @@ const alertUsersOfDeletion = async (members, reservation) => {
   const { start, end, title } = reservation;
   const startDate = dayjs(start).format("dddd, MMMM D, YYYY");
   const endDate = dayjs(end).format("dddd, MMMM D, YYYY");
-  const url = `${process.env.FRONT_END_BASE_URL}?date=${dayjs(
-    start
-  ).toISOString()}`;
+  const url = `${baseUrl}?date=${dayjs(start).toISOString()}`;
   const mailOptions = {
     from: process.env.ADMIN_EMAIL,
     to: members,
@@ -241,7 +243,7 @@ const emailMembersOfReservationChange = async (
   admin
 ) => {
   const viewReservationUrl = new URL(
-    `${process.env.FRONT_END_BASE_URL}?reservationId=${newReservation.id}`
+    `${baseUrl}?reservationId=${newReservation.id}`
   ).href;
   oldReservation.start = formatDate(oldReservation.start);
   oldReservation.end = formatDate(oldReservation.end);
@@ -268,7 +270,7 @@ const emailMembersOfReservationChange = async (
 
 const notifyAdminOfReservationCreation = (currentMember, reservation) => {
   const viewReservationUrl = new URL(
-    `${process.env.FRONT_END_BASE_URL}?reservationId=${reservation.id}`
+    `${baseUrl}?reservationId=${reservation.id}`
   ).href;
   reservation.start = formatDate(reservation.start);
   reservation.end = formatDate(reservation.end);
