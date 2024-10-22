@@ -67,10 +67,6 @@ export const checkSession = async (sessionId, type, userId) => {
         validationInfo.isValid = false;
         return validationInfo;
       }
-      if (session.type !== type) {
-        validationInfo.isValid = false;
-        return validationInfo;
-      }
       validationInfo.userId = session.user_id;
       return validationInfo;
     });

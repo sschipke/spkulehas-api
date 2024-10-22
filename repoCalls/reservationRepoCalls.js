@@ -18,3 +18,11 @@ export const updateReservationTitlesWithNewName = async (
     .andWhere({ title: oldName })
     .update({ title: newName, updated_at: now });
 };
+
+export const deletePastReservations = () => {
+  const twoYearsAgo = dayjs().subtract(2, "years").endOf("year").toISOString();
+  return database("reservation")
+  .where("end","<=", twoYearsAgo)
+  .orderBy("end", "desc")
+  // .del()
+}

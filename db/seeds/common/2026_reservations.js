@@ -388,6 +388,23 @@ const reservations = [
       })
       .toISOString(),
     title: "Chris Kuster"
+  },
+  {
+  start: dayjs("2026-11-01")
+    .startOf("month")
+    .set("hour", noonHour)
+    .toISOString(),
+  end: dayjs("2026-11-25")
+    .endOf("month")
+    .tz(MOUNTAIN_TZ)
+    .set({
+      hour: 12,
+      minute: 0,
+      second: 0,
+      millisecond: 0
+    })
+    .toISOString(),
+  title: "Schipke SpKuLeHaS"
   }
 ];
 
