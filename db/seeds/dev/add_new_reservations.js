@@ -5,8 +5,8 @@ const getUserIdByTitle = async (knex, reservation) => {
     .whereLike("name", `%${reservation.title}`)
     .column("user_id", "name")
     .then((result) => {
-      console.info(reservation.title)
-      console.table(result)
+      console.info(reservation.title);
+      console.table(result);
       reservation.user_id = result[0].user_id;
       return insertNewReservation(knex, reservation);
     });

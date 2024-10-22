@@ -294,7 +294,7 @@ const notifyMemberOfProfileChange = async (newProfile, admin) => {
   if (process.env.NODE_ENV !== "production") {
     newProfile.email = config.get("defaultEmail");
   }
-  
+
   const mailOptions = {
     from: process.env.ADMIN_EMAIL,
     to: newProfile.email,
