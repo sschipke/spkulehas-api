@@ -11,7 +11,9 @@ To generate a secret key run `openssl rand -base64 32`
 To start the server locally: `yarn start`
 
 ##### To Compile with Babel
+
 `npx babel src --out-dir build`
+
 <details>
   <summary>Env Variables</summary>
 
