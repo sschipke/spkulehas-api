@@ -6,7 +6,7 @@ const dayjs = require("dayjs");
 
 require("dotenv").config();
 
-const LOGIN_URL = new URL(`${process.env.FRONT_END_BASE_URL}/login`).href;
+const LOGIN_URL = `${process.env.FRONT_END_BASE_URL}/login`;
 
 const transporter = nodemailer.createTransport({
   pool: true,

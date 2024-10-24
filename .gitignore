@@ -7,3 +7,4 @@ ssh
 ssh-cert.pub
 fly.toml
 yarn-error.log
+build
