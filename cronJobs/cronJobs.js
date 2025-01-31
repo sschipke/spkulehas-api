@@ -3,7 +3,8 @@ import { deleteInvalidSessions } from "../repoCalls/sessionRepoCalls";
 import { deletePastReservations } from "../repoCalls/reservationRepoCalls";
 import {
   sendSessionDeletionEmail,
-  sendSessionDeletionErrorEmail
+  sendSessionDeletionErrorEmail,
+  notifyAdminOfDeletedReservations
 } from "../email";
 
 export const deleteOldSessions = cronJob.schedule("15 2 12 * *", async () => {
@@ -24,13 +25,13 @@ export const deletePastReservationsJob = cronJob.schedule(
   async () => {
     console.info("Deleting Past Reservations.", new Date().toTimeString());
     try {
-      ///TODO: Send email that reservations have been deleted.
-      const count = await deletePastReservations();
-      console.info("Reservations to delete: ", count.length);
-      console.info({ count });
-      // if (count) {
-      //   sendSessionDeletionEmail(count);
-      // }
+      const reservationsToDelete = await deletePastReservations();
+      console.warn(
+        "Number of reservations DELETED: ",
+        reservationsToDelete.length
+      );
+      console.info({ reservationsToDelete });
+      await notifyAdminOfDeletedReservations(reservationsToDelete);
     } catch (error) {
       console.error(error);
     }

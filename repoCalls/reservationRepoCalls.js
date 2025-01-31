@@ -23,6 +23,7 @@ export const deletePastReservations = () => {
   const twoYearsAgo = dayjs().subtract(2, "years").endOf("year").toISOString();
   return database("reservation")
     .where("end", "<=", twoYearsAgo)
-    .orderBy("end", "desc");
-  // .del()
+    .orderBy("end", "desc")
+    .del()
+    .returning("*");
 };

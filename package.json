@@ -1,7 +1,9 @@
 {
   "name": "spkulehas-api",
   "version": "1.0.0",
-  "description": "",
+  "description": "Api for managing reservations for the SpKuLeHaS Cabin",
+  "license": "UNLICENSED",
+  "author": "Scott Schipke",
   "main": "index.js",
   "husky": {
     "hooks": {
@@ -28,8 +30,6 @@
     "prepack": "pinst --disable",
     "postpack": "pinst --enable"
   },
-  "author": "Scott Schipke",
-  "license": "ISC",
   "dependencies": {
     "@babel/core": "^7.13.16",
     "@babel/node": "^7.13.13",
@@ -66,6 +66,6 @@
   },
   "engines": {
     "node": "18.19.0",
-    "yarn": "1.22.19"
+    "yarn": "1.22.22"
   }
 }

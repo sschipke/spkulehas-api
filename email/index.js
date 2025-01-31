@@ -328,6 +328,31 @@ const notifyMemberOfStatusChange = (oldProfile, newProfile, admin) => {
   return transporter.sendMail(mailOptions);
 };
 
+const notifyAdminOfDeletedReservations = (deletedReservations) => {
+  const date = dayjs().calendar();
+  const environment = process.env.NODE_ENV || "development";
+  const numberOfReservations = (deletedReservations || []).length;
+  deletedReservations = (deletedReservations || []).map((reservation) => {
+    reservation["start"] = formatDate(reservation["start"]);
+    reservation["end"] = formatDate(reservation["end"]);
+    return reservation;
+  });
+  const mailOptions = {
+    from: process.env.ADMIN_EMAIL,
+    to: process.env.ADMIN_EMAIL,
+    subject: "Past Reservations Have Been Deleted",
+    template: "bulk-reservations-delete",
+    context: {
+      deletedReservations,
+      numberOfReservations,
+      date,
+      environment
+    }
+  };
+  console.warn("Notifying admin of bulk reservations deleted. ", mailOptions);
+  return transporter.sendMail(mailOptions);
+};
+
 module.exports = {
   sendWelcomeEmail,
   sendPasswordResetEmail,
@@ -340,5 +365,6 @@ module.exports = {
   emailMembersOfReservationChange,
   notifyAdminOfReservationCreation,
   notifyMemberOfProfileChange,
-  notifyMemberOfStatusChange
+  notifyMemberOfStatusChange,
+  notifyAdminOfDeletedReservations
 };

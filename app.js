@@ -6,7 +6,10 @@ export const database = require("knex")(configuration);
 import { validateOrigin } from "./middleware/auth";
 import { logRequest } from "./utils/logging";
 import { errorHandler } from "./middleware/errors";
-import { deleteOldSessions } from "./cronJobs/cronJobs";
+import {
+  deleteOldSessions,
+  deletePastReservationsJob
+} from "./cronJobs/cronJobs";
 import reservations from "./routes/api/v1/reservations";
 import user from "./routes/api/v1/user";
 import sessionsRouter from "./routes/api/v1/session";
@@ -51,5 +54,6 @@ app.use("/api/v1/session", sessionsRouter);
 app.use("/api/v1/admin", adminRouter);
 
 deleteOldSessions.start();
+deletePastReservationsJob.start();
 
 export default app;
