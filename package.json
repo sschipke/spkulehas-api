@@ -14,7 +14,7 @@
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon --exec babel-node src/server.js --verbose",
-    "compile": "npx babel src --out-dir build --copy-files && cp package.json ./build && cp yarn.lock ./build && cp -r ./config ./build",
+    "compile": "npx babel src --out-dir build --copy-files && cp package.json ./build && cp -r ./config ./build",
     "initdb": "knex migrate:latest && knex seed:run",
     "migrate": "knex migrate:latest",
     "rollback": "knex migrate:rollback",
