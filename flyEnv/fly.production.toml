@@ -46,4 +46,4 @@ processes = []
     timeout = "2s"
 
 [deploy]
-  release_command = "yarn migrate"
+  release_command = "yarn migrate && yarn addNewSeasonReservations"

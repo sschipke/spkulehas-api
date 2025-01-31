@@ -14,7 +14,7 @@
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon --exec babel-node src/server.js --verbose",
-    "compile": "npx babel src --out-dir build && cp package.json ./build && cp yarn.lock ./build && cp -r ./src/email/templates ./build/email/",
+    "compile": "npx babel src --out-dir build --copy-files && cp package.json ./build && cp yarn.lock ./build && cp -r ./config ./build",
     "initdb": "knex migrate:latest && knex seed:run",
     "migrate": "knex migrate:latest",
     "rollback": "knex migrate:rollback",
@@ -29,7 +29,8 @@
     "prepare": "husky install",
     "postinstall": "husky install",
     "prepack": "pinst --disable",
-    "postpack": "pinst --enable"
+    "postpack": "pinst --enable",
+    "test:build": "yarn compile && cp .env ./build && cd ./build && node server.js"
   },
   "dependencies": {
     "@babel/core": "^7.25.9",

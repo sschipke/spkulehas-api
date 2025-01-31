@@ -71,7 +71,7 @@ router.post("/new", async (req, res) => {
 
   const validationErrors = validateReservation(reservation, isAdmin(user));
   if (Object.keys(validationErrors).length) {
-    console.error("Unable to create reservation: ", error);
+    console.error("Unable to create reservation: ", validationErrors);
     const { error } = validationErrors;
     return conflictResponse(res, error);
   }
