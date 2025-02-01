@@ -33,11 +33,11 @@
     "test:build": "yarn compile && cp .env ./build && cd ./build && node server.js"
   },
   "dependencies": {
+    "@babel/cli": "^7.26.4",
     "@babel/core": "^7.25.9",
     "@babel/node": "^7.13.13",
     "@babel/polyfill": "^7.12.1",
     "@babel/preset-env": "^7.13.15",
-    "@babel/cli": "^7.25.9",
     "bcrypt": "^5.0.1",
     "config": "^3.3.12",
     "cors": "^2.8.5",
@@ -69,6 +69,7 @@
   },
   "engines": {
     "node": ">=20.0.0",
-    "yarn": ">=1.22.22"
-  }
+    "yarn": "latest"
+  },
+  "packageManager": "yarn@4.6.0"
 }
