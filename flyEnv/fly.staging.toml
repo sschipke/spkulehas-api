@@ -11,10 +11,6 @@ processes = []
 [env]
   PORT = "8080"
   BASE_URL="https://fly.io/apps/spkulehas-api-staging/api/v1/"
-  FRONT_END_BASE_URL="https://spkulehas-staging.netlify.app/"
-  FRONT_END_ORIGIN_URL="spkulehas-staging.netlify.app"
-  MINIMUM_RESERVATION_DATE="2022-05-23"
-  MAXIMUM_RESERVATION_DATE="2026-05-15"
   HOSTNAME="0.0.0.0"
   TZ="America/Denver"
   NODE_ENV="staging"
@@ -44,10 +40,10 @@ processes = []
     port = 443
 
   [[services.tcp_checks]]
-    grace_period = "1s"
+    grace_period = "5s"
     interval = "15s"
     restart_limit = 0
     timeout = "2s"
 
 [deploy]
-  release_command = "yarn migrate"
+  release_command = "yarn addNewSeasonReservations"
