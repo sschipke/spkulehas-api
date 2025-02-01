@@ -16,6 +16,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - uses: superfly/flyctl-actions/setup-flyctl@master
-      - run: yarn compile && flyctl deploy ./build --config ./flyEnv/fly.production.toml --remote-only -a spkulehas-api
+      - run: corepack enable && yarn compile && flyctl deploy ./build --config ./flyEnv/fly.production.toml --remote-only -a spkulehas-api
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
