@@ -47,3 +47,4 @@ processes = []
 
 [deploy]
   release_command = "yarn migrate"
+  
