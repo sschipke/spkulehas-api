@@ -10,5 +10,10 @@
     "sourceType": "module"
   },
   "rules": {},
-  "ignorePatterns": ["*.test.js"]
+  "overrides": [
+  {
+    "files": ["*.test.js", "**/build/**"],
+    "excludedFiles": ["*.test.js", "**/build/**"]
+  }
+]
 }
