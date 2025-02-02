@@ -1,19 +1,19 @@
-# fly.toml file generated for spkulehas-api-staging on 2022-09-03T11:49:10-06:00
+# fly.toml file generated for spkulehas-api on 2022-09-12T16:29:00-06:00
 
-app = "spkulehas-api-staging"
+app = "spkulehas-api"
 kill_signal = "SIGINT"
 kill_timeout = 5
 processes = []
 
 [build]
-  builder = "heroku/builder:24"
+  builder = "heroku/builder:22"
 
 [env]
+  BASE_URL = "https://fly.io/apps/spkulehas-api/api/v1/"
+  NODE_ENV = "production"
   PORT = "8080"
-  BASE_URL="https://fly.io/apps/spkulehas-api-staging/api/v1/"
   HOSTNAME="0.0.0.0"
-  TZ="America/Denver"
-  NODE_ENV="staging"
+  TZ = "America/Denver"
 
 [experimental]
   allowed_public_ports = []
@@ -40,10 +40,10 @@ processes = []
     port = 443
 
   [[services.tcp_checks]]
-    grace_period = "5s"
+    grace_period = "1s"
     interval = "15s"
     restart_limit = 0
     timeout = "2s"
 
 [deploy]
-  release_command = "yarn addNewSeasonReservations"
+  release_command = "yarn migrate"
