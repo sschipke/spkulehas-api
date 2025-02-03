@@ -21,13 +21,11 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20.x
-      - name: Enable Corepack
-        run: corepack enable
 
       - name: Run install and compile
         uses: borales/actions-yarn@v4
         with:
-          cmd: install && yarn compile
+          cmd: corepack enable && yarn install && yarn compile
 
       - name: Deploy to fly.io
         uses: superfly/flyctl-actions/setup-flyctl@master
