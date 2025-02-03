@@ -17,7 +17,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - name: Set Node.js 20.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20.x
+
+      - name: Run install and compile
+        uses: borales/actions-yarn@v4
+        with:
+          cmd: install && yarn compile
+
+      - name: 
       - uses: superfly/flyctl-actions/setup-flyctl@master
-      - run: corepack enable && yarn compile && flyctl deploy ./build --config ./flyEnv/fly.staging.toml --local-only -a spkulehas-api-staging
+      - run: flyctl deploy ./build --config ./flyEnv/fly.staging.toml --local-only -a spkulehas-api-staging
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
