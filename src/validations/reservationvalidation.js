@@ -1,8 +1,8 @@
 import dayjs from "dayjs";
-const utc = require("dayjs/plugin/utc");
-const timezone = require("dayjs/plugin/timezone");
-const isBetween = require("dayjs/plugin/isBetween");
-const config = require("config");
+import utc from "dayjs/plugin/utc.js";
+import timezone from "dayjs/plugin/timezone.js";
+import isBetween from "dayjs/plugin/isBetween.js";
+import config from "config";
 dayjs.extend(isBetween);
 dayjs.extend(utc);
 dayjs.extend(timezone);

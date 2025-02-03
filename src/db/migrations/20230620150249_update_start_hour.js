@@ -51,7 +51,6 @@ exports.up = function (knex) {
   ]);
 };
 
-// eslint-disable-next-line no-unused-vars
 exports.down = function (knex) {
   console.warn("Rolling back noon hour update.");
 };

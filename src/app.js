@@ -1,26 +1,31 @@
 import express from "express";
 import cors from "cors";
-const environment = process.env.NODE_ENV || "development";
-const configuration = require("./knexfile")[environment];
-export const database = require("knex")(configuration);
-import { validateOrigin } from "./middleware/auth";
-import { logRequest } from "./utils/logging";
-import { errorHandler } from "./middleware/errors";
+import { default as dbConfig } from "./knexfile.js";
+import knex from "knex";
+import { validateOrigin } from "./middleware/auth.js";
+import { logRequest } from "./utils/logging.js";
+import { errorHandler } from "./middleware/errors.js";
 import {
   deleteOldSessions,
   deletePastReservationsJob
-} from "./cronJobs/cronJobs";
-import reservations from "./routes/api/v1/reservations";
-import user from "./routes/api/v1/user";
-import sessionsRouter from "./routes/api/v1/session";
-import adminRouter from "./routes/api/v1/admin";
-if (environment === "development") {
-  console.log("loaded");
-  require("dotenv").config();
+} from "./cronJobs/cronJobs.js";
+import reservations from "./routes/api/v1/reservations.js";
+import user from "./routes/api/v1/user.js";
+import sessionsRouter from "./routes/api/v1/session.js";
+import adminRouter from "./routes/api/v1/admin.js";
+import { ENVIRONMENT } from "./utils/contstants.js";
+
+export const database = knex(dbConfig[ENVIRONMENT]);
+
+if (ENVIRONMENT === "development") {
+  import("dotenv").then((dotenv) => {
+    dotenv.config();
+    console.log("loaded");
+  });
 }
 
-if (environment !== "production") {
-  console.log("Using environment: ", { environment });
+if (ENVIRONMENT !== "production") {
+  console.log("Using environment: ", { ENVIRONMENT });
 }
 const app = express();
 app.locals.title = "SpKuLeHaS API";
@@ -31,6 +36,7 @@ app.disable("x-powered-by");
 
 app.use((err, req, res, next) => {
   if (err) {
+    console.error("Error in error handler: ", err);
     return errorHandler();
   }
   return next();

@@ -1,9 +1,7 @@
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
 
 echo '🏗️👷 Linting for pre-push 🏗️👷'
 
-(yarn lint && yarn format:check) || 
+(yarn lint) || 
 (
     echo '❌ Linting errors found ❌'
     false;

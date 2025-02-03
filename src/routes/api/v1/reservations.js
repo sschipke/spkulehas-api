@@ -1,16 +1,16 @@
-require("@babel/polyfill");
-import { database } from "../../../app";
-import { logger } from "../../../utils/logging";
+import "@babel/polyfill";
+import { database } from "../../../app.js";
+import { logger } from "../../../utils/logging.js";
 import {
   canUserEdit,
   notifyUsersOfReservationUpdateByAdmin
-} from "../../../utils/helpers";
-import { validateReservation } from "../../../validations/reservationvalidation";
-import { validateRequestToken } from "../../../middleware/auth";
+} from "../../../utils/helpers.js";
+import { validateReservation } from "../../../validations/reservationvalidation.js";
+import { validateRequestToken } from "../../../middleware/auth.js";
 import {
   alertUsersOfDeletion,
   notifyAdminOfReservationCreation
-} from "../../../email";
+} from "../../../email/index.js";
 import {
   forbiddenResponse,
   notFoundResponse,
@@ -18,14 +18,14 @@ import {
   unknownErrorResponse,
   conflictResponse,
   preconditionFailedResponse
-} from "../../../utils/httpHelpers";
-import { isAdmin } from "../../../validations/userValidation";
+} from "../../../utils/httpHelpers.js";
+import { isAdmin } from "../../../validations/userValidation.js";
 import {
   reservationsEtag,
   updateReservationsEtag
-} from "../../../utils/contstants";
-const dayjs = require("dayjs");
-const express = require("express");
+} from "../../../utils/contstants.js";
+import dayjs from "dayjs";
+import express from "express";
 const router = express.Router();
 
 router.use(validateRequestToken);

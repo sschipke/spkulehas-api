@@ -1,19 +1,19 @@
-const { v4: uuidv4 } = require("uuid");
+import { v4 as uuidv4 } from "uuid";
 import dayjs from "dayjs";
-const calendar = require("dayjs/plugin/calendar");
+import calendar from "dayjs/plugin/calendar.js";
 import { compareSync } from "bcrypt";
 import {
   alertAdminOfMemberCreation,
   sendNewMemberEmail,
   emailMembersOfReservationChange
-} from "../email";
-import { updateReservationTitlesWithNewName } from "../repoCalls/reservationRepoCalls";
-import { createResetSessionForUser } from "../repoCalls/sessionRepoCalls";
-import { generateWebtoken } from "../middleware/auth";
-import { getMemberNameAndEmailById } from "../repoCalls/userRepoCalls";
-import { updateReservationsEtag } from "./contstants";
-import { findUserById } from "../repoCalls/userRepoCalls";
-const config = require("config");
+} from "../email/index.js";
+import { updateReservationTitlesWithNewName } from "../repoCalls/reservationRepoCalls.js";
+import { createResetSessionForUser } from "../repoCalls/sessionRepoCalls.js";
+import { generateWebtoken } from "../middleware/auth.js";
+import { getMemberNameAndEmailById } from "../repoCalls/userRepoCalls.js";
+import { updateReservationsEtag } from "./contstants.js";
+import { findUserById } from "../repoCalls/userRepoCalls.js";
+import config from "config";
 
 dayjs.extend(calendar);
 

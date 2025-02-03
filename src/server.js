@@ -1,5 +1,4 @@
-import "@babel/polyfill";
-import app from "./app";
+import app from "./app.js";
 
 app.set("port", process.env.PORT || 8080);
 app.set("hostname", process.env.HOSTNAME || "localhost");
