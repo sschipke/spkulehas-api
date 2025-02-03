@@ -13,8 +13,8 @@
     }
   },
   "scripts": {
-    "start": "node server.js",
-    "dev": "nodemon --exec babel-node src/server.js",
+    "start": "yarn node server.js",
+    "dev": "yarn nodemon --exec babel-node src/server.js",
     "compile": "babel src --out-dir build --copy-files && cp package.json ./build && cp yarn.lock ./build && cp -r ./config ./build",
     "initdb": "knex migrate:latest && knex seed:run",
     "migrate:dev": "knex migrate:latest --knexfile ./src/knexfile.js",
@@ -32,7 +32,7 @@
     "format:write": "prettier --write .",
     "prepack": "pinst --disable",
     "postpack": "pinst --enable",
-    "test:build": "yarn compile && cp .env ./build && NODE_ENV='local' && node build/server.js"
+    "test:build": "yarn compile && cp .env ./build && NODE_ENV='local' && yarn node build/server.js"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
