@@ -1,6 +1,6 @@
-import { database } from "../app";
+import { database } from "../app.js";
 import dayjs from "dayjs";
-const bcrypt = require("bcrypt");
+import bcrypt from "bcrypt";
 
 export const mapProfileToModel = (profile) => {
   const { firstName, lastName } = profile;

@@ -1,7 +1,10 @@
 import "@babel/polyfill";
-const jwt = require("jsonwebtoken");
-const config = require("config");
-import { unauthorizedResponse, forbiddenResponse } from "../utils/httpHelpers";
+import jwt from "jsonwebtoken";
+import config from "config";
+import {
+  unauthorizedResponse,
+  forbiddenResponse
+} from "../utils/httpHelpers.js";
 
 export const validateRequestToken = (req, res, next) => {
   const signature = process.env.TOKEN_SECRET;

@@ -1,10 +1,10 @@
-import { logger } from "../../../utils/logging";
+import { logger } from "../../../utils/logging.js";
 import {
   sendPasswordResetEmail,
   notifyMemberOfEmailChange,
   notifyMemberOfProfileChange,
   notifyMemberOfStatusChange
-} from "../../../email";
+} from "../../../email/index.js";
 import {
   validateUserProfile,
   canUserUpdate,
@@ -15,22 +15,22 @@ import {
   isAdmin,
   determineNameChange,
   hasStatusChanged
-} from "../../../validations/userValidation";
+} from "../../../validations/userValidation.js";
 import {
   loginLimiter,
   passwordResetLimiter
-} from "../../../middleware/rate-limits";
+} from "../../../middleware/rate-limits.js";
 import {
   validateRequestToken,
   generateWebtoken
-} from "../../../middleware/auth";
+} from "../../../middleware/auth.js";
 
 import {
   validateSession,
   invalidateOtherSessions,
   RESET_TYPE,
   createResetSessionForUser
-} from "../../../repoCalls/sessionRepoCalls";
+} from "../../../repoCalls/sessionRepoCalls.js";
 import {
   findUserByEmail,
   findUserById,
@@ -43,18 +43,18 @@ import {
   processEmailSettingUpdate,
   findAllEmailSettingsByUserId,
   updateLogin
-} from "../../../repoCalls/userRepoCalls";
-import { forbiddenResponse } from "../../../utils/httpHelpers";
+} from "../../../repoCalls/userRepoCalls.js";
+import { forbiddenResponse } from "../../../utils/httpHelpers.js";
 import {
   processNameChange,
   determineProfileChange
-} from "../../../utils/helpers";
+} from "../../../utils/helpers.js";
 import dayjs from "dayjs";
-const SEND_EMAIL_DELAY_MS = 900;
+import express from "express";
+import bcrypt from "bcrypt";
+import config from "config";
 
-const express = require("express");
-const bcrypt = require("bcrypt");
-const config = require("config");
+const SEND_EMAIL_DELAY_MS = 900;
 const router = express.Router();
 router.use(validateRequestToken);
 
@@ -145,6 +145,7 @@ router.post("/forgot/password", passwordResetLimiter, async (req, res) => {
       console.error(
         "Unable to send password reset email to: " + user.email + " " + error
       );
+      return res.status(503).json({ error: "Unable to send email." });
     }
   } else {
     console.error(

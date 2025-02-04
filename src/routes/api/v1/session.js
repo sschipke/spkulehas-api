@@ -1,13 +1,16 @@
 import {
   forbiddenResponse,
   unknownErrorResponse
-} from "../../../utils/httpHelpers";
-import { resetTokenValidationLimiter } from "../../../middleware/rate-limits";
-import { validateRequestToken } from "../../../middleware/auth";
+} from "../../../utils/httpHelpers.js";
+import { resetTokenValidationLimiter } from "../../../middleware/rate-limits.js";
+import { validateRequestToken } from "../../../middleware/auth.js";
 
-import { checkSession, RESET_TYPE } from "../../../repoCalls/sessionRepoCalls";
+import {
+  checkSession,
+  RESET_TYPE
+} from "../../../repoCalls/sessionRepoCalls.js";
 
-const express = require("express");
+import express from "express";
 const router = express.Router();
 router.use(validateRequestToken);
 

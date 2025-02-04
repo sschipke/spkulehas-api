@@ -3,5 +3,6 @@
   "maximumReservationDate": "2027-05-15",
   "frontEndBaseUrl": "http://localhost:3000/",
   "frontEndOriginUrl": "localhost:3000",
-  "defaultEmail": "swschipke@gmail.com"
+  "defaultEmail": "swschipke@gmail.com",
+  "emailTemplatePath": "./email/templates/"
 }

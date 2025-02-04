@@ -1,4 +1,4 @@
-import { generateEtag } from "./helpers";
+import { generateEtag } from "./helpers.js";
 
 export let reservationsEtag = generateEtag();
 
@@ -9,3 +9,14 @@ export function updateReservationsEtag() {
   console.log("Updated reservations eTag: ", reservationsEtag);
   return reservationsEtag;
 }
+
+const determineEnvironment = () => {
+  let defaultEnv = process.env.NODE_ENV || "development";
+
+  if (defaultEnv === "alpha") {
+    defaultEnv = "development";
+  }
+  return defaultEnv;
+};
+
+export const ENVIRONMENT = determineEnvironment();

@@ -1,7 +1,7 @@
-import { database } from "../app";
+import { database } from "../app.js";
 import dayjs from "dayjs";
-const isSameOrAfter = require("dayjs/plugin/isSameOrAfter");
-const { v4: uuidv4 } = require("uuid");
+import isSameOrAfter from "dayjs/plugin/isSameOrAfter.js";
+import { v4 as uuidv4 } from "uuid";
 dayjs.extend(isSameOrAfter);
 
 export const RESET_TYPE = "password_reset";
