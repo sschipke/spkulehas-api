@@ -1,11 +1,11 @@
-const cronJob = require("node-cron");
-import { deleteInvalidSessions } from "../repoCalls/sessionRepoCalls";
-import { deletePastReservations } from "../repoCalls/reservationRepoCalls";
+import cronJob from "node-cron";
+import { deleteInvalidSessions } from "../repoCalls/sessionRepoCalls.js";
+import { deletePastReservations } from "../repoCalls/reservationRepoCalls.js";
 import {
   sendSessionDeletionEmail,
   sendSessionDeletionErrorEmail,
   notifyAdminOfDeletedReservations
-} from "../email";
+} from "../email/index.js";
 
 export const deleteOldSessions = cronJob.schedule("15 2 12 * *", async () => {
   console.info("Deleting Expired Sessions.", new Date().toTimeString());

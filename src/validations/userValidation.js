@@ -1,4 +1,4 @@
-import { safeTrim } from "../utils/helpers";
+import { safeTrim } from "../utils/helpers.js";
 const POSSIBLE_STATUSES = ["ADMIN", "D2", "D1", "S2", "S1", "U"];
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL;
 const ADMIN_STATUS = "ADMIN";

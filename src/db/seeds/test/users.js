@@ -1,7 +1,7 @@
 const dayjs = require("dayjs");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
-const { sendWelcomeEmail } = require("../../../email/index");
+const { sendWelcomeEmail } = require("../../../email/index,js");
 const { generatePassword } = require("../seed-helpers");
 
 const mockUsers = [

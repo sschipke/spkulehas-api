@@ -1,17 +1,15 @@
-require("@babel/polyfill");
-const nodemailer = require("nodemailer");
-const hbs = require("nodemailer-express-handlebars");
-const path = require("path");
-const dayjs = require("dayjs");
-const config = require("config");
-
-require("dotenv").config();
+import nodemailer from "nodemailer";
+import hbs from "nodemailer-express-handlebars";
+import path from "path";
+import dayjs from "dayjs";
+import config from "config";
+import { ENVIRONMENT } from "../utils/contstants.js";
 
 const baseUrl = config.get("frontEndBaseUrl");
-
+const templatePath = config.get("emailTemplatePath");
 const LOGIN_URL = new URL(`${baseUrl}/login`).href;
 
-const transporter = nodemailer.createTransport({
+let transporter = nodemailer.createTransport({
   pool: true,
   service: "Gmail",
   auth: {
@@ -22,14 +20,29 @@ const transporter = nodemailer.createTransport({
 
 const handlebarOptions = {
   viewEngine: {
-    partialsDir: path.resolve("./email/templates/"),
+    partialsDir: path.resolve(templatePath),
     defaultLayout: false
   },
-  viewPath: path.resolve("./email/templates/")
+  viewPath: path.resolve(templatePath)
 };
 
 // use a template file with nodemailer
 transporter.use("compile", hbs(handlebarOptions));
+
+if (ENVIRONMENT === "development") {
+  import("dotenv").then((dotenv) => {
+    dotenv.config();
+    transporter = nodemailer.createTransport({
+      pool: true,
+      service: "Gmail",
+      auth: {
+        user: process.env.ADMIN_EMAIL,
+        pass: process.env.ADMIN_EMAIL_PASSWORD
+      }
+    });
+    transporter.use("compile", hbs(handlebarOptions));
+  });
+}
 
 const formatDate = (date) => dayjs(date).format("MM/DD/YYYY");
 
@@ -90,7 +103,7 @@ const sendPasswordResetEmail = async (user, url, expiration) => {
     "Sending reset email to: ",
     user.email,
     "environemnt: ",
-    process.env.NODE_ENV,
+    ENVIRONMENT,
     mailOptions
   );
   return transporter.sendMail(mailOptions);
@@ -120,7 +133,6 @@ const alertUsersOfDeletion = async (members, reservation) => {
 
 const sendSessionDeletionEmail = async (count) => {
   const date = dayjs().calendar();
-  const environment = process.env.NODE_ENV || "development";
   const isSingular = count === 1;
   const mailOptions = {
     from: process.env.ADMIN_EMAIL,
@@ -131,7 +143,7 @@ const sendSessionDeletionEmail = async (count) => {
       count,
       isSingular,
       date,
-      environment
+      environment: ENVIRONMENT
     }
   };
 
@@ -155,7 +167,6 @@ const sendSessionDeletionEmail = async (count) => {
 
 const sendSessionDeletionErrorEmail = async (error) => {
   const date = dayjs().format("dddd, MMMM DD, YYYY, h:mm a");
-  const environment = process.env.NODE_ENV || "development";
   const mailOptions = {
     from: process.env.ADMIN_EMAIL, // sender address
     to: "swschipke@gmail.com",
@@ -163,7 +174,7 @@ const sendSessionDeletionErrorEmail = async (error) => {
     template: "session-deletion-count",
     context: {
       date,
-      environment,
+      environment: ENVIRONMENT,
       error
     }
   };
@@ -330,7 +341,7 @@ const notifyMemberOfStatusChange = (oldProfile, newProfile, admin) => {
 
 const notifyAdminOfDeletedReservations = (deletedReservations) => {
   const date = dayjs().calendar();
-  const environment = process.env.NODE_ENV || "development";
+  const environment = ENVIRONMENT;
   const numberOfReservations = (deletedReservations || []).length;
   deletedReservations = (deletedReservations || []).map((reservation) => {
     reservation["start"] = formatDate(reservation["start"]);
@@ -353,7 +364,7 @@ const notifyAdminOfDeletedReservations = (deletedReservations) => {
   return transporter.sendMail(mailOptions);
 };
 
-module.exports = {
+export {
   sendWelcomeEmail,
   sendPasswordResetEmail,
   alertUsersOfDeletion,

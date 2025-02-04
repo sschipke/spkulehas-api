@@ -14,8 +14,8 @@ jobs:
     name: Deploy production
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: superfly/flyctl-actions/setup-flyctl@master
-      - run: corepack enable && yarn compile && flyctl deploy ./build --config ./flyEnv/fly.production.toml --remote-only -a spkulehas-api
+      - run: corepack enable && yarn install && yarn compile && flyctl deploy ./build --config ./flyEnv/fly.production.toml --remote-only
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}

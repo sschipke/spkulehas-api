@@ -1,4 +1,4 @@
-import { database } from "../app";
+import { database } from "../app.js";
 import dayjs from "dayjs";
 export const updateReservationTitlesWithNewName = async (
   userId,

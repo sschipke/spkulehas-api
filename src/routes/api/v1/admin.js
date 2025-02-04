@@ -1,11 +1,14 @@
-const dayjs = require("dayjs");
-import { logger } from "../../../utils/logging";
-import { validateUserProfile } from "../../../validations/userValidation";
-import { allowOnlyAdmin, validateRequestToken } from "../../../middleware/auth";
+import dayjs from "dayjs";
+import { logger } from "../../../utils/logging.js";
+import { validateUserProfile } from "../../../validations/userValidation.js";
+import {
+  allowOnlyAdmin,
+  validateRequestToken
+} from "../../../middleware/auth.js";
 import {
   addMemberRateLimiter,
   defaultRateLimit
-} from "../../../middleware/rate-limits";
+} from "../../../middleware/rate-limits.js";
 import {
   getUserProfileById,
   findAllEmailSettingsByUserId,
@@ -13,18 +16,18 @@ import {
   addNewUser,
   mapUserToProfile,
   getUserLoginInfo
-} from "../../../repoCalls/userRepoCalls";
+} from "../../../repoCalls/userRepoCalls.js";
 import {
   notFoundResponse,
   unauthorizedResponse
-} from "../../../utils/httpHelpers";
+} from "../../../utils/httpHelpers.js";
 import {
   createIdsForNewMember,
   handleNewUserCreationEmails,
   confirmPassword
-} from "../../../utils/helpers";
+} from "../../../utils/helpers.js";
 
-const express = require("express");
+import express from "express";
 const router = express.Router();
 router.use(validateRequestToken);
 router.use(allowOnlyAdmin);
