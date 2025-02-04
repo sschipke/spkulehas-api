@@ -13,9 +13,9 @@
     }
   },
   "scripts": {
-    "start": "yarn node server.js",
+    "start": "node server.js",
     "dev": "yarn nodemon --exec babel-node src/server.js",
-    "compile": "babel src --out-dir build --copy-files && cp package.json ./build && cp yarn.lock ./build && cp -r ./config ./build",
+    "compile": "yarn babel src --out-dir build --copy-files && cp package.json ./build && cp yarn.lock ./build && cp -r ./config ./build",
     "initdb": "knex migrate:latest && knex seed:run",
     "migrate:dev": "knex migrate:latest --knexfile ./src/knexfile.js",
     "migrate": "knex migrate:latest",
