@@ -32,7 +32,7 @@
     "format:write": "prettier --write .",
     "prepack": "pinst --disable",
     "postpack": "pinst --enable",
-    "test:build": "yarn compile && cp .env ./build && NODE_ENV='local' && node build/server.js"
+    "test:build": "yarn compile && cp .env ./build && NODE_ENV='alpha' && node build/server.js"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",

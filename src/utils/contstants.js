@@ -13,7 +13,7 @@ export function updateReservationsEtag() {
 const determineEnvironment = () => {
   let defaultEnv = process.env.NODE_ENV || "development";
 
-  if (defaultEnv === "local") {
+  if (defaultEnv === "alpha") {
     defaultEnv = "development";
   }
   return defaultEnv;
