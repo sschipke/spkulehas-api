@@ -15,7 +15,7 @@
   "scripts": {
     "start": "node server.js",
     "dev": "yarn nodemon --exec babel-node src/server.js",
-    "compile": "yarn babel src --out-dir build --copy-files && cp package.json ./build && cp yarn.lock ./build && cp -r ./config ./build",
+    "compile": "yarn babel src --out-dir build --copy-files && cp -r src/db build/db && cp package.json ./build && cp yarn.lock ./build && cp -r ./config ./build",
     "initdb": "knex migrate:latest && knex seed:run",
     "migrate:dev": "knex migrate:latest --knexfile ./src/knexfile.js",
     "migrate": "knex migrate:latest",
@@ -54,7 +54,6 @@
     "@babel/cli": "^7.26.4",
     "@babel/core": "^7.26.7",
     "@babel/node": "^7.26.0",
-    "@babel/polyfill": "^7.12.1",
     "@babel/preset-env": "^7.26.7",
     "@eslint/js": "^9.19.0",
     "babel-node": "^0.0.1-security",
