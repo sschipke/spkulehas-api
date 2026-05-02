@@ -1,4 +1,3 @@
-import "@babel/polyfill";
 import { database } from "../../../app.js";
 import { logger } from "../../../utils/logging.js";
 import {

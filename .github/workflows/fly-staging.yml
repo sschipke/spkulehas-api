@@ -19,6 +19,6 @@ jobs:
       - uses: actions/checkout@v4
       - name: Deploy to fly.io
         uses: superfly/flyctl-actions/setup-flyctl@master
-      - run: corepack enable && yarn install && yarn compile && flyctl deploy ./build --config ./flyEnv/fly.staging.toml --local-only -a spkulehas-api-staging
+      - run: flyctl deploy . --config flyEnv/fly.staging.toml --remote-only
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
