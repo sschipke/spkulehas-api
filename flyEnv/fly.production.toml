@@ -6,7 +6,8 @@ kill_timeout = 5
 processes = []
 
 [build]
-  builder = "heroku/builder:22"
+  dockerfile = "../Dockerfile"
+  ignorefile = "../.dockerignore"
 
 [env]
   BASE_URL = "https://fly.io/apps/spkulehas-api/api/v1/"
@@ -20,7 +21,6 @@ processes = []
   auto_rollback = true
 
 [[services]]
-  http_checks = []
   internal_port = 8080
   processes = ["app"]
   protocol = "tcp"
@@ -39,6 +39,14 @@ processes = []
     handlers = ["tls", "http"]
     port = 443
 
+  [[services.http_checks]]
+    interval = "15s"
+    grace_period = "10s"
+    method = "get"
+    path = "/api/v1/monitor"
+    protocol = "http"
+    timeout = "2s"
+
   [[services.tcp_checks]]
     grace_period = "1s"
     interval = "15s"
@@ -46,4 +54,4 @@ processes = []
     timeout = "2s"
 
 [deploy]
-  release_command = "yarn migrate"
+  release_command = "node ./node_modules/knex/bin/cli.js migrate:latest"
