@@ -8,8 +8,8 @@ const updateName = async (knex, first_name, last_name, userId) => {
     });
 };
 
-exports.up = function (knex) {
-  Promise.all([
+export async function up(knex) {
+  await Promise.all([
     knex.schema.alterTable("user", (table) => {
       table.timestamp("last_login", { useTz: true });
     }),
@@ -32,10 +32,10 @@ exports.up = function (knex) {
         throw new Error("Error populating names.", err);
       })
   ]);
-};
+}
 
-exports.down = function (knex) {
-  return Promise.all([
+export async function down(knex) {
+  await Promise.all([
     knex.schema.alterTable("user", (table) => {
       table.dropColumn("last_login");
     }),
@@ -44,4 +44,4 @@ exports.down = function (knex) {
       table.dropColumn("last_name");
     })
   ]);
-};
+}

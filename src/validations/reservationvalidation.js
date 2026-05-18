@@ -33,7 +33,7 @@ export const validateReservation = (reservation, isAdmin) => {
     return { error: "The title is invalid." };
   }
   reservation.title = trimmedTitle;
-  const trimmedNotes = notes.trim();
+  const trimmedNotes = (notes || "").trim();
   if (trimmedNotes.length > 60) {
     return { error: "Submitted Notes are invalid." };
   }

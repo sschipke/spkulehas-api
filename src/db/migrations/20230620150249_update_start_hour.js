@@ -1,6 +1,6 @@
-const dayjs = require("dayjs");
-const timezone = require("dayjs/plugin/timezone");
-const utc = require("dayjs/plugin/utc");
+import dayjs from "dayjs";
+import timezone from "dayjs/plugin/timezone.js";
+import utc from "dayjs/plugin/utc.js";
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -31,8 +31,8 @@ const updateStartHour = async (knex, id, startTimeStamp, title) => {
     });
 };
 
-exports.up = function (knex) {
-  return Promise.all([
+export async function up(knex) {
+  await Promise.all([
     knex("reservation")
       .columns("id", "start", "title")
       .then((reservations) => {
@@ -49,8 +49,8 @@ exports.up = function (knex) {
         throw new Error("Unable to perform noon hour update.");
       })
   ]);
-};
+}
 
-exports.down = function (knex) {
+export async function down(knex) {
   console.warn("Rolling back noon hour update.");
-};
+}

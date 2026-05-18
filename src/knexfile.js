@@ -1,23 +1,31 @@
 export default {
   development: {
     client: "pg",
-    connection: "postgres://localhost/spkulehas",
+    connection:
+      process.env.DATABASE_URL ||
+      // Default matches README Docker Postgres (superuser `postgres`); URLs without a user use the OS login and fail on Docker.
+      "postgres://postgres@127.0.0.1:5432/spkulehas",
     migrations: {
       directory: "./db/migrations"
     },
     seeds: {
-      directory: "./db/seeds/dev"
+      directory: "./db/seeds/dev",
+      loadExtensions: [".cjs"]
     },
     useNullAsDefault: true
   },
   test: {
     client: "pg",
-    connection: "postgres://localhost/spkulehas_test",
+    connection:
+      process.env.DATABASE_URL_TEST ||
+      process.env.DATABASE_URL?.replace(/\/[^/]+$/, "/spkulehas_test") ||
+      "postgres://postgres@127.0.0.1:5432/spkulehas_test",
     migrations: {
       directory: "./db/migrations"
     },
     seeds: {
-      directory: "./db/seeds/test"
+      directory: "./db/seeds/test",
+      loadExtensions: [".cjs"]
     },
     useNullAsDefault: true
   },
@@ -28,7 +36,8 @@ export default {
       directory: "./db/migrations"
     },
     seeds: {
-      directory: "./db/seeds/staging"
+      directory: "./db/seeds/staging",
+      loadExtensions: [".cjs"]
     },
     useNullAsDefault: true
   },
@@ -42,7 +51,8 @@ export default {
       directory: "./db/migrations"
     },
     seeds: {
-      directory: "./db/seeds/prod"
+      directory: "./db/seeds/prod",
+      loadExtensions: [".cjs"]
     },
     useNullAsDefault: true
   }
