@@ -1,5 +1,6 @@
 import express from "express";
 import cors from "cors";
+import dotenv from "dotenv";
 import { default as dbConfig } from "./knexfile.js";
 import knex from "knex";
 import { validateOrigin } from "./middleware/auth.js";
@@ -15,16 +16,14 @@ import sessionsRouter from "./routes/api/v1/session.js";
 import adminRouter from "./routes/api/v1/admin.js";
 import { ENVIRONMENT } from "./utils/contstants.js";
 
-export const database = knex(dbConfig[ENVIRONMENT]);
-
-if (ENVIRONMENT === "development") {
-  import("dotenv").then((dotenv) => {
-    dotenv.config();
-    console.log("loaded");
-  });
+if (process.env.NODE_ENV !== "production") {
+  dotenv.config();
 }
 
+export const database = knex(dbConfig[ENVIRONMENT]);
+
 if (ENVIRONMENT !== "production") {
+  console.log("loaded");
   console.log("Using environment: ", { ENVIRONMENT });
 }
 const app = express();

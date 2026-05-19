@@ -4,6 +4,71 @@
 
 - [Scott Schipke](https://github.com/sschipke)
 
+## Local startup
+
+From the repository root, with **Node 20+** and **Docker** (or any Postgres you can reach with the URLs in `.env`).
+
+**1. Environment**
+
+Copy [`.env.example`](.env.example) to `.env`, set `TOKEN_SECRET` (for example `openssl rand -base64 32`), and adjust `DATABASE_URL` / `DATABASE_URL_TEST` if your Postgres is not on `127.0.0.1:5432`. If you omit those variables, [`src/knexfile.js`](src/knexfile.js) defaults to user **`postgres`** on **`127.0.0.1:5432`** (same as the Docker snippet below). A URL like `postgres://localhost/spkulehas` with no username makes `pg` use your **macOS login** as the role, which fails against the Docker image with `role "YourName" does not exist` unless you create that role.
+
+**2. Postgres (Docker, first time)**
+
+```bash
+docker run -d --name spkulehas-pg \
+  -e POSTGRES_HOST_AUTH_METHOD=trust \
+  -p 5432:5432 \
+  -v spkulehas-pgdata:/var/lib/postgresql/data \
+  postgres:16-alpine
+
+docker exec spkulehas-pg psql -U postgres -c "CREATE DATABASE spkulehas;"
+docker exec spkulehas-pg psql -U postgres -c "CREATE DATABASE spkulehas_test;"
+```
+
+*(If a database already exists, Postgres returns an error; that is safe to ignore.)*
+
+Later: `docker start spkulehas-pg` if the container is stopped. Skip the `docker run` / `CREATE DATABASE` steps if you already have databases.
+
+**3. Dependencies**
+
+```bash
+npm install
+```
+
+(Yarn 4 works too if you use Corepack; `package.json` scripts work with either.)
+
+**4. Migrations and seeds (first time or after schema changes)**
+
+```bash
+npm run migrate:dev    # database: spkulehas
+npm run migrate:test   # database: spkulehas_test
+npm run seed:test      # fixture users + reservations on spkulehas_test
+```
+
+`npm run initdb` runs migrate + seed for the **development** database only (dev seeds expect existing users; prefer `seed:test` for a full local fixture on `spkulehas_test`).
+
+**5. Run the API**
+
+Against the **test** database (matches `seed:test`):
+
+```bash
+npm run dev:test
+```
+
+Against the **development** database:
+
+```bash
+npm run dev
+```
+
+The API listens on **http://localhost:8080** by default (`PORT` overrides). Smoke check:
+
+```bash
+curl -i http://localhost:8080/api/v1/monitor
+```
+
+Expect HTTP `204`.
+
 ### Local testing (Docker)
 
 Build the same image the app uses on Fly:
@@ -47,10 +112,10 @@ Expect HTTP `204`.
 
 ### Local development (no Docker)
 
-Install dependencies, set environment (for example a local `.env`; see **Env Variables** below), then:
+Install dependencies, copy `.env` from `.env.example`, then start the API (see **Local startup** for Postgres, migrate, and seed commands). Quick start after setup:
 
 ```bash
-yarn dev
+npm run dev
 ```
 
 To run the compiled output without Docker: `yarn compile`, then from the `build/` layout (or `yarn start` if aligned with your local setup).
@@ -62,6 +127,8 @@ Against a database you can reach from your shell:
 ```bash
 DATABASE_URL='postgres://…' NODE_ENV=staging yarn migrate:dev
 ```
+
+For the default local Knex setup, prefer the npm scripts in **Local startup** (`migrate:dev`, `migrate:test`, etc.), which load `.env` and pass `--knexfile ./src/knexfile.js`.
 
 ### Useful commands:
 
@@ -78,6 +145,8 @@ To start the server locally: `yarn start`
 
 - `PGSSLMODE`
 - `TOKEN_SECRET`
+- `DATABASE_URL` (development / Knex when using `.env`)
+- `DATABASE_URL_TEST` (test database / Knex when using `.env`)
 
 </details>
 

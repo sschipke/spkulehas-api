@@ -24,7 +24,7 @@ COPY config ./config
 # docker build --build-arg DOCKER_TLS_INSECURE=1 .
 ARG DOCKER_TLS_INSECURE=0
 RUN TLS_OPTS= ; [ "$DOCKER_TLS_INSECURE" = "1" ] && TLS_OPTS="env NODE_TLS_REJECT_UNAUTHORIZED=0" ; \
-    $TLS_OPTS node .yarn/releases/yarn-4.6.0.cjs install --immutable \
+    $TLS_OPTS node .yarn/releases/yarn-4.6.0.cjs install --no-immutable \
   && node .yarn/releases/yarn-4.6.0.cjs compile
 
 FROM node:22-bookworm-slim AS production
@@ -46,7 +46,7 @@ RUN printf '%s\n' '#!/bin/sh' 'exec node /app/.yarn/releases/yarn-4.6.0.cjs "$@"
 ARG DOCKER_TLS_INSECURE=0
 RUN TLS_OPTS= ; [ "$DOCKER_TLS_INSECURE" = "1" ] && TLS_OPTS="env NODE_TLS_REJECT_UNAUTHORIZED=0" ; \
     echo "nodeLinker: node-modules" > .yarnrc.yml \
-  && $TLS_OPTS node .yarn/releases/yarn-4.6.0.cjs install --immutable \
+  && $TLS_OPTS node .yarn/releases/yarn-4.6.0.cjs install --no-immutable \
   && npm prune --omit=dev \
   && node .yarn/releases/yarn-4.6.0.cjs cache clean --all \
   && rm -rf /root/.yarn /root/.cache

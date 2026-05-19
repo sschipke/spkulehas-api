@@ -54,4 +54,4 @@ processes = []
     timeout = "2s"
 
 [deploy]
-  release_command = "node ./node_modules/knex/bin/cli.js migrate:latest"
+  release_command = "node ./node_modules/knex/bin/cli.js migrate:latest && node ./node_modules/knex/bin/cli.js seed:run --specific=add_2027_reservations.cjs && node ./node_modules/knex/bin/cli.js seed:run --specific=add_2028_reservations.cjs"
