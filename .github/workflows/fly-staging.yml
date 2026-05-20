@@ -3,8 +3,6 @@ on:
   push:
     branches:
       - develop
-      - feature/*
-      - bugfix/*
   workflow_dispatch:
     inputs:
       environment:
@@ -17,6 +15,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
       - name: Deploy to fly.io
         uses: superfly/flyctl-actions/setup-flyctl@master
       - run: flyctl deploy . --config flyEnv/fly.staging.toml --remote-only --no-cache
