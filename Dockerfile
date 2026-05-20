@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM node:22-bookworm-slim AS build
+FROM node:24-bookworm-slim AS build
 
 WORKDIR /app
 
@@ -27,7 +27,7 @@ RUN TLS_OPTS= ; [ "$DOCKER_TLS_INSECURE" = "1" ] && TLS_OPTS="env NODE_TLS_REJEC
     $TLS_OPTS node .yarn/releases/yarn-4.6.0.cjs install --no-immutable \
   && node .yarn/releases/yarn-4.6.0.cjs compile
 
-FROM node:22-bookworm-slim AS production
+FROM node:24-bookworm-slim AS production
 
 WORKDIR /app
 
