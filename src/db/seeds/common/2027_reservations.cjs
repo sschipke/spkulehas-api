@@ -388,6 +388,29 @@ const reservations = [
       })
       .toISOString(),
     title: "Susan Orwick"
+  },
+  {
+    start: dayjs("2027-05-15")
+      .tz(MOUNTAIN_TZ)
+      .set({ hour: 12, minute: 0, second: 0, millisecond: 0 })
+      .toISOString(),
+    end: dayjs("2027-05-16")
+      .tz(MOUNTAIN_TZ)
+      .set({ hour: 12, minute: 0, second: 0, millisecond: 0 })
+      .toISOString(),
+    title: "Cabin Cleaning"
+  },
+  {
+    start: dayjs("2027-11-01")
+      .startOf("month")
+      .set("hour", noonHour)
+      .toISOString(),
+    end: dayjs("2027-11-25")
+      .endOf("month")
+      .tz(MOUNTAIN_TZ)
+      .set({ hour: 12, minute: 0, second: 0, millisecond: 0 })
+      .toISOString(),
+    title: "Schipke SpKuLeHaS"
   }
 ];
 
