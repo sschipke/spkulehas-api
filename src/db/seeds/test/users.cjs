@@ -1,8 +1,7 @@
 const dayjs = require("dayjs");
 const bcrypt = require("bcrypt");
 const saltRounds = 10;
-const { sendWelcomeEmail } = require("../../../email/index,js");
-const { generatePassword } = require("../seed-helpers");
+const { generatePassword } = require("../seed-helpers.cjs");
 
 const mockUsers = [
   {
@@ -10,6 +9,8 @@ const mockUsers = [
     email: "huntshop@rushmore.com",
     profile: {
       name: "Gale Schipke",
+      first_name: "Gale",
+      last_name: "Schipke",
       status: "S1",
       street: "3908 Clover St",
       city: "Rapid City",
@@ -50,9 +51,11 @@ const mockUsers = [
   },
   {
     id: "eb3169b4-3935-4bf3-9feb-3acc19ea71dd",
-    email: "srschipke@gmail.com",
+    email: "sws.chipke@gmail.com",
     profile: {
       name: "Steven Schipke",
+      first_name: "Steven",
+      last_name: "Schipke",
       status: "S1",
       street: "3908 Clover St",
       city: "Rapid City",
@@ -79,7 +82,7 @@ const mockUsers = [
           })
           .toISOString(),
         title: "Steven Schipke",
-        user_id: "3acc19ea71dd"
+        user_id: "eb3169b4-3935-4bf3-9feb-3acc19ea71dd"
       },
       {
         start: dayjs("2023-09-04").startOf("isoWeek").toISOString(),
@@ -90,11 +93,13 @@ const mockUsers = [
     ]
   },
   {
-    id: "nf4ec5cf-67da-4729-b34d-49e409693695",
+    id: "af4ec5cf-67da-4729-b34d-49e409693695",
     email: "swschipke@gmail.com",
     profile: {
       status: "D1",
-      name: "Scott Schipke"
+      name: "Scott Schipke",
+      first_name: "Scott",
+      last_name: "Schipke"
     },
     reservations: []
   },
@@ -103,7 +108,9 @@ const mockUsers = [
     email: "spkulehas@gmail.com",
     profile: {
       status: "ADMIN",
-      name: "Schipke SpKuLeHaS"
+      name: "Schipke SpKuLeHaS",
+      first_name: "Scott",
+      last_name: "Schipke"
     },
     reservations: []
   }
@@ -111,24 +118,17 @@ const mockUsers = [
 
 const createUser = async (knex, user) => {
   user.password = generatePassword();
-  return sendWelcomeEmail(user)
-    .then(() => {
-      const { email, password, id } = user;
-      const hash = bcrypt.hashSync(password, saltRounds);
-      return knex("user").insert(
-        {
-          email,
-          password: hash,
-          id
-        },
-        "id"
-      );
-    })
-
-    .catch((err) => {
-      console.error("ERR: ", err);
-      throw new Error("Error in createUser ", err);
-    })
+  const { email, password, id } = user;
+  const hash = bcrypt.hashSync(password, saltRounds);
+  return knex("user")
+    .insert(
+      {
+        email,
+        password: hash,
+        id
+      },
+      "id"
+    )
     .then(() => {
       let reservationPromises = [];
       user.reservations.forEach((reservation) => {
@@ -173,18 +173,22 @@ const createReservations = (knex, reservation, user_id) => {
 };
 
 const createProfile = (knex, profile, user_id) => {
-  const { name, status, street, city, state, zipcode, phone } = profile;
+  const { name, first_name, last_name, status, street, city, state, zipcode, phone } = profile;
+  const isadmin = status === "ADMIN";
   return knex("userprofile")
     .insert(
       {
         name,
+        first_name,
+        last_name,
         status,
         user_id,
         street,
         city,
         state,
         zipcode,
-        phone
+        phone,
+        isadmin
       },
       "id"
     )

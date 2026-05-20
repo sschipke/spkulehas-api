@@ -7,12 +7,14 @@ dayjs.extend(isBetween);
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
-const WINTER_SEASON_START_2024 = "2024-10-21";
-const WINTER_SEASON_END_2024 = "2025-05-18";
 const WINTER_SEASON_START_2025 = "2025-10-20";
 const WINTER_SEASON_END_2025 = "2026-05-18";
 const WINTER_SEASON_START_2026 = "2026-10-25";
 const WINTER_SEASON_END_2026 = "2027-05-15";
+const WINTER_SEASON_START_2027 = "2027-10-18";
+const WINTER_SEASON_END_2027 = "2028-05-13";
+const WINTER_SEASON_START_2028 = "2028-10-16";
+const WINTER_SEASON_END_2028 = "2029-05-11";
 const MOUNTAIN_TZ = "America/Denver";
 
 export const validateReservation = (reservation, isAdmin) => {
@@ -33,7 +35,7 @@ export const validateReservation = (reservation, isAdmin) => {
     return { error: "The title is invalid." };
   }
   reservation.title = trimmedTitle;
-  const trimmedNotes = notes.trim();
+  const trimmedNotes = (notes || "").trim();
   if (trimmedNotes.length > 60) {
     return { error: "Submitted Notes are invalid." };
   }
@@ -90,8 +92,13 @@ export const isInWinter = (date) => {
       "day"
     ) ||
     dayjs(date).isBetween(
-      WINTER_SEASON_START_2024,
-      WINTER_SEASON_END_2024,
+      WINTER_SEASON_START_2027,
+      WINTER_SEASON_END_2027,
+      "day"
+    ) ||
+    dayjs(date).isBetween(
+      WINTER_SEASON_START_2028,
+      WINTER_SEASON_END_2028,
       "day"
     )
   );

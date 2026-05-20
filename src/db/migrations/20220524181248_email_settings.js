@@ -1,5 +1,5 @@
-exports.up = function (knex) {
-  return Promise.all([
+export async function up(knex) {
+  await Promise.all([
     knex.schema.createTable("email_setting", function (table) {
       table.increments("id").primary();
       table.string("user_id").notNull();
@@ -29,11 +29,11 @@ exports.up = function (knex) {
       table.timestamps(true, true);
     })
   ]);
-};
+}
 
-exports.down = function (knex) {
-  return Promise.all([
+export async function down(knex) {
+  await Promise.all([
     knex.schema.dropTable("email_setting"),
     knex.schema.dropTable("session")
   ]);
-};
+}
