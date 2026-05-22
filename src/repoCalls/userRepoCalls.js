@@ -188,7 +188,6 @@ export const updateLogin = async (id) => {
 };
 
 export const getUserProfilesDetailView = async () => {
-  // const memberDetails = await
   return database("userprofile")
     .whereNot({ status: "ADMIN" })
     .columns([
@@ -212,8 +211,10 @@ export const getUserProfilesDetailView = async () => {
     WHEN 'D1' THEN 3
     WHEN 'D2' THEN 4
     ELSE 5
-  END;`
-    );
+  END`
+    )
+    .orderBy("last_name", "asc")
+    .orderBy("first_name", "asc");
 };
 
 export const addProfile = async (profile) => {
