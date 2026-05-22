@@ -14,8 +14,9 @@
   },
   "scripts": {
     "start": "node server.js",
-    "dev": "nodemon --exec babel-node src/server.js",
-    "dev:test": "NODE_ENV=test nodemon --exec babel-node src/server.js",
+    "db:start": "docker start spkulehas-pg",
+    "dev": "npm run db:start && nodemon --exec babel-node src/server.js",
+    "dev:test": "npm run db:start && NODE_ENV=test nodemon --exec babel-node src/server.js",
     "compile": "yarn babel src --out-dir build --copy-files && cp -r src/db build/db && cp package.json ./build && cp yarn.lock ./build && cp -r ./config ./build",
     "initdb": "NODE_ENV=development node -r dotenv/config ./node_modules/knex/bin/cli.js migrate:latest --knexfile ./src/knexfile.js && NODE_ENV=development node -r dotenv/config ./node_modules/knex/bin/cli.js seed:run --knexfile ./src/knexfile.js",
     "migrate:dev": "NODE_ENV=development node -r dotenv/config ./node_modules/knex/bin/cli.js migrate:latest --knexfile ./src/knexfile.js",

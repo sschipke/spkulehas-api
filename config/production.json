@@ -1,4 +1,5 @@
 {
   "frontEndBaseUrl": "https://spkulehas.com/",
-  "frontEndOriginUrl": "spkulehas.com"
+  "frontEndOriginUrl": "spkulehas.com",
+  "allowedOriginUrls": ["spkulehas.com", "spkulehas.netlify.app"]
 }
