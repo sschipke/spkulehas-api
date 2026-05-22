@@ -212,8 +212,9 @@ export const getUserProfilesDetailView = async () => {
     WHEN 'D1' THEN 3
     WHEN 'D2' THEN 4
     ELSE 5
-  END;`
-    );
+  END`
+    )
+    .orderBy("last_name", "asc");
 };
 
 export const addProfile = async (profile) => {
