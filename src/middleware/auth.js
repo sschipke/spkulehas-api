@@ -72,12 +72,30 @@ export const generateWebtoken = (userProfile, expiration, type, sessionId) => {
   });
 };
 
-export const validateOrigin = (req, res, next) => {
-  const { headers } = req;
-  const { origin } = headers;
+export const getAllowedOriginUrls = () => {
+  try {
+    const urls = config.get("allowedOriginUrls");
+    if (Array.isArray(urls) && urls.length > 0) {
+      return urls;
+    }
+  } catch {
+    // allowedOriginUrls not defined for this environment
+  }
   const frontEndUrl = config.get("frontEndOriginUrl") || "localhost";
+  return [frontEndUrl];
+};
+
+export const isOriginAllowed = (origin) => {
+  if (!origin) {
+    return false;
+  }
+  return getAllowedOriginUrls().some((allowed) => origin.includes(allowed));
+};
+
+export const validateOrigin = (req, res, next) => {
+  const { origin } = req.headers;
   console.log({ origin });
-  if (!origin || !origin.includes(frontEndUrl)) {
+  if (!isOriginAllowed(origin)) {
     if (res.headersSent) {
       return next();
     }
