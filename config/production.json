@@ -1,5 +1,7 @@
 {
   "frontEndBaseUrl": "https://spkulehas.com/",
   "frontEndOriginUrl": "spkulehas.com",
+  "emailLogoUrl": "https://spkulehas.com/favicon.png",
+  "emailHeaderColor": "#880e4f",
   "allowedOriginUrls": ["spkulehas.com", "spkulehas.netlify.app"]
 }

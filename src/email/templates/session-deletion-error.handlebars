@@ -1,25 +1,17 @@
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="x-ua-compatible" content="ie=edge" />
-    <title>Error Deleting Sessions</title>
-    <style>
-      body { display: flex; align-items: center; justify-content: center;
-      font-family: "Roboto","Helvetica","Arial",sans-serif; .ii a[href] { color:
-      #FFFFFF; }; } h2,p { color: red; }
-    </style>
-  </head>
-  <body>
-    <h2>Session Deletion Error</h2>
-    <p>
-      An error occurd deleting old and invalid sessions today,
-      <strong>{{date}}</strong>
-      in the
-      {{environment}}
-      api.
-    </p>
-    <p>
-      {{error}}
-    </p>
-  </body>
-</html>
+<h1 class="email-heading">Session Deletion Error</h1>
+
+{{> info-box
+  accentColor="#880e4f"
+  backgroundColor="#fce4ec"
+  content="An error occurred while deleting old and invalid sessions."
+}}
+
+<p class="email-text">
+  Date: <strong>{{date}}</strong><br />
+  Environment: <strong>{{environment}}</strong>
+</p>
+
+<p class="email-text">
+  <strong>Error details:</strong><br />
+  {{errorMessage}}
+</p>

@@ -35,6 +35,7 @@
     "lint:fix": "eslint --fix 'src/**/*.js'",
     "format:check": "prettier --check .",
     "format:write": "prettier --write .",
+    "email:preview": "NODE_ENV=development babel-node scripts/email-preview.js",
     "prepack": "pinst --disable",
     "postpack": "pinst --enable",
     "test:build": "yarn compile && cp .env ./build && NODE_ENV='alpha' && node build/server.js"

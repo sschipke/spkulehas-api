@@ -4,5 +4,7 @@
   "frontEndBaseUrl": "http://localhost:3000/",
   "frontEndOriginUrl": "localhost:3000",
   "defaultEmail": "swschipke@gmail.com",
+  "emailLogoUrl": "https://spkulehas.com/favicon.png",
+  "emailHeaderColor": "#880e4f",
   "emailTemplatePath": "./email/templates/"
 }

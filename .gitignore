@@ -8,5 +8,6 @@ ssh-cert.pub
 fly.toml
 yarn-error.log
 build
+tmp
 *.yarnrc.yml
 .yarn/install-state.gz
