@@ -1,12 +1,14 @@
 import nodemailer from "nodemailer";
 import hbs from "nodemailer-express-handlebars";
-import path from "path";
 import dayjs from "dayjs";
 import config from "config";
 import { ENVIRONMENT } from "../utils/contstants.js";
+import {
+  createEmailContext,
+  createHandlebarOptions
+} from "./templateConfig.js";
 
 const baseUrl = config.get("frontEndBaseUrl");
-const templatePath = config.get("emailTemplatePath");
 const LOGIN_URL = new URL(`${baseUrl}/login`).href;
 
 let transporter = nodemailer.createTransport({
@@ -18,13 +20,7 @@ let transporter = nodemailer.createTransport({
   }
 });
 
-const handlebarOptions = {
-  viewEngine: {
-    partialsDir: path.resolve(templatePath),
-    defaultLayout: false
-  },
-  viewPath: path.resolve(templatePath)
-};
+const handlebarOptions = createHandlebarOptions();
 
 // use a template file with nodemailer
 transporter.use("compile", hbs(handlebarOptions));
@@ -52,10 +48,14 @@ const sendWelcomeEmail = async (user, index) => {
     to: user.email,
     subject: "Welcome to the SpKuLeHaS App!",
     template: "welcome",
-    context: {
-      user,
-      loginUrl: LOGIN_URL
-    }
+    context: createEmailContext(
+      { user, loginUrl: LOGIN_URL },
+      {
+        useLayout: true,
+        pageTitle: "Welcome to SpKuLeHaS",
+        preheader: "Your SpKuLeHaS account is ready."
+      }
+    )
   };
 
   return new Promise((resolve, reject) => {
@@ -92,11 +92,14 @@ const sendPasswordResetEmail = async (user, url, expiration) => {
     to: user.email,
     subject: "Password Reset",
     template: "password-reset",
-    context: {
-      user,
-      url,
-      expiration
-    }
+    context: createEmailContext(
+      { user, url, expiration },
+      {
+        useLayout: true,
+        pageTitle: "Password Reset",
+        preheader: "Reset your SpKuLeHaS password."
+      }
+    )
   };
 
   console.log(
@@ -119,12 +122,14 @@ const alertUsersOfDeletion = async (members, reservation) => {
     to: members,
     subject: "Reservation Canceled",
     template: "reservation-deleted",
-    context: {
-      startDate,
-      endDate,
-      title,
-      url
-    }
+    context: createEmailContext(
+      { startDate, endDate, title, url },
+      {
+        useLayout: true,
+        pageTitle: "Reservation Canceled",
+        preheader: "A SpKuLeHaS reservation has been canceled."
+      }
+    )
   };
 
   console.log("Sending deletion email: ", mailOptions);
@@ -139,12 +144,14 @@ const sendSessionDeletionEmail = async (count) => {
     to: "swschipke@gmail.com",
     subject: "Session Deletion from SpKuLeHaS",
     template: "session-deletion-count",
-    context: {
-      count,
-      isSingular,
-      date,
-      environment: ENVIRONMENT
-    }
+    context: createEmailContext(
+      { count, isSingular, date, environment: ENVIRONMENT },
+      {
+        useLayout: true,
+        pageTitle: "Session Deletion",
+        preheader: "Expired sessions were deleted from SpKuLeHaS."
+      }
+    )
   };
 
   return new Promise((resolve, reject) => {
@@ -171,12 +178,19 @@ const sendSessionDeletionErrorEmail = async (error) => {
     from: process.env.ADMIN_EMAIL, // sender address
     to: "swschipke@gmail.com",
     subject: "ERROR: Session Deletion from SpKuLeHaS",
-    template: "session-deletion-count",
-    context: {
-      date,
-      environment: ENVIRONMENT,
-      error
-    }
+    template: "session-deletion-error",
+    context: createEmailContext(
+      {
+        date,
+        environment: ENVIRONMENT,
+        errorMessage: error?.message || String(error)
+      },
+      {
+        useLayout: true,
+        pageTitle: "Session Deletion Error",
+        preheader: "An error occurred during SpKuLeHaS session cleanup."
+      }
+    )
   };
 
   return transporter.sendMail(mailOptions);
@@ -188,12 +202,19 @@ const sendNewMemberEmail = async (user, createUrl, expiration) => {
     to: user.email,
     subject: `Welcome ${user.firstName}, to Schipke SpKuLeHaS!`,
     template: "new-member",
-    context: {
-      user,
-      loginUrl: LOGIN_URL,
-      createUrl,
-      expiration
-    }
+    context: createEmailContext(
+      {
+        user,
+        loginUrl: LOGIN_URL,
+        createUrl,
+        expiration
+      },
+      {
+        useLayout: true,
+        pageTitle: "Welcome to SpKuLeHaS",
+        preheader: "Create your password to get started with SpKuLeHaS."
+      }
+    )
   };
 
   console.log(
@@ -211,11 +232,14 @@ const alertAdminOfMemberCreation = async (user, admin) => {
     to: process.env.ADMIN_EMAIL,
     subject: "A New Member Has Been Created",
     template: "new-member-alert",
-    context: {
-      user,
-      admin,
-      date: new Date().toLocaleString()
-    }
+    context: createEmailContext(
+      { user, admin, date: new Date().toLocaleString() },
+      {
+        useLayout: true,
+        pageTitle: "New Member Created",
+        preheader: "A new SpKuLeHaS member account was created."
+      }
+    )
   };
 
   console.log("Sending new member alert email.", mailOptions);
@@ -234,12 +258,14 @@ const notifyMemberOfEmailChange = async (
     to: newEmail,
     subject: "Your Email Has Changed",
     template: "email-change-alert",
-    context: {
-      oldEmail,
-      newEmail,
-      admin,
-      wasAdmin
-    }
+    context: createEmailContext(
+      { oldEmail, newEmail, admin, wasAdmin },
+      {
+        useLayout: true,
+        pageTitle: "Email Change Notice",
+        preheader: "Your SpKuLeHaS account email address was updated."
+      }
+    )
   };
 
   console.log("Notifying member of email change: ", mailOptions);
@@ -265,14 +291,21 @@ const emailMembersOfReservationChange = async (
     to: [previousMember.email, currentMember.email],
     subject: "Your Reservation Has Changed",
     template: "reservation-change",
-    context: {
-      previousMember,
-      currentMember,
-      oldReservation,
-      newReservation,
-      viewReservationUrl,
-      admin
-    }
+    context: createEmailContext(
+      {
+        previousMember,
+        currentMember,
+        oldReservation,
+        newReservation,
+        viewReservationUrl,
+        admin
+      },
+      {
+        useLayout: true,
+        pageTitle: "Reservation Change",
+        preheader: "A SpKuLeHaS reservation has been updated."
+      }
+    )
   };
 
   console.info("Notifying members of reservation change. ", mailOptions);
@@ -290,11 +323,14 @@ const notifyAdminOfReservationCreation = (currentMember, reservation) => {
     to: process.env.ADMIN_EMAIL,
     subject: "A Reservation Has Been Created",
     template: "reservation-created",
-    context: {
-      currentMember,
-      reservation,
-      viewReservationUrl
-    }
+    context: createEmailContext(
+      { currentMember, reservation, viewReservationUrl },
+      {
+        useLayout: true,
+        pageTitle: "Reservation Created",
+        preheader: "A new SpKuLeHaS reservation was created."
+      }
+    )
   };
 
   console.info("Notifying admin of reservation creation. ", mailOptions);
@@ -311,11 +347,14 @@ const notifyMemberOfProfileChange = async (newProfile, admin) => {
     to: newProfile.email,
     subject: `${newProfile.name}'s Profile Has Been Updated`,
     template: "profile-change-notification",
-    context: {
-      newProfile,
-      admin,
-      loginUrl: LOGIN_URL
-    }
+    context: createEmailContext(
+      { newProfile, admin, loginUrl: LOGIN_URL },
+      {
+        useLayout: true,
+        pageTitle: "Profile Updated",
+        preheader: "Your SpKuLeHaS profile information was updated."
+      }
+    )
   };
   console.info("Notifying member of profile change. ", mailOptions);
   return transporter.sendMail(mailOptions);
@@ -328,12 +367,14 @@ const notifyMemberOfStatusChange = (oldProfile, newProfile, admin) => {
     to: newProfile.email,
     subject: "Your Status Has Changed",
     template: "status-change-alert",
-    context: {
-      oldProfile,
-      newProfile,
-      admin,
-      isShareholder
-    }
+    context: createEmailContext(
+      { oldProfile, newProfile, admin, isShareholder },
+      {
+        useLayout: true,
+        pageTitle: "Status Change",
+        preheader: "Your SpKuLeHaS member status was updated."
+      }
+    )
   };
   console.info("Notifying member of status change. ", mailOptions);
   return transporter.sendMail(mailOptions);
@@ -353,12 +394,14 @@ const notifyAdminOfDeletedReservations = (deletedReservations) => {
     to: process.env.ADMIN_EMAIL,
     subject: "Past Reservations Have Been Deleted",
     template: "bulk-reservations-delete",
-    context: {
-      deletedReservations,
-      numberOfReservations,
-      date,
-      environment
-    }
+    context: createEmailContext(
+      { deletedReservations, numberOfReservations, date, environment },
+      {
+        useLayout: true,
+        pageTitle: "Bulk Reservation Deletion",
+        preheader: "Past SpKuLeHaS reservations were deleted."
+      }
+    )
   };
   console.warn("Notifying admin of bulk reservations deleted. ", mailOptions);
   return transporter.sendMail(mailOptions);
